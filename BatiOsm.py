@@ -2,7 +2,7 @@
 #!/usr/bin/env python
 import sys
 import os
-from math import sqrt
+import math
 import time
 from operator import attrgetter
 
@@ -26,9 +26,13 @@ class Point:
         
     def distance(self, other):
         """Calcul de la distance entre deux points"""
-        d_lat = self.node_lat - other.node_lat
-        d_lon = self.node_lon - other.node_lon
-        return sqrt(d_lat**2 + d_lon**2)
+        lat1=float(self.node_lat) * math.pi / 180
+        lat2=float(other.node_lat) * math.pi / 180
+        lon1=float(self.node_lon) * math.pi / 180
+        lon2=float(other.node_lon) * math.pi / 180
+        dist = math.atan(math.sqrt(math.pow(math.cos(lat2)*math.sin(abs(lon1-lon2)),2) + math.pow(math.cos(lat1)*math.sin(lat2) - math.sin(lat1)*math.cos(lat2)*math.cos(lon1-lon2),2)) / (math.sin(lat1)*math.sin(lat2) + math.cos(lat1)*math.cos(lat2)*math.cos(lon1-lon2)))
+        dist *= 6372795 # convert from radians to meters
+        return dist
         
     def export_node(self):
         """Création du code xml équivalent au point"""
@@ -139,7 +143,10 @@ class Batiment:
         maxLat = max(tableauLatitude)
         minLon = min(tableauLongitude)
         maxLon = max(tableauLongitude)
-        self.largeur = sqrt((maxLat - minLat)**2 + (maxLon - minLon)**2)
+        # creation de 2 noeuds fictifs
+        min_node = Point('min', minLat, minLon)
+        max_node = Point('max', maxLat, maxLon)
+        self.largeur = min_node.distance(max_node)
         
     def setDistMini(self, distance):
         """Cette méthode permet de définir la distance mini comme étant celle
@@ -786,4 +793,3 @@ print "Durée du calcul : ", tps2 - tps1
 print "------------------------------------------------------------------"
 print "-                       FIN DU PROCESS                           -"
 print "------------------------------------------------------------------"
-
