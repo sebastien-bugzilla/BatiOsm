@@ -580,16 +580,24 @@ i_new = 0
 while i_new < new_nbre_ways:
     if new_bati_sorted[i_new].status == "IDENTIQUE":
         nb_bat_noMod = nb_bat_noMod + 1
-        dernier_id_identique = i_new
+#        dernier_id_identique = i_new
     elif new_bati_sorted[i_new].status == "INNER":
         nb_bat_inner_new = nb_bat_inner_new + 1
-        dernier_id_inner_new = i_new
+#        dernier_id_inner_new = i_new
     elif new_bati_sorted[i_new].status == "MODIFIE":
         nb_bat_mod = nb_bat_mod + 1
-        dernier_id_modifie = i_new
+#        dernier_id_modifie = i_new
     elif new_bati_sorted[i_new].status == "NOUVEAU":
         nb_bat_new = nb_bat_new + 1
     i_new = i_new + 1
+
+#traitement des cas particulier si l'une des catégories est vide
+# note : je ne sais pas gérer le cas où l'analyse donne aucun batiment identique
+dernier_id_identique=nb_bat_noMod-1
+dernier_id_inner_new=nb_bat_noMod+nb_bat_inner_new-1
+dernier_id_modifie=nb_bat_noMod+nb_bat_inner_new+nb_bat_mod-1
+
+
 
 dernier_id_inner_old = 0
 i_old = 0
@@ -699,23 +707,26 @@ nom_file = prefixe + "_mod_1_a_" + str(nb_bat_mod) + ".osm"
 file_mod_building = open(adresse + "/" + nom_file, "w")
 file_mod_building.write("<?xml version='1.0' encoding='UTF-8'?>" + "\n")
 file_mod_building.write("<osm version='0.6' upload='true' generator='JOSM'>" + "\n")
-for i_bat in range(nb_bat_mod):
-    indice = dernier_id_inner_new + i_bat + 1
-    new_bati_sorted[indice].export_bat()
-    file_mod_building.write(new_bati_sorted[indice].print_bat + "\n")
-    if new_bati_sorted[indice].multipolygone == "yes":
-        relation = new_bati_sorted[indice].ind_relation
-        for members in range(new_relation[relation].nb_ways):
-            if new_relation[relation].role[members] == "inner":
-                indic_bati_membre = new_relation[relation].ind_ways[members]
-                new_bati[indic_bati_membre].export_bat()
-                file_mod_building.write(new_bati[indic_bati_membre].print_bat + "\n")
-        new_relation[relation].export_relation()
-        file_mod_building.write(new_relation[relation].print_relation + "\n")
-    Ligne = ["MODIFIE", new_bati_sorted[indice].id_bat_proche, \
-        str(round(new_bati_sorted[indice].dist_mini, 9)), \
-        new_bati_sorted[indice].bat_id, nom_file]
-    file_log.write(formatLog(Ligne) + "\n")
+if nb_bat_mod>0:
+    for i_bat in range(nb_bat_mod):
+        indice = dernier_id_inner_new + i_bat + 1
+        new_bati_sorted[indice].export_bat()
+        file_mod_building.write(new_bati_sorted[indice].print_bat + "\n")
+        if new_bati_sorted[indice].multipolygone == "yes":
+            relation = new_bati_sorted[indice].ind_relation
+            for members in range(new_relation[relation].nb_ways):
+                if new_relation[relation].role[members] == "inner":
+                    indic_bati_membre = new_relation[relation].ind_ways[members]
+                    new_bati[indic_bati_membre].export_bat()
+                    file_mod_building.write(new_bati[indic_bati_membre].print_bat + "\n")
+            new_relation[relation].export_relation()
+            file_mod_building.write(new_relation[relation].print_relation + "\n")
+        Ligne = ["MODIFIE", new_bati_sorted[indice].id_bat_proche, \
+            str(round(new_bati_sorted[indice].dist_mini, 9)), \
+            new_bati_sorted[indice].bat_id, nom_file]
+        file_log.write(formatLog(Ligne) + "\n")
+else:
+    file_mod_building.write("<!-- Pas de batiments modifiés -->" + "\n")
 file_mod_building.write("</osm>")
 file_mod_building.close()
 
