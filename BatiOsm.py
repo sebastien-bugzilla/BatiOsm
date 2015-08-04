@@ -22,7 +22,7 @@ class Point:
         self.node_lon = float(node_lon)
         
     def affiche(self):
-        print self.node_id, self.node_lat, self.node_lon
+        print(self.node_id, self.node_lat, self.node_lon)
         
     def distance(self, other):
         """Calcul de la distance entre deux points"""
@@ -283,15 +283,15 @@ separation = "------------------------------------------------------------------
 
 tps1 = time.clock()
 
-print "------------------------------------------------------------------"
-print "-                    Lecture des données                         -"
-print "------------------------------------------------------------------"
+print("------------------------------------------------------------------")
+print("-                    Lecture des données                         -")
+print("------------------------------------------------------------------")
 
 #------------------------------------------------------------------------
 #lecture des vieux batiments :
 #------------------------------------------------------------------------
 file_old = open(fichier_osm_old, "r")
-print "lecture du fichier " + fichier_osm_old + "..."
+print("lecture du fichier " + fichier_osm_old + "...")
 #détermination du séparateur du fichier : " ou '
 ligne = file_old.readline().rstrip('\n\r')
 tabLigne1 = ligne.split("'")
@@ -348,8 +348,8 @@ for ligne in file_old:
             numTag, tagKey, tagValue, 1000, 0., "UNKNOWN"))
         old_bati[old_nbre_ways].BatimentToPoint()
         if old_bati[old_nbre_ways].pbAire == "YES":
-            print "  Warning, surface nulle obtenue pour le batiment :", \
-                old_bati[old_nbre_ways].bat_id 
+            print ("  Warning, surface nulle obtenue pour le batiment :", \
+                old_bati[old_nbre_ways].bat_id)
         old_bati[old_nbre_ways].calculLargeur()
         old_nbre_ways = old_nbre_ways + 1
     elif champsLigne[0].find("relation id") !=-1:
@@ -380,17 +380,17 @@ for ligne in file_old:
 
 file_old.close()
 
-print "  " + str(old_nbre_nodes) + " noeuds répertoriés dans le fichier " + \
-    fichier_osm_old
-print "  " + str(old_nbre_ways) + " batiments répertoriés dans le fichier " + \
-    fichier_osm_old
+print("  " + str(old_nbre_nodes) + " noeuds répertoriés dans le fichier " + \
+    fichier_osm_old)
+print("  " + str(old_nbre_ways) + " batiments répertoriés dans le fichier " + \
+    fichier_osm_old)
 
 
 #------------------------------------------------------------------------
 #lecture des nouveaux batiments :
 #------------------------------------------------------------------------
 file_new = open(fichier_osm_new, "r")
-print "lecture du fichier " + fichier_osm_new + "..."
+print("lecture du fichier " + fichier_osm_new + "...")
 ligne = file_new.readline().rstrip('\n\r')
 tabLigne1 = ligne.split("'")
 tabLigne2 = ligne.split("\"")
@@ -445,8 +445,8 @@ for ligne in file_new:
             numTag, tagKey, tagValue, 1000, 0., "UNKNOWN"))
         new_bati[new_nbre_ways].BatimentToPoint()
         if new_bati[new_nbre_ways].pbAire == "YES":
-            print "  Attention, surface nulle obtenue pour le batiment :", \
-                new_bati[new_nbre_ways].bat_id 
+            print("  Attention, surface nulle obtenue pour le batiment :", \
+                new_bati[new_nbre_ways].bat_id)
         new_bati[new_nbre_ways].calculLargeur()
         new_nbre_ways = new_nbre_ways + 1
     elif champsLigne[0].find("relation id") !=-1:
@@ -476,13 +476,13 @@ for ligne in file_new:
 
 file_new.close()
 
-print "  " + str(new_nbre_nodes) + " noeuds répertoriés dans le fichier " + \
-    fichier_osm_new
-print "  " + str(new_nbre_ways) + " batiments répertoriés dans le fichier " + \
-    fichier_osm_new
-print "------------------------------------------------------------------"
-print "-  Recherche des similitudes et des différences entre batiments  -"
-print "------------------------------------------------------------------"
+print("  " + str(new_nbre_nodes) + " noeuds répertoriés dans le fichier " + \
+    fichier_osm_new)
+print("  " + str(new_nbre_ways) + " batiments répertoriés dans le fichier " + \
+    fichier_osm_new)
+print("------------------------------------------------------------------")
+print("-  Recherche des similitudes et des différences entre batiments  -")
+print("------------------------------------------------------------------")
 #------------------------------------------------------------------------------
 #calcul des distances mini entre chaque anciens batiments
 # pour chaque batiment anciens (resp. nouveau) on détermine la distance 
@@ -609,13 +609,13 @@ while i_old < old_nbre_ways:
         nb_bat_del = nb_bat_del + 1
     i_old = i_old + 1
 
-print "------------------------------------------------------------------"
-print "-                    Création des fichiers                       -"
-print "------------------------------------------------------------------"
-print nb_bat_noMod, " batiments identiques"
-print nb_bat_mod, " batiments modifiés"
-print nb_bat_new, " batiments nouveaux"
-print nb_bat_del, " batiments supprimés"
+print("------------------------------------------------------------------")
+print("-                    Création des fichiers                       -")
+print("------------------------------------------------------------------")
+print(nb_bat_noMod, " batiments identiques")
+print(nb_bat_mod, " batiments modifiés")
+print(nb_bat_new, " batiments nouveaux")
+print(nb_bat_del, " batiments supprimés")
 
 tps2 = time.clock()
 
@@ -793,8 +793,8 @@ file_del_building.close()
 
 file_log.close()
 
-print "Durée du calcul : ", tps2 - tps1
-print "------------------------------------------------------------------"
-print "-                       FIN DU PROCESS                           -"
-print "------------------------------------------------------------------"
+print("Durée du calcul : ", tps2 - tps1)
+print("------------------------------------------------------------------")
+print("-                       FIN DU PROCESS                           -")
+print("------------------------------------------------------------------")
 
