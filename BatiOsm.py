@@ -32,9 +32,29 @@ class Point:
         
     def export_node(self):
         """Création du code xml équivalent au point"""
-        self.print_node = "  <node id='" + self.node_id + \
-            "' action='modify' visible='true' lat='" + \
-            str(self.node_lat) + "' lon='" + str(self.node_lon) + "' />"
+        if self.historique == []:
+            self.print_node = "  <node id='" + self.node_id + \
+                "' action='modify' visible='true' lat='" + \
+                str(self.node_lat) + "' lon='" + str(self.node_lon) + "' />"
+        else:
+            i_hist = 0
+            nodeHist= ""
+            while i_hist < len(self.historique):
+                if (-1)**i_hist == 1:
+                    sep=""
+                else:
+                    sep="'"
+                nodeHist= nodeHist + sep + self.historique[i_hist] + sep
+                i_hist = i_hist + 1
+            self.print_node = nodeHist
+    
+    def setHistorique(self, historique):
+        """
+        Cette méthode défini dans une variable tous les éléments relatifs à
+        l'historique dans osm : numéros de version, date de maj, dernier
+        utilisateur ayant modifié le batiment, le changeset,etc...
+        """
+        self.historique=historique
 
 class Batiment:
     """L'entité Batiment rassemble plusieurs données : 
@@ -75,10 +95,13 @@ class Batiment:
     def BatimentToPoint(self):
         """Calcul du centre de gravité du batiment.
         
-        les coordonnées sont d'abord exprimés en "pseudo-mètres" en 
-        prenant comme origine le premier point du batiment parce qu'il
-        n'y a pas suffisamment de différence entre chaque point pour
-        faire les calcul (il faudrait augmenter la précision).
+        Etant donné qu'il n'y a pas suffisamment de différence entre chaque point,
+        pour faire les calculs à partir de la latitude et de la longitude,
+        les coordonnées sont d'abord exprimés en "pseudo-mètres" (c.a.d en 
+        approximant chaque composante par rapport à l'origine à R*(lat2-lat1).
+        R étant le rayon de la terre, pris égal à 6500000. 
+        L'origine est arbitrairement définit comme le premier point du batiment. 
+        Cela permet de faire les calculs sur des nombres plus grands.
         Ensuite le calcul se fait d'après 
             https://fr.wikipedia.org/wiki/Aire_et_centre_de_masse_d%27un_polygone
         Le calcul nécessite de diviser par la surface du batiment. Cela
@@ -163,12 +186,32 @@ class Batiment:
         """
         self.role = role
         
+    def setHistorique(self, historique):
+        """
+        Cette méthode défini dans une variable tous les éléments relatifs à
+        l'historique dans osm : numéros de version, date de maj, dernier
+        utilisateur ayant modifié le batiment, le changeset,etc...
+        """
+        self.historique = historique
+        
     def export_bat(self):
         """Cette méthode défini une version xml du batiment, de ses noeuds
         et de ses éventuels tag dans le but d'être transcrit dans un fichier."""
         export = []
         res_export = ""
-        export.append("  <way id='" + self.bat_id + "' visible='true'>")
+        if self.historique != []:
+            i_hist = 0
+            wayHist= ""
+            while i_hist < len(self.historique):
+                if (-1)**i_hist == 1:
+                    sep=""
+                else:
+                    sep="'"
+                wayHist= wayHist + sep + self.historique[i_hist] + sep
+                i_hist = i_hist + 1
+            export.append(wayHist)
+        else:
+            export.append("  <way id='" + self.bat_id + "' visible='true'>")
         i_node = 0
         while i_node < self.nbre_node:
             export.append("    <nd ref='" + self.node_id[i_node].node_id + \
@@ -326,6 +369,10 @@ for ligne in file_old:
         old_nodes.append(Point(champsLigne[col_id], champsLigne[col_lat], \
             champsLigne[col_lon]))
         old_id_nodes.append(champsLigne[col_id])
+        if champsLigne[1][0] != "-":
+            old_nodes[old_nbre_nodes].setHistorique(champsLigne)
+        else:
+            old_nodes[old_nbre_nodes].setHistorique([])
         old_nbre_nodes = old_nbre_nodes + 1
     elif champsLigne[0].find("way id") != -1: # nouveau batiment : on initialise les données
         way_id = champsLigne[1]
@@ -334,6 +381,7 @@ for ligne in file_old:
         tagKey = []
         tagValue = []
         numTag = 0
+        tabHistorique = champsLigne
     elif champsLigne[0].find("nd ref") != -1:
         id_nd_ref = champsLigne[1]
         i_nd_ref = i_nd_ref + 1
@@ -351,6 +399,10 @@ for ligne in file_old:
             print ("  Warning, surface nulle obtenue pour le batiment :", \
                 old_bati[old_nbre_ways].bat_id)
         old_bati[old_nbre_ways].calculLargeur()
+        if way_id[0] != "-":    # alors le way provient d'osm. il faut enregistrer l'historique
+            old_bati[old_nbre_ways].setHistorique(tabHistorique)
+        else:
+            old_bati[old_nbre_ways].setHistorique([])
         old_nbre_ways = old_nbre_ways + 1
     elif champsLigne[0].find("relation id") !=-1:
         relation_id = champsLigne[1]
@@ -423,6 +475,10 @@ for ligne in file_new:
         new_nodes.append(Point(champsLigne[col_id], champsLigne[col_lat], \
             champsLigne[col_lon]))
         new_id_nodes.append(champsLigne[col_id])
+        if champsLigne[1][0] != "-":
+            new_nodes[new_nbre_nodes].setHistorique(champsLigne)
+        else:
+            new_nodes[new_nbre_nodes].setHistorique([])
         new_nbre_nodes = new_nbre_nodes + 1
     elif champsLigne[0].find("way id") != -1:
         way_id = champsLigne[1]
@@ -448,6 +504,7 @@ for ligne in file_new:
             print("  Attention, surface nulle obtenue pour le batiment :", \
                 new_bati[new_nbre_ways].bat_id)
         new_bati[new_nbre_ways].calculLargeur()
+        new_bati[new_nbre_ways].setHistorique([])
         new_nbre_ways = new_nbre_ways + 1
     elif champsLigne[0].find("relation id") !=-1:
         relation_id = champsLigne[1]
