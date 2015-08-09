@@ -72,12 +72,13 @@ class Batiment:
         - pbAire : l'information si le batiment a une aire nulle
         - multipolygone : yes si le batiment en est un, no sinon
         - role : le role si le batiment appartient à une relation
-        - ind_relation : l'indice de la relation auquel il appartient
+        - nom_relation : le nom de la relation auquel il appartient (ie l'ID 
+            de la relation tel que lu dans le fichier source)
     """
     def __init__(self, bat_id, nbre_node, node_id, 
             numTag, tableauTagKey, tableauTagValue, 
             distance=1000, largeur = 0., status = "UNKNOWN", pbAire = "NO",
-            multipolygone = "no", role = "outer", ind_relation = 0):
+            multipolygone = "no", role = "outer", nom_relation = 0):
         self.bat_id = bat_id
         self.nbre_node = nbre_node
         self.node_id = node_id
@@ -90,7 +91,8 @@ class Batiment:
         self.pbAire = "NO"
         self.multipolygone = "no"
         self.role = "outer"
-        self.ind_relation = 0
+        self.nom_relation = 0
+        self.innerWay = []
     
     def BatimentToPoint(self):
         """Calcul du centre de gravité du batiment.
@@ -226,6 +228,24 @@ class Batiment:
             self.node_id[i_node].export_node()
             export.append(self.node_id[i_node].print_node)
             i_node = i_node + 1
+        ###
+        if self.multipolygone == "yes":
+            # export des chemins intérieurs
+            CheminInterieur=""
+            for i_inner in range(len(self.innerWay)):
+                self.innerWay[i_inner].export_bat()
+                CheminInterieur = CheminInterieur + self.innerWay[i_inner].print_bat
+            export.append(CheminInterieur)
+            # export de la relation
+            export.append("  <relation id='" + self.nom_relation + "'>")
+            export.append("    <tag k='type' v='multipolygon'/>")
+            export.append("    <member type='way' ref='" + self.bat_id + \
+                 "' role='outer'/>")
+            for ways in range(len(self.innerWay)):
+                export.append("    <member type='way' ref='" + \
+                    self.innerWay[ways].bat_id + "' role='inner'/>")
+            export.append("  </relation>")
+        ###
         nb_ligne = len(export)
         i_ligne = 0
         while i_ligne < nb_ligne:
@@ -260,37 +280,22 @@ class Batiment:
             except:
                 pass
 
-class Relation:
-    """
-    Classe qui regroupe les relations pour le traitement des multipolygones.
-    """
+    def addInner(self, other):
+        """
+        Cette méthode permet d'ajouter un batiment en tant que chemin intérieur
+        pour la définition d'un multipolygone. L'objectif étant de se passer 
+        de la classe relation et de considérer les chemins intérieurs d'un 
+        multipolygone comme une dépendance du chemin extérieur.
+        """
+        self.innerWay.append(other)
     
-    def __init__(self, id_relation, nb_ways, tab_id_ways, tab_ind_ways, tab_role):
-        self.id = id_relation
-        self.nb_ways = nb_ways
-        self.id_ways = tab_id_ways
-        self.ind_ways = tab_ind_ways
-        self.role = tab_role
-    
-    def export_relation(self):
-        export = []
-        res_export = ""
-        export.append("  <relation id='" + self.id + "'>")
-        export.append("    <tag k='value' v='multipolygon'/>")
-        for ways in range(self.nb_ways):
-            export.append("    <member type='way' ref='" + \
-                self.id_ways[ways] + "' role='" + \
-                self.role[ways] + "'/>")
-        export.append("  </relation>")
-        nb_ligne = len(export)
-        i_ligne = 0
-        while i_ligne < nb_ligne:
-            if i_ligne == nb_ligne - 1:
-                res_export = res_export + export[i_ligne]
-            else:
-                res_export = res_export + export[i_ligne] + "\n"
-            i_ligne = i_ligne + 1
-        self.print_relation = res_export
+    def addRelation(self, nom_relation):
+        """
+        Cette méthode défini le numéro de la relation a créer lorsque le batiment
+        est un multipolygone.
+        """
+        self.nom_relation = nom_relation
+
 
 def formatLog(donnees):
     """Cette fonction permet de générer une chaine de caractère formaté et 
@@ -329,6 +334,107 @@ tps1 = time.clock()
 print("------------------------------------------------------------------")
 print("-                    Lecture des données                         -")
 print("------------------------------------------------------------------")
+
+#------------------------------------------------------------------------
+#lecture des nouveaux batiments :
+#------------------------------------------------------------------------
+file_new = open(fichier_osm_new, "r")
+print("lecture du fichier " + fichier_osm_new + "...")
+ligne = file_new.readline().rstrip('\n\r')
+tabLigne1 = ligne.split("'")
+tabLigne2 = ligne.split("\"")
+if len(tabLigne1) > len(tabLigne2):
+    delim = "'"
+else:
+    delim = "\""
+
+
+
+new_nodes = []
+new_id_nodes = []
+new_bati = []
+new_bati_sorted = []
+new_relation = []
+
+new_nbre_nodes = 0
+new_nbre_ways = 0
+new_nbre_relation = 0
+i_way = 0
+i_nd_ref = 0
+col_id = 0
+col_lat = 0
+col_lon = 0
+
+for ligne in file_new:
+    champsLigne = ligne.rstrip('\n\r').split(delim)
+    if champsLigne[0].find("node id") != -1:
+        col_id = 1
+        col_lat = champsLigne.index(" lat=") + 1
+        col_lon = champsLigne.index(" lon=") + 1
+        new_nodes.append(Point(champsLigne[col_id], champsLigne[col_lat], \
+            champsLigne[col_lon]))
+        new_id_nodes.append(champsLigne[col_id])
+        if champsLigne[1][0] != "-":
+            new_nodes[new_nbre_nodes].setHistorique(champsLigne)
+        else:
+            new_nodes[new_nbre_nodes].setHistorique([])
+        new_nbre_nodes = new_nbre_nodes + 1
+    elif champsLigne[0].find("way id") != -1:
+        way_id = champsLigne[1]
+        i_nd_ref = 0
+        nodes = []
+        tagKey = []
+        tagValue = []
+        numTag = 0
+    elif champsLigne[0].find("nd ref") != -1:
+        id_nd_ref = champsLigne[1]
+        i_nd_ref = i_nd_ref + 1
+        nodes.append(new_nodes[new_id_nodes.index(id_nd_ref)])
+    elif champsLigne[0].find("tag") != -1:
+        if i_nd_ref != 0:
+            tagKey.append(champsLigne[1])
+            tagValue.append(champsLigne[3])
+            numTag = numTag + 1
+    elif champsLigne[0].find("/way") != -1:
+        new_bati.append(Batiment(way_id, i_nd_ref, nodes, \
+            numTag, tagKey, tagValue, 1000, 0., "UNKNOWN"))
+        new_bati[new_nbre_ways].BatimentToPoint()
+        if new_bati[new_nbre_ways].pbAire == "YES":
+            print("  Attention, surface nulle obtenue pour le batiment :", \
+                new_bati[new_nbre_ways].bat_id)
+        new_bati[new_nbre_ways].calculLargeur()
+        new_bati[new_nbre_ways].setHistorique([])
+        new_nbre_ways = new_nbre_ways + 1
+    elif champsLigne[0].find("relation id") !=-1:
+        relation_id = champsLigne[1]
+        nb_member = 0
+        tab_id_member = []
+        tab_ind_member = []
+        tab_role = []
+    elif champsLigne[0].find("member type") != -1:
+        col_ref = champsLigne.index(" ref=") + 1
+        col_role = champsLigne.index(" role=") + 1
+        tab_id_member.append(champsLigne[col_ref])
+        tab_role.append(champsLigne[col_role])
+        nb_member = nb_member + 1
+    elif champsLigne[0].find("/relation") != -1:
+        for i_bat in range(new_nbre_ways):
+            if new_bati[i_bat].bat_id == tab_id_member[0]: # attention on suppose le outer est toujours le premier...
+                OuterWay = new_bati[i_bat]
+                OuterWay.addRelation(relation_id)
+                OuterWay.multipolygone = "yes"
+            for i_member in range(1, nb_member):
+                if new_bati[i_bat].bat_id == tab_id_member[i_member]:
+                    new_bati[i_bat].setRole("inner")
+                    OuterWay.addInner(new_bati[i_bat])
+                    
+
+file_new.close()
+
+print("  " + str(new_nbre_nodes) + " noeuds répertoriés dans le fichier " + \
+    fichier_osm_new)
+print("  " + str(new_nbre_ways) + " batiments répertoriés dans le fichier " + \
+    fichier_osm_new)
 
 #------------------------------------------------------------------------
 #lecture des vieux batiments :
@@ -408,8 +514,8 @@ for ligne in file_old:
         relation_id = champsLigne[1]
         nb_member = 0
         tab_id_member = []
-        tab_ind_member = []
-        tab_role = []
+        tab_ind_member = [] # -> devient inutile
+        tab_role = []       # -> devient inutile
     elif champsLigne[0].find("member type") != -1:
         col_ref = champsLigne.index(" ref=") + 1
         col_role = champsLigne.index(" role=") + 1
@@ -417,18 +523,16 @@ for ligne in file_old:
         tab_role.append(champsLigne[col_role])
         nb_member = nb_member + 1
     elif champsLigne[0].find("/relation") != -1:
-        for i_member in range(nb_member):
-            for i_bat in range(old_nbre_ways):
+        for i_bat in range(old_nbre_ways):
+            if old_bati[i_bat].bat_id == tab_id_member[0]: # attention on suppose le outer est toujours le premier...
+                OuterWay = old_bati[i_bat]
+                OuterWay.addRelation(relation_id)
+                OuterWay.multipolygone = "yes"
+            for i_member in range(1, nb_member):
                 if old_bati[i_bat].bat_id == tab_id_member[i_member]:
-                    old_bati[i_bat].multipolygone = "yes"
-                    old_bat[i_bat].ind_relation = old_nbre_relation
-                    tab_ind_member.append(i_bat)
-                    if tab_role[i_member] == "inner":
-                        old_bati[i_bat].setRole("inner")
-        old_relation.append(Relation(relation_id, nb_member, tab_id_member, \
-            tab_ind_member, tab_role))
-        old_nbre_relation = old_nbre_relation + 1
-        
+                    old_bati[i_bat].setRole("inner")
+                    OuterWay.addInner(old_bati[i_bat])
+                    
 
 file_old.close()
 
@@ -437,111 +541,11 @@ print("  " + str(old_nbre_nodes) + " noeuds répertoriés dans le fichier " + \
 print("  " + str(old_nbre_ways) + " batiments répertoriés dans le fichier " + \
     fichier_osm_old)
 
-
-#------------------------------------------------------------------------
-#lecture des nouveaux batiments :
-#------------------------------------------------------------------------
-file_new = open(fichier_osm_new, "r")
-print("lecture du fichier " + fichier_osm_new + "...")
-ligne = file_new.readline().rstrip('\n\r')
-tabLigne1 = ligne.split("'")
-tabLigne2 = ligne.split("\"")
-if len(tabLigne1) > len(tabLigne2):
-    delim = "'"
-else:
-    delim = "\""
-
-new_nodes = []
-new_id_nodes = []
-new_bati = []
-new_bati_sorted = []
-new_relation = []
-
-new_nbre_nodes = 0
-new_nbre_ways = 0
-new_nbre_relation = 0
-i_way = 0
-i_nd_ref = 0
-col_id = 0
-col_lat = 0
-col_lon = 0
-
-for ligne in file_new:
-    champsLigne = ligne.rstrip('\n\r').split(delim)
-    if champsLigne[0].find("node id") != -1:
-        col_id = 1
-        col_lat = champsLigne.index(" lat=") + 1
-        col_lon = champsLigne.index(" lon=") + 1
-        new_nodes.append(Point(champsLigne[col_id], champsLigne[col_lat], \
-            champsLigne[col_lon]))
-        new_id_nodes.append(champsLigne[col_id])
-        if champsLigne[1][0] != "-":
-            new_nodes[new_nbre_nodes].setHistorique(champsLigne)
-        else:
-            new_nodes[new_nbre_nodes].setHistorique([])
-        new_nbre_nodes = new_nbre_nodes + 1
-    elif champsLigne[0].find("way id") != -1:
-        way_id = champsLigne[1]
-        i_nd_ref = 0
-        nodes = []
-        tagKey = []
-        tagValue = []
-        numTag = 0
-    elif champsLigne[0].find("nd ref") != -1:
-        id_nd_ref = champsLigne[1]
-        i_nd_ref = i_nd_ref + 1
-        nodes.append(new_nodes[new_id_nodes.index(id_nd_ref)])
-    elif champsLigne[0].find("tag") != -1:
-        if i_nd_ref != 0:
-            tagKey.append(champsLigne[1])
-            tagValue.append(champsLigne[3])
-            numTag = numTag + 1
-    elif champsLigne[0].find("/way") != -1:
-        new_bati.append(Batiment(way_id, i_nd_ref, nodes, \
-            numTag, tagKey, tagValue, 1000, 0., "UNKNOWN"))
-        new_bati[new_nbre_ways].BatimentToPoint()
-        if new_bati[new_nbre_ways].pbAire == "YES":
-            print("  Attention, surface nulle obtenue pour le batiment :", \
-                new_bati[new_nbre_ways].bat_id)
-        new_bati[new_nbre_ways].calculLargeur()
-        new_bati[new_nbre_ways].setHistorique([])
-        new_nbre_ways = new_nbre_ways + 1
-    elif champsLigne[0].find("relation id") !=-1:
-        relation_id = champsLigne[1]
-        nb_member = 0
-        tab_id_member = []
-        tab_ind_member = []
-        tab_role = []
-    elif champsLigne[0].find("member type") != -1:
-        col_ref = champsLigne.index(" ref=") + 1
-        col_role = champsLigne.index(" role=") + 1
-        tab_id_member.append(champsLigne[col_ref])
-        tab_role.append(champsLigne[col_role])
-        nb_member = nb_member + 1
-    elif champsLigne[0].find("/relation") != -1:
-        for i_member in range(nb_member):
-            for i_bat in range(new_nbre_ways):
-                if new_bati[i_bat].bat_id == tab_id_member[i_member]:
-                    new_bati[i_bat].multipolygone = "yes"
-                    new_bati[i_bat].ind_relation = new_nbre_relation
-                    tab_ind_member.append(i_bat)
-                    if tab_role[i_member] == "inner":
-                        new_bati[i_bat].setRole("inner")
-        new_relation.append(Relation(relation_id, nb_member, tab_id_member, \
-            tab_ind_member, tab_role))
-        new_nbre_relation = new_nbre_relation + 1
-
-file_new.close()
-
-print("  " + str(new_nbre_nodes) + " noeuds répertoriés dans le fichier " + \
-    fichier_osm_new)
-print("  " + str(new_nbre_ways) + " batiments répertoriés dans le fichier " + \
-    fichier_osm_new)
 print("------------------------------------------------------------------")
 print("-  Recherche des similitudes et des différences entre batiments  -")
 print("------------------------------------------------------------------")
 #------------------------------------------------------------------------------
-#calcul des distances mini entre chaque anciens batiments
+# calcul des distances mini entre chaque anciens batiments
 # pour chaque batiment anciens (resp. nouveau) on détermine la distance 
 # la plus petite avec tous les nouveaux batiments (resp. anciens)
 #------------------------------------------------------------------------------
@@ -558,9 +562,6 @@ while i_old < old_nbre_ways:
                     old_bati[i_old].setDistMini(distance)
                     old_bati[i_old].setBatProche(new_bati[i_new].bat_id, i_new)
             i_new = i_new + 1
-    else:
-        old_bati[i_old].setDistMini(9999.)
-        old_bati[i_old].setBatProche("-9999", 9999)
     avancement = int(float(i_old) / (old_nbre_ways + new_nbre_ways) * 100.)
     sys.stdout.write("Calcul en cours : " + str(avancement) + " %" + chr(13))
     i_old = i_old + 1
@@ -576,16 +577,13 @@ while i_new < new_nbre_ways:
                     new_bati[i_new].setDistMini(distance)
                     new_bati[i_new].setBatProche(old_bati[i_old].bat_id, i_old)
             i_old = i_old + 1
-    else:
-        new_bati[i_new].setDistMini(9999.)
-        new_bati[i_new].setBatProche("-9999", 9999)
     avancement = int(float(old_nbre_ways + i_new) / \
         (old_nbre_ways + new_nbre_ways) * 100.)
     sys.stdout.write("Calcul en cours : " + str(avancement) + " %" + chr(13))
     i_new = i_new + 1
 
 #------------------------------------------------------------------------
-#Classement des batiments :
+# Classement des batiments :
 #  - dist_mini < BORNE_INF_MODIF : identique
 #  - BORNE_INF_MODIF < dist_mini < BORNE_SUP_MODIF : modifié
 #  - dist_mini > BORNE_SUP_MODIF : nouveau ou supprimé
@@ -614,8 +612,6 @@ for batiments in range(new_nbre_ways):
             new_bati[batiments].setStatus("NOUVEAU")
         if new_bati[batiments].dist_mini > new_bati[batiments].largeur:
             new_bati[batiments].setStatus("NOUVEAU")
-    else:
-        new_bati[batiments].setStatus("INNER")
 
 for batiments in range(old_nbre_ways):
     if old_bati[batiments].role == "outer":
@@ -623,8 +619,7 @@ for batiments in range(old_nbre_ways):
             old_bati[batiments].setStatus("SUPPRIME")
         if old_bati[batiments].dist_mini > old_bati[batiments].largeur:
             old_bati[batiments].setStatus("SUPPRIME")
-    else:
-        old_bati[batiments].setStatus("INNER")
+
 
 # Classement des batiments en fonction du status et de la distance mini.
 new_bati_sorted = sorted(new_bati, key = attrgetter("status", \
@@ -632,47 +627,38 @@ new_bati_sorted = sorted(new_bati, key = attrgetter("status", \
 old_bati_sorted = sorted(old_bati, key = attrgetter("status", \
     "dist_mini"))
 
-dernier_id_inner_new = 0
 i_new = 0
 while i_new < new_nbre_ways:
-    if new_bati_sorted[i_new].status == "IDENTIQUE":
-        nb_bat_noMod = nb_bat_noMod + 1
-#        dernier_id_identique = i_new
-    elif new_bati_sorted[i_new].status == "INNER":
-        nb_bat_inner_new = nb_bat_inner_new + 1
-#        dernier_id_inner_new = i_new
-    elif new_bati_sorted[i_new].status == "MODIFIE":
-        nb_bat_mod = nb_bat_mod + 1
-#        dernier_id_modifie = i_new
-    elif new_bati_sorted[i_new].status == "NOUVEAU":
-        nb_bat_new = nb_bat_new + 1
+    if new_bati_sorted[i_new].role == "outer":
+        if new_bati_sorted[i_new].status == "IDENTIQUE":
+            nb_bat_noMod = nb_bat_noMod + 1
+        elif new_bati_sorted[i_new].status == "MODIFIE":
+            nb_bat_mod = nb_bat_mod + 1
+        elif new_bati_sorted[i_new].status == "NOUVEAU":
+            nb_bat_new = nb_bat_new + 1
     i_new = i_new + 1
 
 #traitement des cas particulier si l'une des catégories est vide
 # note : je ne sais pas gérer le cas où l'analyse donne aucun batiment identique
 dernier_id_identique=nb_bat_noMod-1
-dernier_id_inner_new=nb_bat_noMod+nb_bat_inner_new-1
-dernier_id_modifie=nb_bat_noMod+nb_bat_inner_new+nb_bat_mod-1
+dernier_id_modifie=nb_bat_noMod+nb_bat_mod-1
 
 
-
-dernier_id_inner_old = 0
+#dernier_id_inner_old = 0
 i_old = 0
 while i_old < old_nbre_ways:
-    if old_bati_sorted[i_old].status == "INNER":
-        nb_bat_inner_old = nb_bat_inner_old + 1
-        dernier_id_inner_old = i_old
-    elif old_bati_sorted[i_old].status == "SUPPRIME":
-        nb_bat_del = nb_bat_del + 1
+    if old_bati_sorted[i_old].role == "outer":
+        if old_bati_sorted[i_old].status == "SUPPRIME":
+            nb_bat_del = nb_bat_del + 1
     i_old = i_old + 1
 
 print("------------------------------------------------------------------")
 print("-                    Création des fichiers                       -")
 print("------------------------------------------------------------------")
-print(nb_bat_noMod, " batiments identiques")
-print(nb_bat_mod, " batiments modifiés")
-print(nb_bat_new, " batiments nouveaux")
-print(nb_bat_del, " batiments supprimés")
+print(str(nb_bat_noMod) + " batiments identiques")
+print(str(nb_bat_mod) +  " batiments modifiés")
+print(str(nb_bat_new) + " batiments nouveaux")
+print(str(nb_bat_del) + " batiments supprimés")
 
 tps2 = time.clock()
 
@@ -698,7 +684,7 @@ file_log.write("    Nombre de batiments supprimés trouvés : " + \
     str(nb_bat_del) + "\n")
 file_log.write("Temps de calcul : " + str(tps2 - tps1) + " secondes." + "\n")
 file_log.write(separation + "\n")
-file_log.write("Récapitulatif des nouveaux batiments" + "\n")
+file_log.write("Récapitulatif des batiments issus de" + fichier_osm_new + "\n")
 file_log.write(separation + "\n")
 
 i_new = 0
@@ -710,7 +696,7 @@ while i_new < new_nbre_ways:
     file_log.write(formatLog(Resultat) + "\n")
     i_new = i_new + 1
 file_log.write(separation + "\n")
-file_log.write("Récapitulatif des Anciens batiments" + "\n")
+file_log.write("Récapitulatif des batiments issus de" + fichier_osm_old + "\n")
 file_log.write(separation + "\n")
 i_old = 0
 while i_old < old_nbre_ways:
@@ -737,15 +723,6 @@ file_noMod_building.write("<osm version='0.6' upload='true' generator='JOSM'>" +
 for i_bat in range(dernier_id_identique):
     new_bati_sorted[i_bat].export_bat()
     file_noMod_building.write(new_bati_sorted[i_bat].print_bat + "\n")
-    if new_bati_sorted[i_bat].multipolygone == "yes":
-        relation = new_bati_sorted[i_bat].ind_relation
-        for members in range(new_relation[relation].nb_ways):
-            if new_relation[relation].role[members] == "inner":
-                indic_bati_membre = new_relation[relation].ind_ways[members]
-                new_bati[indic_bati_membre].export_bat()
-                file_noMod_building.write(new_bati[indic_bati_membre].print_bat + "\n")
-        new_relation[relation].export_relation()
-        file_noMod_building.write(new_relation[relation].print_relation + "\n")
     Ligne = ["IDENTIQUE", new_bati_sorted[i_bat].id_bat_proche , \
         str(round(new_bati_sorted[i_bat].dist_mini, 9)), \
         new_bati_sorted[i_bat].bat_id  , noMod_building ]
@@ -766,18 +743,9 @@ file_mod_building.write("<?xml version='1.0' encoding='UTF-8'?>" + "\n")
 file_mod_building.write("<osm version='0.6' upload='true' generator='JOSM'>" + "\n")
 if nb_bat_mod>0:
     for i_bat in range(nb_bat_mod):
-        indice = dernier_id_inner_new + i_bat + 1
+        indice = i_bat + 1
         new_bati_sorted[indice].export_bat()
         file_mod_building.write(new_bati_sorted[indice].print_bat + "\n")
-        if new_bati_sorted[indice].multipolygone == "yes":
-            relation = new_bati_sorted[indice].ind_relation
-            for members in range(new_relation[relation].nb_ways):
-                if new_relation[relation].role[members] == "inner":
-                    indic_bati_membre = new_relation[relation].ind_ways[members]
-                    new_bati[indic_bati_membre].export_bat()
-                    file_mod_building.write(new_bati[indic_bati_membre].print_bat + "\n")
-            new_relation[relation].export_relation()
-            file_mod_building.write(new_relation[relation].print_relation + "\n")
         Ligne = ["MODIFIE", new_bati_sorted[indice].id_bat_proche, \
             str(round(new_bati_sorted[indice].dist_mini, 9)), \
             new_bati_sorted[indice].bat_id, nom_file]
@@ -802,15 +770,6 @@ for i_bat in range(nb_bat_new):
     indice = dernier_id_modifie + i_bat + 1
     new_bati_sorted[indice].export_bat()
     file_new_building.write(new_bati_sorted[indice].print_bat + "\n")
-    if new_bati_sorted[indice].multipolygone == "yes":
-        relation = new_bati_sorted[indice].ind_relation
-        for members in range(new_relation[relation].nb_ways):
-            if new_relation[relation].role[members] == "inner":
-                indic_bati_membre = new_relation[relation].ind_ways[members]
-                new_bati[indic_bati_membre].export_bat()
-                file_new_building.write(new_bati[indic_bati_membre].print_bat + "\n")
-        new_relation[relation].export_relation()
-        file_new_building.write(new_relation[relation].print_relation + "\n")
     Ligne = ["NOUVEAU", new_bati_sorted[indice].id_bat_proche, \
         str(round(new_bati_sorted[indice].dist_mini, 9)), \
         new_bati_sorted[indice].bat_id, nom_file]
@@ -830,27 +789,18 @@ file_del_building = open(adresse + "/" + nom_file , "w")
 file_del_building.write("<?xml version='1.0' encoding='UTF-8'?>" + "\n")
 file_del_building.write("<osm version='0.6' upload='true' generator='JOSM'>" + "\n")
 for i_bat in range(nb_bat_del):
-    indice = dernier_id_inner_old + i_bat
-    old_bati_sorted[indice].export_bat()
-    file_del_building.write(old_bati_sorted[indice].print_bat + "\n")
-    if old_bati_sorted[indice].multipolygone == "yes":
-        relation = old_bati_sorted[indice].ind_relation
-        for members in range(old_relation[relation].nb_ways):
-            if old_relation[relation].role[members] == "inner":
-                indic_bati_membre = old_relation[relation].ind_ways[members]
-                old_bati[indic_bati_membre].export_bat()
-                file_del_building.write(old_bati[indic_bati_membre].print_bat + "\n")
-        old_relation[relation].export_relation()
-        file_del_building.write(old_relation[relation].print_relation + "\n")
-    Ligne = ["SUPPRIME", old_bati_sorted[indice].bat_id, \
-        str(round(old_bati_sorted[indice].dist_mini, 9)), nom_file]
+    indice = i_bat
+    old_bati_sorted[i_bat].export_bat()
+    file_del_building.write(old_bati_sorted[i_bat].print_bat + "\n")
+    Ligne = ["SUPPRIME", old_bati_sorted[i_bat].bat_id, \
+        str(round(old_bati_sorted[i_bat].dist_mini, 9)), nom_file]
     file_log.write(formatLog(Ligne) + "\n")
 file_del_building.write("</osm>")
 file_del_building.close()
 
 file_log.close()
 
-print("Durée du calcul : ", tps2 - tps1)
+print("Durée du calcul : " + str(tps2 - tps1))
 print("------------------------------------------------------------------")
 print("-                       FIN DU PROCESS                           -")
 print("------------------------------------------------------------------")
