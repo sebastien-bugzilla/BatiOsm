@@ -743,7 +743,7 @@ file_mod_building.write("<?xml version='1.0' encoding='UTF-8'?>" + "\n")
 file_mod_building.write("<osm version='0.6' upload='true' generator='JOSM'>" + "\n")
 if nb_bat_mod>0:
     for i_bat in range(nb_bat_mod):
-        indice = i_bat + 1
+        indice = dernier_id_identique + i_bat + 1
         new_bati_sorted[indice].export_bat()
         file_mod_building.write(new_bati_sorted[indice].print_bat + "\n")
         Ligne = ["MODIFIE", new_bati_sorted[indice].id_bat_proche, \
