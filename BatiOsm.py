@@ -8,6 +8,7 @@ from operator import attrgetter
 
 BORNE_INF_MODIF = 1.e-5
 BORNE_SUP_MODIF = 1.e-4
+NB_ZONE = 20
 
 class Point:
     """Définition d'un point.
@@ -299,7 +300,6 @@ class Batiment:
         """
         self.nom_relation = nom_relation
 
-
 def formatLog(donnees):
     """Cette fonction permet de générer une chaine de caractère formaté et 
     de longueur constante à partir du tableau passé en paramètre"""
@@ -317,6 +317,22 @@ def formatLog(donnees):
             nbCar = len(donnees[i_data])
         result = result + "|" + donnees[i_data]
     result = result + "|"
+    return result
+
+def formatMat(donnees):
+    """Cette fonction permet de générer une chaine de caractère formaté et 
+    de longueur constante à partir du tableau passé en paramètre"""
+    result = ""
+    nbData = len(donnees)
+    nbCarLimite = 4
+    for i_data in range(nbData):
+        #donnees[i_data] = " " + donnees[i_data]
+        nbCar = len(donnees[i_data])
+        while nbCar < nbCarLimite:
+            donnees[i_data] = donnees[i_data] + " "
+            nbCar = len(donnees[i_data])
+        result = result + "" + donnees[i_data]
+    result = result + ""
     return result
 
 #------------------------------------------------------------------------------
@@ -363,15 +379,15 @@ lat_max=max(lat1,lat2)
 lon_min=min(lon1,lon2)
 lon_max=max(lon1,lon2)
 
-delta_lat = (lat_max-lat_min)/10
-delta_lon = (lon_max-lon_min)/10
+delta_lat = (lat_max-lat_min)/NB_ZONE
+delta_lon = (lon_max-lon_min)/NB_ZONE
 
 new_nodes = []
 new_id_nodes = []
 new_bati = []
-for i in range(10):
+for i in range(NB_ZONE):
     new_bati += [[]]
-    for j in range(10):
+    for j in range(NB_ZONE):
         new_bati[i] += [[]]
 
 new_nbre_nodes = 0
@@ -422,10 +438,10 @@ for ligne in file_new:
         unBatiment.setHistorique([])
         repereLatitude = int((unBatiment.pt_moy.node_lat-lat_min)/delta_lat)
         repereLongitude = int((unBatiment.pt_moy.node_lon-lon_min)/delta_lon)
-        if repereLatitude == 10:
-            repereLatitude = 9
-        if repereLongitude == 10:
-            repereLongitude = 9
+        if repereLatitude == NB_ZONE:
+            repereLatitude = NB_ZONE-1
+        if repereLongitude == NB_ZONE:
+            repereLongitude = NB_ZONE-1
         if repereLatitude == -1:
             repereLatitude = 0
         if repereLongitude == -1:
@@ -445,8 +461,8 @@ for ligne in file_new:
         tab_role.append(champsLigne[col_role])
         nb_member = nb_member + 1
     elif champsLigne[0].find("/relation") != -1:
-        for i_lat in range(10):
-            for i_lon in range(10):
+        for i_lat in range(NB_ZONE):
+            for i_lon in range(NB_ZONE):
                 for i_bat in range(len(new_bati[i_lat][i_lon])):
                     if new_bati[i_lat][i_lon][i_bat].bat_id == tab_id_member[0]: # attention on suppose le outer est toujours le premier...
                         OuterWay = new_bati[i_lat][i_lon][i_bat]
@@ -481,9 +497,9 @@ else:
 old_nodes = []
 old_id_nodes = []
 old_bati = []
-for i in range(10):
+for i in range(NB_ZONE):
     old_bati += [[]]
-    for j in range(10):
+    for j in range(NB_ZONE):
         old_bati[i] += [[]]
 
 old_nbre_nodes = 0
@@ -539,10 +555,10 @@ for ligne in file_old:
             unBatiment.setHistorique([])
         repereLatitude = int((unBatiment.pt_moy.node_lat-lat_min)/delta_lat)
         repereLongitude = int((unBatiment.pt_moy.node_lon-lon_min)/delta_lon)
-        if repereLatitude == 10:
-            repereLatitude = 9
-        if repereLongitude == 10:
-            repereLongitude = 9
+        if repereLatitude == NB_ZONE:
+            repereLatitude = NB_ZONE-1
+        if repereLongitude == NB_ZONE:
+            repereLongitude = NB_ZONE-1
         if repereLatitude == -1:
             repereLatitude = 0
         if repereLongitude == -1:
@@ -562,8 +578,8 @@ for ligne in file_old:
         tab_role.append(champsLigne[col_role])
         nb_member = nb_member + 1
     elif champsLigne[0].find("/relation") != -1:
-        for i_lat in range(10):
-            for i_lon in range(10):
+        for i_lat in range(NB_ZONE):
+            for i_lon in range(NB_ZONE):
                 for i_bat in range(len(old_bati[i_lat][i_lon])):
                     # attention on suppose le outer est toujours le premier...
                     if old_bati[i_lat][i_lon][i_bat].bat_id == tab_id_member[0]: 
@@ -594,12 +610,12 @@ print("------------------------------------------------------------------")
 
 nb_bat_traite = 0
 avancement = 0.
-for i_lat in range(10):
-    for i_lon in range(10):
+for i_lat in range(NB_ZONE):
+    for i_lon in range(NB_ZONE):
         lat_inf = max(i_lat-1,0)
         lon_inf = max(i_lon-1,0)
-        lat_sup = min(i_lat+1,9) + 1
-        lon_sup = min(i_lon+1,9) + 1
+        lat_sup = min(i_lat+1,NB_ZONE-1) + 1
+        lon_sup = min(i_lon+1,NB_ZONE-1) + 1
         for i_bat in range(len(old_bati[i_lat][i_lon])):
             if old_bati[i_lat][i_lon][i_bat].role == "outer":
                 nb_bat_traite = nb_bat_traite + 1
@@ -614,12 +630,12 @@ for i_lat in range(10):
                                     old_bati[i_lat][i_lon][i_bat].setDistMini(distance)
                                     old_bati[i_lat][i_lon][i_bat].setBatProche(new_bati[n_lat][n_lon][n_bat].bat_id)
 
-for i_lat in range(10):
-    for i_lon in range(10):
+for i_lat in range(NB_ZONE):
+    for i_lon in range(NB_ZONE):
         lat_inf = max(i_lat-1,0)
         lon_inf = max(i_lon-1,0)
-        lat_sup = min(i_lat+1,9) + 1
-        lon_sup = min(i_lon+1,9) + 1
+        lat_sup = min(i_lat+1,NB_ZONE-1) + 1
+        lon_sup = min(i_lon+1,NB_ZONE-1) + 1
         for i_bat in range(len(new_bati[i_lat][i_lon])):
             if new_bati[i_lat][i_lon][i_bat].role == "outer":
                 nb_bat_traite = nb_bat_traite + 1
@@ -651,8 +667,8 @@ nb_bat_mod = 0
 nb_bat_del = 0
 nb_bat_noMod = 0
 
-for i_lat in range(10):
-    for i_lon in range(10):
+for i_lat in range(NB_ZONE):
+    for i_lon in range(NB_ZONE):
         #Classement des anciens batiments
         for i_bat in range(len(old_bati[i_lat][i_lon])):
             if old_bati[i_lat][i_lon][i_bat].role == "outer":
@@ -674,8 +690,8 @@ for i_lat in range(10):
                     new_bati[i_lat][i_lon][i_bat].setStatus("NOUVEAU")
 
 # Comptage des batiment de chaque catégorie.
-for i_lat in range(10):
-    for i_lon in range(10):
+for i_lat in range(NB_ZONE):
+    for i_lon in range(NB_ZONE):
         for i_bat in range(len(old_bati[i_lat][i_lon])):
             if old_bati[i_lat][i_lon][i_bat].role == "outer":
                 if old_bati[i_lat][i_lon][i_bat].status == "SUPPRIME":
@@ -705,6 +721,7 @@ file_log = open(adresse + "/" + prefixe + "_log.txt", "w")
 file_log.write("Rappel des input : \n")
 file_log.write("    BORNE_INF_MODIF : " + str(BORNE_INF_MODIF) + "\n")
 file_log.write("    BORNE_SUP_MODIF : " + str(BORNE_SUP_MODIF) + "\n")
+file_log.write("    NB_ZONE : " + str(NB_ZONE) + "\n")
 file_log.write("Le fichier " + fichier_osm_old + " contient :" + "\n")
 file_log.write("    - " + str(old_nbre_nodes) + " noeuds" + "\n")
 file_log.write("    - " + str(old_nbre_ways) + " batiments" + "\n")
@@ -725,8 +742,8 @@ file_log.write(separation + "\n")
 file_log.write("Récapitulatif des batiments issus de " + fichier_osm_new + "\n")
 file_log.write(separation + "\n")
 
-for i_lat in range(10):
-    for i_lon in range(10):
+for i_lat in range(NB_ZONE):
+    for i_lon in range(NB_ZONE):
         for i_bat in range(len(new_bati[i_lat][i_lon])):
             Resultat = [new_bati[i_lat][i_lon][i_bat].bat_id, \
                 new_bati[i_lat][i_lon][i_bat].status, \
@@ -738,8 +755,8 @@ file_log.write(separation + "\n")
 file_log.write("Récapitulatif des batiments issus de " + fichier_osm_old + "\n")
 file_log.write(separation + "\n")
 
-for i_lat in range(10):
-    for i_lon in range(10):
+for i_lat in range(NB_ZONE):
+    for i_lon in range(NB_ZONE):
         for i_bat in range(len(old_bati[i_lat][i_lon])):
             Resultat = [old_bati[i_lat][i_lon][i_bat].bat_id, \
                 old_bati[i_lat][i_lon][i_bat].status, \
@@ -747,9 +764,6 @@ for i_lat in range(10):
                 str(old_bati[i_lat][i_lon][i_bat].pt_moy.node_lat), \
                 str(old_bati[i_lat][i_lon][i_bat].pt_moy.node_lon)]
             file_log.write(formatLog(Resultat) + "\n")
-
-file_log.write(separation + "\n")
-file_log.write(str(nb_bat_noMod) + " batiments classés comme identiques" + "\n")
 file_log.write(separation + "\n")
 
 nom_file_noMod = prefixe + "_unModified.osm"
@@ -775,10 +789,11 @@ file_del.write("<osm version='0.6' upload='true' generator='JOSM'>" + "\n")
 # Ecriture des nouveaux batiments
 enTete = ["STATUS", "ANCIEN BATIMENT", "TOLERANCE", "NOUVEAU BATIMENT", "fichier"]
 file_log.write("NOUVEAUX BATIMENTS" + "\n" )
+file_log.write(separation + "\n")
 file_log.write(formatLog(enTete) +"\n")
 file_log.write(separation + "\n")
-for i_lat in range(10):
-    for i_lon in range(10):
+for i_lat in range(NB_ZONE):
+    for i_lon in range(NB_ZONE):
         for i_bat in range(len(new_bati[i_lat][i_lon])):
             if new_bati[i_lat][i_lon][i_bat].role == "outer":
                 new_bati[i_lat][i_lon][i_bat].export_bat()
@@ -803,11 +818,13 @@ for i_lat in range(10):
 
 # Ecriture des anciens batiments (seulement ceux qui sont supprimés)
 enTete = ["STATUS", "ANCIEN BATIMENT", "TOLERANCE", "fichier"]
+file_log.write(separation + "\n")
 file_log.write("ANCIENS BATIMENTS" + "\n" )
+file_log.write(separation + "\n")
 file_log.write(formatLog(enTete) +"\n")
 file_log.write(separation + "\n")
-for i_lat in range(10):
-    for i_lon in range(10):
+for i_lat in range(NB_ZONE):
+    for i_lon in range(NB_ZONE):
         for i_bat in range(len(old_bati[i_lat][i_lon])):
             if old_bati[i_lat][i_lon][i_bat].role == "outer":
                 if old_bati[i_lat][i_lon][i_bat].status == "SUPPRIME":
@@ -828,11 +845,29 @@ file_new.write("</osm>")
 file_new.close()
 file_log.write(separation + "\n")
 # Enregistrement de la 'densité' de batiments.
-for i_lat in range(10):
-    for i_lon in range(10):
-        file_log.write("latitude : " + str(i_lat) + " - longitude : " + str(i_lon) \
-            + " - nombre de batiments anciens / nouveau : " + \
-            str(len(old_bati[i_lat][i_lon])) + " / " + str(len(new_bati[i_lat][i_lon])) + "\n")
+file_log.write("Densité de batiments issus du fichier " + fichier_osm_old + "\n")
+file_log.write(separation + "\n")
+enTete = ["",""]
+i_zone = 0
+while i_zone < NB_ZONE:
+    enTete.append(str(i_zone))
+    i_zone = i_zone + 1
+file_log.write(formatMat(enTete) + "\n")
+for i_lat in range(NB_ZONE):
+    densite_old = [str(i_lat) , "|"]
+    for i_lon in range(NB_ZONE):
+        densite_old.append(str(len(old_bati[i_lat][i_lon])))
+    file_log.write(formatMat(densite_old) + "\n")
+
+file_log.write(separation + "\n")
+file_log.write("Densité de batiments issus du fichier " + fichier_osm_new + "\n")
+file_log.write(separation + "\n")
+file_log.write(formatMat(enTete) + "\n")
+for i_lat in range(NB_ZONE):
+    densite_new = [str(i_lat) , "|"]
+    for i_lon in range(NB_ZONE):
+        densite_new.append(str(len(new_bati[i_lat][i_lon])))
+    file_log.write(formatMat(densite_new) + "\n")
 file_log.close()
 
 print("Durée du calcul : " + str(tps2 - tps1))
