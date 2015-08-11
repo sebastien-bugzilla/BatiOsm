@@ -8,7 +8,7 @@ from operator import attrgetter
 
 BORNE_INF_MODIF = 1.e-5
 BORNE_SUP_MODIF = 1.e-4
-NB_ZONE = 20
+NB_ZONE = 50
 
 class Point:
     """Définition d'un point.
@@ -412,7 +412,12 @@ for ligne in file_new:
         else:
             new_nodes[new_nbre_nodes].setHistorique([])
         new_nbre_nodes = new_nbre_nodes + 1
-    elif champsLigne[0].find("way id") != -1:
+file_new.close()
+
+file_new = open(fichier_osm_new, "r")
+for ligne in file_new:
+    champsLigne = ligne.rstrip('\n\r').split(delim)
+    if champsLigne[0].find("way id") != -1:
         way_id = champsLigne[1]
         i_nd_ref = 0
         nodes = []
@@ -472,7 +477,6 @@ for ligne in file_new:
                         if new_bati[i_lat][i_lon][i_bat].bat_id == tab_id_member[i_member]:
                             new_bati[i_lat][i_lon][i_bat].setRole("inner")
                             OuterWay.addInner(new_bati[i_lat][i_lon][i_bat])
-
 file_new.close()
 
 print("  " + str(new_nbre_nodes) + " noeuds répertoriés dans le fichier " + \
@@ -525,7 +529,11 @@ for ligne in file_old:
         else:
             old_nodes[old_nbre_nodes].setHistorique([])
         old_nbre_nodes = old_nbre_nodes + 1
-    elif champsLigne[0].find("way id") != -1: # nouveau batiment : on initialise les données
+file_old.close()
+file_old = open(fichier_osm_old, "r")
+for ligne in file_old:
+    champsLigne = ligne.rstrip('\n\r').split(delim)
+    if champsLigne[0].find("way id") != -1: # nouveau batiment : on initialise les données
         way_id = champsLigne[1]
         i_nd_ref = 0
         nodes = []
@@ -590,14 +598,14 @@ for ligne in file_old:
                         if old_bati[i_lat][i_lon][i_bat].bat_id == tab_id_member[i_member]:
                             old_bati[i_lat][i_lon][i_bat].setRole("inner")
                             OuterWay.addInner(old_bati[i_lat][i_lon][i_bat])
-
 file_old.close()
-
+tps2 = time.clock()
 print("  " + str(old_nbre_nodes) + " noeuds répertoriés dans le fichier " + \
     fichier_osm_old)
 print("  " + str(old_nbre_ways) + " batiments répertoriés dans le fichier " + \
     fichier_osm_old)
-
+print("------------------------------------------------------------------")
+print("Temps de lecture des fichiers : " + str(tps2 - tps1))
 print("------------------------------------------------------------------")
 print("-  Recherche des similitudes et des différences entre batiments  -")
 print("------------------------------------------------------------------")
@@ -714,7 +722,7 @@ print(str(nb_bat_mod) +  " batiments modifiés")
 print(str(nb_bat_new) + " batiments nouveaux")
 print(str(nb_bat_del) + " batiments supprimés")
 
-tps2 = time.clock()
+tps3 = time.clock()
 
 
 file_log = open(adresse + "/" + prefixe + "_log.txt", "w")
@@ -737,7 +745,9 @@ file_log.write("    Nombre de batiments nouveaux trouvés : " + \
     str(nb_bat_new) + "\n")
 file_log.write("    Nombre de batiments supprimés trouvés : " + \
     str(nb_bat_del) + "\n")
-file_log.write("Temps de calcul : " + str(tps2 - tps1) + " secondes." + "\n")
+file_log.write("Temps de lecture des fichiers : " + str(tps2 - tps1) + " secondes." + "\n")
+file_log.write("Temps de calcul : " + str(tps3 - tps2) + " secondes." + "\n")
+file_log.write("Temps d'execution totale : " + str(tps3 - tps1) + " secondes." + "\n")
 file_log.write(separation + "\n")
 file_log.write("Récapitulatif des batiments issus de " + fichier_osm_new + "\n")
 file_log.write(separation + "\n")
@@ -870,7 +880,8 @@ for i_lat in range(NB_ZONE):
     file_log.write(formatMat(densite_new) + "\n")
 file_log.close()
 
-print("Durée du calcul : " + str(tps2 - tps1))
+print("Durée du calcul : " + str(tps3 - tps2))
+print("Durée totale : " + str(tps3-tps1))
 print("------------------------------------------------------------------")
 print("-                       FIN DU PROCESS                           -")
 print("------------------------------------------------------------------")
