@@ -34,9 +34,9 @@ class Point:
     def export_node(self):
         """Création du code xml équivalent au point"""
         if self.historique == []:
-            self.print_node = "  <node id='" + self.node_id + \
-                "' action='modify' visible='true' lat='" + \
-                str(self.node_lat) + "' lon='" + str(self.node_lon) + "' />"
+            self.print_node = "  <node id=\"" + self.node_id + \
+                "\" action=\"modify\" visible=\"true\" lat=\"" + \
+                str(self.node_lat) + "\" lon=\"" + str(self.node_lon) + "\" />"
         else:
             i_hist = 0
             nodeHist= ""
@@ -44,7 +44,7 @@ class Point:
                 if (-1)**i_hist == 1:
                     sep=""
                 else:
-                    sep="'"
+                    sep="\""
                 nodeHist= nodeHist + sep + self.historique[i_hist] + sep
                 i_hist = i_hist + 1
             self.print_node = nodeHist
@@ -211,20 +211,20 @@ class Batiment:
                 if (-1)**i_hist == 1:
                     sep=""
                 else:
-                    sep="'"
+                    sep="\""
                 wayHist= wayHist + sep + self.historique[i_hist] + sep
                 i_hist = i_hist + 1
             export.append(wayHist)
         else:
-            export.append("  <way id='" + self.bat_id + "' visible='true'>")
+            export.append("  <way id=\"" + self.bat_id + "\" visible=\"true\">")
         i_node = 0
         while i_node < self.nbre_node:
-            export.append("    <nd ref='" + self.node_id[i_node].node_id + \
-                "' />")
+            export.append("    <nd ref=\"" + self.node_id[i_node].node_id + \
+                "\" />")
             i_node = i_node + 1
         for i_tag in range(self.nombre_tag):
-            export.append("    <tag k='" + self.tableau_tag_key[i_tag] + \
-                "' v='" + self.tableau_tag_value[i_tag] + "' />")
+            export.append("    <tag k=\"" + self.tableau_tag_key[i_tag] + \
+                "\" v=\"" + self.tableau_tag_value[i_tag] + "\" />")
         export.append("  </way>")
         i_node = 0
         while i_node < self.nbre_node:
@@ -239,13 +239,13 @@ class Batiment:
                 CheminInterieur = CheminInterieur + self.innerWay[i_inner].print_bat
             export.append(CheminInterieur)
             # export de la relation
-            export.append("  <relation id='" + self.nom_relation + "'>")
-            export.append("    <tag k='type' v='multipolygon'/>")
-            export.append("    <member type='way' ref='" + self.bat_id + \
-                 "' role='outer'/>")
+            export.append("  <relation id=\"" + self.nom_relation + "\">")
+            export.append("    <tag k=\"type\" v=\"multipolygon\"/>")
+            export.append("    <member type=\"way\" ref=\"" + self.bat_id + \
+                 "\" role=\"outer\"/>")
             for ways in range(len(self.innerWay)):
-                export.append("    <member type='way' ref='" + \
-                    self.innerWay[ways].bat_id + "' role='inner'/>")
+                export.append("    <member type=\"way\" ref=\"" + \
+                    self.innerWay[ways].bat_id + "\" role=\"inner\"/>")
             export.append("  </relation>")
         nb_ligne = len(export)
         i_ligne = 0
@@ -412,7 +412,6 @@ NB_ZONE_LON = int((lon_max - lon_min) / (2 * BORNE_SUP_MODIF))-1
 NB_ZONE = min(NB_ZONE_LAT,NB_ZONE_LON,500,NB_ZONE_USER)
 delta_lat = (lat_max-lat_min)/NB_ZONE
 delta_lon = (lon_max-lon_min)/NB_ZONE
-print("  NB_ZONE a été calculé à : " + str(NB_ZONE))
 
 new_bati = []
 for i in range(NB_ZONE):
@@ -614,6 +613,7 @@ print("------------------------------------------------------------------")
 print("Temps de lecture des fichiers : " + str(tps2 - tps1))
 print("------------------------------------------------------------------")
 print("-  Recherche des similitudes et des différences entre batiments  -")
+print("-  NB_ZONE a été calculé à : " + str(NB_ZONE))
 print("------------------------------------------------------------------")
 #------------------------------------------------------------------------------
 # calcul des distances mini entre chaque anciens batiments
@@ -790,23 +790,23 @@ file_log.write(separation + "\n")
 
 nom_file_noMod = prefixe + "_unModified.osm"
 file_noMod = open(adresse + "/" + nom_file_noMod, "w")
-file_noMod.write("<?xml version='1.0' encoding='UTF-8'?>" + "\n")
-file_noMod.write("<osm version='0.6' upload='true' generator='JOSM'>" + "\n")
+file_noMod.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "\n")
+file_noMod.write("<osm version=\"0.6\" upload=\"true\" generator=\"JOSM\">" + "\n")
 
 nom_file_mod = prefixe + "_mod_1_a_" + str(nb_bat_mod) + ".osm"
 file_mod = open(adresse + "/" + nom_file_mod, "w")
-file_mod.write("<?xml version='1.0' encoding='UTF-8'?>" + "\n")
-file_mod.write("<osm version='0.6' upload='true' generator='JOSM'>" + "\n")
+file_mod.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "\n")
+file_mod.write("<osm version=\"0.6\" upload=\"true\" generator=\"JOSM\">" + "\n")
 
 nom_file_new = prefixe + "_new_1_a_" + str(nb_bat_new) + ".osm"
 file_new = open(adresse + "/" + nom_file_new , "w")
-file_new.write("<?xml version='1.0' encoding='UTF-8'?>" + "\n")
-file_new.write("<osm version='0.6' upload='true' generator='JOSM'>" + "\n")
+file_new.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "\n")
+file_new.write("<osm version=\"0.6\" upload=\"true\" generator=\"JOSM\">" + "\n")
 
 nom_file_del = prefixe + "_sup_1_a_" + str(nb_bat_del) + ".osm"
 file_del = open(adresse + "/" + nom_file_del , "w")
-file_del.write("<?xml version='1.0' encoding='UTF-8'?>" + "\n")
-file_del.write("<osm version='0.6' upload='true' generator='JOSM'>" + "\n")
+file_del.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "\n")
+file_del.write("<osm version=\"0.6\" upload=\"true\" generator=\"JOSM\">" + "\n")
 
 # Ecriture des nouveaux batiments
 enTete = ["STATUS", "ANCIEN BATIMENT", "TOLERANCE", "NOUVEAU BATIMENT", "fichier"]
