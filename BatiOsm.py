@@ -8,7 +8,7 @@ from operator import attrgetter
 
 BORNE_INF_MODIF = 1.e-5
 BORNE_SUP_MODIF = 1.e-4
-NB_ZONE_USER = 1000
+NB_ZONE_USER = 500
 
 class Point:
     """Définition d'un point.
@@ -79,7 +79,7 @@ class Batiment:
     def __init__(self, bat_id, nbre_node, node_id, 
             numTag, tableauTagKey, tableauTagValue, 
             distance=1000, largeur = 0., status = "UNKNOWN", pbAire = "NO",
-            multipolygone = "no", role = "outer", nom_relation = 0):
+            multipolygone = "no", role = "outer", nom_relation = ""):
         self.bat_id = bat_id
         self.nbre_node = nbre_node
         self.node_id = node_id
@@ -92,7 +92,7 @@ class Batiment:
         self.pbAire = "NO"
         self.multipolygone = "no"
         self.role = "outer"
-        self.nom_relation = 0
+        self.nom_relation = ""
         self.innerWay = []
     
     def BatimentToPoint(self):
@@ -412,6 +412,7 @@ NB_ZONE_LON = int((lon_max - lon_min) / (2 * BORNE_SUP_MODIF))-1
 NB_ZONE = min(NB_ZONE_LAT,NB_ZONE_LON,500,NB_ZONE_USER)
 delta_lat = (lat_max-lat_min)/NB_ZONE
 delta_lon = (lon_max-lon_min)/NB_ZONE
+print("  NB_ZONE a été calculé à : " + str(NB_ZONE))
 
 new_bati = []
 for i in range(NB_ZONE):
@@ -466,7 +467,6 @@ for ligne in file_new:
         col_ref = champsLigne.index(" ref=") + 1
         col_role = champsLigne.index(" role=") + 1
         tab_id_member.append(champsLigne[col_ref])
-        tab_role.append(champsLigne[col_role])
         nb_member = nb_member + 1
     elif champsLigne[0].find("/relation") != -1:
         for i_lat in range(NB_ZONE):
@@ -476,6 +476,9 @@ for ligne in file_new:
                         OuterWay = new_bati[i_lat][i_lon][i_bat]
                         OuterWay.addRelation(relation_id)
                         OuterWay.multipolygone = "yes"
+        for i_lat in range(NB_ZONE):
+            for i_lon in range(NB_ZONE):
+                for i_bat in range(len(new_bati[i_lat][i_lon])):           
                     for i_member in range(1, nb_member):
                         if new_bati[i_lat][i_lon][i_bat].bat_id == tab_id_member[i_member]:
                             new_bati[i_lat][i_lon][i_bat].setRole("inner")
@@ -584,7 +587,6 @@ for ligne in file_old:
         col_ref = champsLigne.index(" ref=") + 1
         col_role = champsLigne.index(" role=") + 1
         tab_id_member.append(champsLigne[col_ref])
-        tab_role.append(champsLigne[col_role])
         nb_member = nb_member + 1
     elif champsLigne[0].find("/relation") != -1:
         for i_lat in range(NB_ZONE):
@@ -595,6 +597,9 @@ for ligne in file_old:
                         OuterWay = old_bati[i_lat][i_lon][i_bat]
                         OuterWay.addRelation(relation_id)
                         OuterWay.multipolygone = "yes"
+        for i_lat in range(NB_ZONE):
+            for i_lon in range(NB_ZONE):
+                for i_bat in range(len(old_bati[i_lat][i_lon])):
                     for i_member in range(1, nb_member):
                         if old_bati[i_lat][i_lon][i_bat].bat_id == tab_id_member[i_member]:
                             old_bati[i_lat][i_lon][i_bat].setRole("inner")
