@@ -21,6 +21,7 @@ class Point:
         self.node_id = node_id
         self.node_lat = float(node_lat)
         self.node_lon = float(node_lon)
+        self.historique = []
         
     def affiche(self):
         print(self.node_id, self.node_lat, self.node_lon)
@@ -33,7 +34,7 @@ class Point:
         
     def export_node(self):
         """Création du code xml équivalent au point"""
-        if self.historique == []:
+        if self.historique == "":
             self.print_node = "  <node id=\"" + self.node_id + \
                 "\" action=\"modify\" visible=\"true\" lat=\"" + \
                 str(self.node_lat) + "\" lon=\"" + str(self.node_lon) + "\" />"
@@ -71,6 +72,7 @@ class Batiment:
         - tableau_tag_key : le tableau d'identifiants des tags
         - tableau_tag_value : le tableau des valeurs des tags
         - pbAire : l'information si le batiment a une aire nulle
+        - Aire : l'aire du batiment
         - multipolygone : yes si le batiment en est un, no sinon
         - role : le role si le batiment appartient à une relation
         - nom_relation : le nom de la relation auquel il appartient (ie l'ID 
@@ -90,6 +92,7 @@ class Batiment:
         self.tableau_tag_key = tableauTagKey
         self.tableau_tag_value = tableauTagValue
         self.pbAire = "NO"
+        self.aire = 0.
         self.multipolygone = "no"
         self.role = "outer"
         self.nom_relation = ""
@@ -150,7 +153,9 @@ class Batiment:
                 calculLatitude / (6 * aire * 6500000.)
             longitude = self.node_id[0].node_lon + \
                 calculLongitude / (6 * aire * 6500000.)
+            self.aire = aire
         self.pt_moy = Point(self.bat_id, latitude, longitude)
+        self.pt_moy.setHistorique("")
         
     def calculLargeur(self):
         """Calcul de la largeur approximative du batiment. 
@@ -204,7 +209,7 @@ class Batiment:
         et de ses éventuels tag dans le but d'être transcrit dans un fichier."""
         export = []
         res_export = ""
-        if self.historique != []:
+        if self.historique != "":
             i_hist = 0
             wayHist= ""
             while i_hist < len(self.historique):
@@ -344,7 +349,11 @@ adresse = sys.path[0]
 fichier_osm_old = sys.argv[1]
 fichier_osm_new = sys.argv[2]
 prefixe = sys.argv[3]
-
+try:
+    mode = sys.argv[4]
+except:
+    mode = ""
+    pass
 separation = "--------------------------------------------------------------------------------------------------------------------------------"
 
 
@@ -403,7 +412,7 @@ for ligne in file_new:
         if champsLigne[1][0] != "-":
             new_nodes[new_nbre_nodes].setHistorique(champsLigne)
         else:
-            new_nodes[new_nbre_nodes].setHistorique([])
+            new_nodes[new_nbre_nodes].setHistorique("")
         new_nbre_nodes = new_nbre_nodes + 1
 file_new.close()
 
@@ -445,7 +454,7 @@ for ligne in file_new:
             print("  Attention, surface nulle obtenue pour le batiment :" + \
                 unBatiment.bat_id)
         unBatiment.calculLargeur()
-        unBatiment.setHistorique([])
+        unBatiment.setHistorique("")
         repereLatitude = int((unBatiment.pt_moy.node_lat-lat_min)/delta_lat)
         repereLongitude = int((unBatiment.pt_moy.node_lon-lon_min)/delta_lon)
         if repereLatitude > NB_ZONE-1:
@@ -532,7 +541,7 @@ for ligne in file_old:
         if champsLigne[1][0] != "-":
             old_nodes[old_nbre_nodes].setHistorique(champsLigne)
         else:
-            old_nodes[old_nbre_nodes].setHistorique([])
+            old_nodes[old_nbre_nodes].setHistorique("")
         old_nbre_nodes = old_nbre_nodes + 1
 file_old.close()
 file_old = open(fichier_osm_old, "r")
@@ -565,7 +574,7 @@ for ligne in file_old:
         if way_id[0] != "-":    # alors le way provient d'osm. il faut enregistrer l'historique
             unBatiment.setHistorique(tabHistorique)
         else:
-            unBatiment.setHistorique([])
+            unBatiment.setHistorique("")
         repereLatitude = int((unBatiment.pt_moy.node_lat-lat_min)/delta_lat)
         repereLongitude = int((unBatiment.pt_moy.node_lon-lon_min)/delta_lon)
         if repereLatitude > NB_ZONE-1:
@@ -891,6 +900,62 @@ for i_lat in range(NB_ZONE):
         densite_new.append(str(len(new_bati[i_lat][i_lon])))
     file_log.write(formatMat(densite_new) + "\n")
 file_log.close()
+
+if mode == "debug":
+    # sauvegarde dans un fichier des zones définies
+    nom_file_debug = prefixe + "_debug.osm"
+    node_id = 100000
+    way_id = 1
+    file_debug = open(adresse + "/" + nom_file_debug, "w")
+    file_debug.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "\n")
+    file_debug.write("<osm version=\"0.6\" upload=\"true\" generator=\"JOSM\">" + "\n")
+    for i_lat in range(NB_ZONE):
+        lat = lat_min + i_lat * delta_lat
+        node1 = "  <node id=\"-" + str(node_id) + "\" action=\"modify\" visible=\"true\"" + \
+            " lat=\"" + str(lat) + "\" lon=\"" + str(lon_min) + "\" />"
+        node2 = "  <node id=\"-" + str(node_id + 1) + "\" action=\"modify\" visible=\"true\"" + \
+            " lat=\"" + str(lat) + "\" lon=\"" + str(lon_max) + "\" />"
+        way1 = "  <way id=\"-" + str(way_id) + "\" action=\"modify\"" + \
+            " visible=\"true\">"
+        way2 = "    <nd ref=\"-" + str(node_id) + "\" />"
+        way3 = "    <nd ref=\"-" + str(node_id + 1) + "\" />"
+        way4 = "  </way>"
+        file_debug.write(node1 + "\n")
+        file_debug.write(node2 + "\n")
+        file_debug.write(way1 + "\n")
+        file_debug.write(way2 + "\n")
+        file_debug.write(way3 + "\n")
+        file_debug.write(way4 + "\n")
+        node_id = node_id + 2
+        way_id = way_id + 1
+    for i_lon in range(NB_ZONE):
+        lon = lon_min + i_lon * delta_lon
+        node1 = "  <node id=\"-" + str(node_id) + "\" action=\"modify\" visible=\"true\"" + \
+            " lat=\"" + str(lat_min) + "\" lon=\"" + str(lon) + "\" />"
+        node2 = "  <node id=\"-" + str(node_id + 1) + "\" action=\"modify\" visible=\"true\"" + \
+            " lat=\"" + str(lat_max) + "\" lon=\"" + str(lon) + "\" />"
+        way1 = "  <way id=\"-" + str(way_id) + "\" action=\"modify\"" + \
+            " visible=\"true\">"
+        way2 = "    <nd ref=\"-" + str(node_id) + "\" />"
+        way3 = "    <nd ref=\"-" + str(node_id + 1) + "\" />"
+        way4 = "  </way>"
+        file_debug.write(node1 + "\n")
+        file_debug.write(node2 + "\n")
+        file_debug.write(way1 + "\n")
+        file_debug.write(way2 + "\n")
+        file_debug.write(way3 + "\n")
+        file_debug.write(way4 + "\n")
+        node_id = node_id + 2
+        way_id = way_id + 1
+    # Transcription des points au cdg des batiments
+    for i_lat in range(NB_ZONE):
+        for i_lon in range(NB_ZONE):
+            for i_bat in range(len(new_bati[i_lat][i_lon])):
+                new_bati[i_lat][i_lon][i_bat].pt_moy.export_node()
+                file_debug.write(new_bati[i_lat][i_lon][i_bat].pt_moy.print_node + "\n")     
+    file_debug.write("</osm>" + "\n")
+    file_debug.close()
+                
 
 print("Durée du calcul : " + str(tps3 - tps2))
 print("Durée totale : " + str(tps3-tps1))
