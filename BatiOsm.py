@@ -331,7 +331,6 @@ def formatMat(donnees):
     nbData = len(donnees)
     nbCarLimite = 4
     for i_data in range(nbData):
-        #donnees[i_data] = " " + donnees[i_data]
         nbCar = len(donnees[i_data])
         while nbCar < nbCarLimite:
             donnees[i_data] = donnees[i_data] + " "
@@ -687,12 +686,6 @@ for i_lat in range(NB_ZONE):
 #  - dist_mini > BORNE_SUP_MODIF : nouveau ou supprimé
 #  - dist_mini > largeur : nouveau ou supprimé
 #------------------------------------------------------------------------
-
-nb_bat_new = 0
-nb_bat_mod = 0
-nb_bat_del = 0
-nb_bat_noMod = 0
-
 for i_lat in range(NB_ZONE):
     for i_lon in range(NB_ZONE):
         #Classement des anciens batiments
@@ -715,6 +708,11 @@ for i_lat in range(NB_ZONE):
                 if new_bati[i_lat][i_lon][i_bat].dist_mini > new_bati[i_lat][i_lon][i_bat].largeur:
                     new_bati[i_lat][i_lon][i_bat].setStatus("NOUVEAU")
 
+nb_bat_new = 0
+nb_bat_mod = 0
+nb_bat_del = 0
+nb_bat_noMod = 0
+
 # Comptage des batiment de chaque catégorie.
 for i_lat in range(NB_ZONE):
     for i_lon in range(NB_ZONE):
@@ -731,6 +729,66 @@ for i_lat in range(NB_ZONE):
                 elif new_bati[i_lat][i_lon][i_bat].status == "NOUVEAU":
                     nb_bat_new = nb_bat_new + 1
 
+# Vérification de la cohérence des résultats. On chercher à vérifier que :
+# nb_bat_apres = nb_bat_avant + nouveaux - supprimés
+# si l'équation n'est pas vérifié et que la zone compte des batiments modifiés
+# suffisant pour rétablir l'équilibre, alors on déclare les batiments modifiés 
+# comme nouveaux sinon on affiche un warning
+warning_equilibre = []
+for i_lat in range(NB_ZONE):
+    for i_lon in range(NB_ZONE):
+        nb_nouveaux = 0
+        nb_supprimes = 0
+        nb_modifies = 0
+        nb_identiques = 0
+        nb_innner = 0
+        nb_bat_apres = len(new_bati[i_lat][i_lon])
+        nb_bat_avant = len(old_bati[i_lat][i_lon])
+        for i_bat in range(len(old_bati[i_lat][i_lon])):
+            if old_bati[i_lat][i_lon][i_bat].status == "SUPPRIME":
+                nb_supprimes = nb_supprimes + 1
+        for i_bat in range(len(new_bati[i_lat][i_lon])):
+            if new_bati[i_lat][i_lon][i_bat].status == "NOUVEAU":
+                nb_nouveaux = nb_nouveaux + 1
+            elif new_bati[i_lat][i_lon][i_bat].status == "MODIFIE":
+                nb_modifies = nb_modifies + 1
+            elif new_bati[i_lat][i_lon][i_bat].status == "IDENTIQUE":
+                nb_identiques = nb_identiques + 1
+            elif new_bati[i_lat][i_lon][i_bat].role == "inner":
+                nb_innner = nb_innner + 1
+        if nb_bat_apres != nb_bat_avant + nb_nouveaux - nb_supprimes:
+            if nb_bat_apres == nb_bat_avant + nb_nouveaux + nb_modifies - nb_supprimes:
+                for i_bat in range(len(new_bati[i_lat][i_lon])):
+                    if new_bati[i_lat][i_lon][i_bat].status == "MODIFIE":
+                        new_bati[i_lat][i_lon][i_bat].setStatus("NOUVEAU")
+            else:
+                warning_equilibre.append("Erreur d'équilibre pour la zone i_lat" \
+                    + " / i_lon " + str(i_lat) + "/" + str(i_lon))
+                warning_equilibre.append("   Avant : " \
+                    + str(nb_bat_avant) + "   Après : " + str(nb_bat_apres) \
+                    + "   Nouveaux : " + str(nb_nouveaux) + "   Supprimés : " \
+                    + str(nb_supprimes) + "   Modifiés : " + str(nb_modifies))
+
+nb_bat_new = 0
+nb_bat_mod = 0
+nb_bat_del = 0
+nb_bat_noMod = 0
+
+# Comptage des batiment de chaque catégorie.
+for i_lat in range(NB_ZONE):
+    for i_lon in range(NB_ZONE):
+        for i_bat in range(len(old_bati[i_lat][i_lon])):
+            if old_bati[i_lat][i_lon][i_bat].role == "outer":
+                if old_bati[i_lat][i_lon][i_bat].status == "SUPPRIME":
+                    nb_bat_del = nb_bat_del +1
+        for i_bat in range(len(new_bati[i_lat][i_lon])):
+            if new_bati[i_lat][i_lon][i_bat].role == "outer":
+                if new_bati[i_lat][i_lon][i_bat].status == "IDENTIQUE":
+                    nb_bat_noMod = nb_bat_noMod + 1
+                elif new_bati[i_lat][i_lon][i_bat].status == "MODIFIE":
+                    nb_bat_mod = nb_bat_mod + 1
+                elif new_bati[i_lat][i_lon][i_bat].status == "NOUVEAU":
+                    nb_bat_new = nb_bat_new + 1
 
 print("------------------------------------------------------------------")
 print("-                    Création des fichiers                       -")
@@ -769,6 +827,10 @@ file_log.write("    Nombre de batiments supprimés trouvés : " + \
 file_log.write("Temps de lecture des fichiers : " + str(tps2 - tps1) + " secondes." + "\n")
 file_log.write("Temps de calcul : " + str(tps3 - tps2) + " secondes." + "\n")
 file_log.write("Temps d'execution totale : " + str(tps3 - tps1) + " secondes." + "\n")
+file_log.write(separation + "\n")
+i_warn = 0
+for i_warn in range(len(warning_equilibre)):
+    file_log.write(warning_equilibre[i_warn] + "\n")
 file_log.write(separation + "\n")
 file_log.write("Récapitulatif des batiments issus de " + fichier_osm_new + "\n")
 file_log.write(separation + "\n")
@@ -955,7 +1017,6 @@ if mode == "debug":
                 file_debug.write(new_bati[i_lat][i_lon][i_bat].pt_moy.print_node + "\n")     
     file_debug.write("</osm>" + "\n")
     file_debug.close()
-                
 
 print("Durée du calcul : " + str(tps3 - tps2))
 print("Durée totale : " + str(tps3-tps1))
