@@ -3,11 +3,12 @@
 import sys
 import os
 from math import sqrt
+from math import pi
 import time
 from operator import attrgetter
 
-BORNE_INF_MODIF = 1.e-5
-BORNE_SUP_MODIF = 1.e-4
+BORNE_INF_MODIF = 1.
+BORNE_SUP_MODIF = 10.
 NB_ZONE_USER = 500
 
 class Point:
@@ -30,7 +31,7 @@ class Point:
         """Calcul de la distance entre deux points"""
         d_lat = self.node_lat - other.node_lat
         d_lon = self.node_lon - other.node_lon
-        return sqrt(d_lat**2 + d_lon**2)
+        return sqrt(d_lat**2 + d_lon**2)*pi/180*6378137
         
     def export_node(self):
         """Création du code xml équivalent au point"""
@@ -125,9 +126,9 @@ class Batiment:
         lonLocale = []
         while i_node < self.nbre_node:
             latLocale.append((self.node_id[i_node].node_lat - \
-                self.node_id[0].node_lat) * 6500000.)
+                self.node_id[0].node_lat) * 6378137.*pi/180)
             lonLocale.append((self.node_id[i_node].node_lon - \
-                self.node_id[0].node_lon) * 6500000.)
+                self.node_id[0].node_lon) * 6378137.*pi/180)
             i_node = i_node + 1
         i_node = 0
         while i_node < self.nbre_node - 1:
@@ -150,9 +151,9 @@ class Batiment:
             longitude = lonMoyenne / self.nbre_node
         else:
             latitude = self.node_id[0].node_lat + \
-                calculLatitude / (6 * aire * 6500000.)
+                calculLatitude / (6 * aire) * 180/(pi*6378137)
             longitude = self.node_id[0].node_lon + \
-                calculLongitude / (6 * aire * 6500000.)
+                calculLongitude / (6 * aire) * 180/(pi*6378137)
             self.aire = aire
         self.pt_moy = Point(self.bat_id, latitude, longitude)
         self.pt_moy.setHistorique("")
@@ -173,7 +174,7 @@ class Batiment:
         maxLat = max(tableauLatitude)
         minLon = min(tableauLongitude)
         maxLon = max(tableauLongitude)
-        self.largeur = sqrt((maxLat - minLat)**2 + (maxLon - minLon)**2)
+        self.largeur = sqrt((maxLat - minLat)**2 + (maxLon - minLon)**2)*pi/180*6378137
         
     def setDistMini(self, distance):
         """Cette méthode permet de définir la distance mini comme étant celle
@@ -305,38 +306,18 @@ class Batiment:
         """
         self.nom_relation = nom_relation
 
-def formatLog(donnees):
+def formatLog(donnees, nbCarLim, separateur):
     """Cette fonction permet de générer une chaine de caractère formaté et 
     de longueur constante à partir du tableau passé en paramètre"""
     result = ""
     nbData = len(donnees)
     for i_data in range(nbData):
-        if i_data < nbData - 1:
-            nbCarLimite = 18
-        else:
-            nbCarLimite = 50
         donnees[i_data] = " " + donnees[i_data]
         nbCar = len(donnees[i_data])
-        while nbCar < nbCarLimite:
+        while nbCar < nbCarLim:
             donnees[i_data] = donnees[i_data] + " "
             nbCar = len(donnees[i_data])
-        result = result + "|" + donnees[i_data]
-    result = result + "|"
-    return result
-
-def formatMat(donnees):
-    """Cette fonction permet de générer une chaine de caractère formaté et 
-    de longueur constante à partir du tableau passé en paramètre"""
-    result = ""
-    nbData = len(donnees)
-    nbCarLimite = 4
-    for i_data in range(nbData):
-        nbCar = len(donnees[i_data])
-        while nbCar < nbCarLimite:
-            donnees[i_data] = donnees[i_data] + " "
-            nbCar = len(donnees[i_data])
-        result = result + "" + donnees[i_data]
-    result = result + ""
+        result = result + separateur + donnees[i_data]
     return result
 
 #------------------------------------------------------------------------------
@@ -415,8 +396,8 @@ for ligne in file_new:
         new_nbre_nodes = new_nbre_nodes + 1
 file_new.close()
 
-NB_ZONE_LAT = int((lat_max - lat_min) / (2 * BORNE_SUP_MODIF))-1
-NB_ZONE_LON = int((lon_max - lon_min) / (2 * BORNE_SUP_MODIF))-1
+NB_ZONE_LAT = int((lat_max - lat_min) * (pi/180*6378137) / (2 * BORNE_SUP_MODIF))-1
+NB_ZONE_LON = int((lon_max - lon_min) * (pi/180*6378137) / (2 * BORNE_SUP_MODIF))-1
 NB_ZONE = min(NB_ZONE_LAT,NB_ZONE_LON,500,NB_ZONE_USER)
 delta_lat = (lat_max-lat_min)/NB_ZONE
 delta_lon = (lon_max-lon_min)/NB_ZONE
@@ -454,6 +435,7 @@ for ligne in file_new:
                 unBatiment.bat_id)
         unBatiment.calculLargeur()
         unBatiment.setHistorique("")
+        unBatiment.setBatProche("")
         repereLatitude = int((unBatiment.pt_moy.node_lat-lat_min)/delta_lat)
         repereLongitude = int((unBatiment.pt_moy.node_lon-lon_min)/delta_lon)
         if repereLatitude > NB_ZONE-1:
@@ -570,6 +552,7 @@ for ligne in file_old:
             print("  Attention, surface nulle obtenue pour le batiment :" + \
                 unBatiment.bat_id)
         unBatiment.calculLargeur()
+        unBatiment.setBatProche("")
         if way_id[0] != "-":    # alors le way provient d'osm. il faut enregistrer l'historique
             unBatiment.setHistorique(tabHistorique)
         else:
@@ -619,6 +602,8 @@ print("  " + str(old_nbre_ways) + " batiments répertoriés dans le fichier " + 
     fichier_osm_old)
 print("------------------------------------------------------------------")
 print("Temps de lecture des fichiers : " + str(tps2 - tps1))
+print("------------------------------------------------------------------")
+
 print("------------------------------------------------------------------")
 print("-  Recherche des similitudes et des différences entre batiments  -")
 print("-  NB_ZONE a été calculé à : " + str(NB_ZONE))
@@ -678,7 +663,6 @@ for i_lat in range(NB_ZONE):
                                         new_bati[i_lat][i_lon][i_bat].copy_tag(old_bati[o_lat][o_lon][o_bat],"IDENTIQUE")
                                     elif distance > BORNE_INF_MODIF and distance < BORNE_SUP_MODIF:
                                         new_bati[i_lat][i_lon][i_bat].copy_tag(old_bati[o_lat][o_lon][o_bat],"MODIFIE")
-
 #------------------------------------------------------------------------
 # Classement des batiments :
 #  - dist_mini < BORNE_INF_MODIF : identique
@@ -735,6 +719,7 @@ for i_lat in range(NB_ZONE):
 # suffisant pour rétablir l'équilibre, alors on déclare les batiments modifiés 
 # comme nouveaux sinon on affiche un warning
 warning_equilibre = []
+warning_equilibre.append("Erreur d'équilibre : nb_bat_apres <> nb_bat_avant + nouveaux - supprimés")
 for i_lat in range(NB_ZONE):
     for i_lon in range(NB_ZONE):
         nb_nouveaux = 0
@@ -801,7 +786,6 @@ print(str(nb_bat_del) + " batiments supprimés")
 
 tps3 = time.clock()
 
-
 file_log = open(adresse + "/" + prefixe + "_log.txt", "w")
 file_log.write("Rappel des input : \n")
 file_log.write("    BORNE_INF_MODIF : " + str(BORNE_INF_MODIF) + "\n")
@@ -841,9 +825,10 @@ for i_lat in range(NB_ZONE):
             Resultat = [new_bati[i_lat][i_lon][i_bat].bat_id, \
                 new_bati[i_lat][i_lon][i_bat].status, \
                 str(round(new_bati[i_lat][i_lon][i_bat].dist_mini, 9)), \
-                str(new_bati[i_lat][i_lon][i_bat].pt_moy.node_lat), \
-                str(new_bati[i_lat][i_lon][i_bat].pt_moy.node_lon)]
-            file_log.write(formatLog(Resultat) + "\n")
+                str(round(new_bati[i_lat][i_lon][i_bat].pt_moy.node_lat,7)), \
+                str(round(new_bati[i_lat][i_lon][i_bat].pt_moy.node_lon,7)), \
+                str(round(new_bati[i_lat][i_lon][i_bat].aire,1))]
+            file_log.write(formatLog(Resultat,16,"|") + "\n")
 file_log.write(separation + "\n")
 file_log.write("Récapitulatif des batiments issus de " + fichier_osm_old + "\n")
 file_log.write(separation + "\n")
@@ -851,12 +836,14 @@ file_log.write(separation + "\n")
 for i_lat in range(NB_ZONE):
     for i_lon in range(NB_ZONE):
         for i_bat in range(len(old_bati[i_lat][i_lon])):
+            #print(old_bati[i_lat][i_lon][i_bat].aire)
             Resultat = [old_bati[i_lat][i_lon][i_bat].bat_id, \
                 old_bati[i_lat][i_lon][i_bat].status, \
                 str(round(old_bati[i_lat][i_lon][i_bat].dist_mini, 9)), \
-                str(old_bati[i_lat][i_lon][i_bat].pt_moy.node_lat), \
-                str(old_bati[i_lat][i_lon][i_bat].pt_moy.node_lon)]
-            file_log.write(formatLog(Resultat) + "\n")
+                str(round(old_bati[i_lat][i_lon][i_bat].pt_moy.node_lat,7)), \
+                str(round(old_bati[i_lat][i_lon][i_bat].pt_moy.node_lon,7)), \
+                str(round(old_bati[i_lat][i_lon][i_bat].aire,1))]
+            file_log.write(formatLog(Resultat,16,"|") + "\n")
 file_log.write(separation + "\n")
 
 nom_file_noMod = prefixe + "_unModified.osm"
@@ -880,10 +867,10 @@ file_del.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "\n")
 file_del.write("<osm version=\"0.6\" upload=\"true\" generator=\"JOSM\">" + "\n")
 
 # Ecriture des nouveaux batiments
-enTete = ["STATUS", "ANCIEN BATIMENT", "TOLERANCE", "NOUVEAU BATIMENT", "fichier"]
+enTete = ["STAT", "ANCIEN BAT.", "TOL", "NOUVEAU BAT.", "fichier"]
 file_log.write("NOUVEAUX BATIMENTS" + "\n" )
 file_log.write(separation + "\n")
-file_log.write(formatLog(enTete) +"\n")
+file_log.write(formatLog(enTete,16,"|") +"\n")
 file_log.write(separation + "\n")
 for i_lat in range(NB_ZONE):
     for i_lon in range(NB_ZONE):
@@ -894,27 +881,30 @@ for i_lat in range(NB_ZONE):
                     file_noMod.write(new_bati[i_lat][i_lon][i_bat].print_bat + "\n")
                     Ligne = ["IDENTIQUE", new_bati[i_lat][i_lon][i_bat].bat_id, \
                         str(round(new_bati[i_lat][i_lon][i_bat].dist_mini,9)), \
+                        new_bati[i_lat][i_lon][i_bat].id_bat_proche, \
                         nom_file_noMod]
-                    file_log.write(formatLog(Ligne) + "\n")
+                    file_log.write(formatLog(Ligne,16,"|") + "\n")
                 elif new_bati[i_lat][i_lon][i_bat].status == "MODIFIE":
                     file_mod.write(new_bati[i_lat][i_lon][i_bat].print_bat + "\n")
                     Ligne = ["MODIFIE", new_bati[i_lat][i_lon][i_bat].bat_id, \
                         str(round(new_bati[i_lat][i_lon][i_bat].dist_mini,9)), \
+                        new_bati[i_lat][i_lon][i_bat].id_bat_proche, \
                         nom_file_mod]
-                    file_log.write(formatLog(Ligne) + "\n")
+                    file_log.write(formatLog(Ligne,16,"|") + "\n")
                 elif new_bati[i_lat][i_lon][i_bat].status == "NOUVEAU":
                     file_new.write(new_bati[i_lat][i_lon][i_bat].print_bat + "\n")
                     Ligne = ["NOUVEAU", new_bati[i_lat][i_lon][i_bat].bat_id, \
                         str(round(new_bati[i_lat][i_lon][i_bat].dist_mini,9)), \
+                        new_bati[i_lat][i_lon][i_bat].id_bat_proche, \
                         nom_file_new]
-                    file_log.write(formatLog(Ligne) + "\n")
+                    file_log.write(formatLog(Ligne,16,"|") + "\n")
 
 # Ecriture des anciens batiments (seulement ceux qui sont supprimés)
-enTete = ["STATUS", "ANCIEN BATIMENT", "TOLERANCE", "fichier"]
+enTete = ["STAT", "ANCIEN BAT.", "TOL", "fichier"]
 file_log.write(separation + "\n")
 file_log.write("ANCIENS BATIMENTS" + "\n" )
 file_log.write(separation + "\n")
-file_log.write(formatLog(enTete) +"\n")
+file_log.write(formatLog(enTete,16,"|") +"\n")
 file_log.write(separation + "\n")
 for i_lat in range(NB_ZONE):
     for i_lon in range(NB_ZONE):
@@ -926,7 +916,7 @@ for i_lat in range(NB_ZONE):
                     Ligne = ["SUPPRIME", old_bati[i_lat][i_lon][i_bat].bat_id, \
                         str(round(old_bati[i_lat][i_lon][i_bat].dist_mini,9)), \
                         nom_file_del]
-                    file_log.write(formatLog(Ligne) + "\n")
+                    file_log.write(formatLog(Ligne,16,"|") + "\n")
 # cloture des fichiers osm
 file_del.write("</osm>")
 file_del.close()
@@ -945,22 +935,22 @@ i_zone = 0
 while i_zone < NB_ZONE:
     enTete.append(str(i_zone))
     i_zone = i_zone + 1
-file_log.write(formatMat(enTete) + "\n")
+file_log.write(formatLog(enTete,4," ") + "\n")
 for i_lat in range(NB_ZONE):
     densite_old = [str(i_lat) , "|"]
     for i_lon in range(NB_ZONE):
         densite_old.append(str(len(old_bati[i_lat][i_lon])))
-    file_log.write(formatMat(densite_old) + "\n")
+    file_log.write(formatLog(densite_old,4," ") + "\n")
 
 file_log.write(separation + "\n")
 file_log.write("Densité de batiments issus du fichier " + fichier_osm_new + "\n")
 file_log.write(separation + "\n")
-file_log.write(formatMat(enTete) + "\n")
+file_log.write(formatLog(enTete,4," ") + "\n")
 for i_lat in range(NB_ZONE):
     densite_new = [str(i_lat) , "|"]
     for i_lon in range(NB_ZONE):
         densite_new.append(str(len(new_bati[i_lat][i_lon])))
-    file_log.write(formatMat(densite_new) + "\n")
+    file_log.write(formatLog(densite_new,4," ") + "\n")
 file_log.close()
 
 if mode == "debug":
