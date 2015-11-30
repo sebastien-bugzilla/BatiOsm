@@ -3,6 +3,8 @@
 import sys
 import os
 from math import sqrt
+import lxml.etree
+from io import StringIO
 from math import pi
 import time
 from operator import attrgetter
@@ -35,21 +37,14 @@ class Point:
         
     def export_node(self):
         """Création du code xml équivalent au point"""
-        if self.historique == "":
-            self.print_node = "  <node id=\"" + self.node_id + \
-                "\" action=\"modify\" visible=\"true\" lat=\"" + \
-                str(self.node_lat) + "\" lon=\"" + str(self.node_lon) + "\" />"
-        else:
-            i_hist = 0
-            nodeHist= ""
-            while i_hist < len(self.historique):
-                if (-1)**i_hist == 1:
-                    sep=""
-                else:
-                    sep="\""
-                nodeHist= nodeHist + sep + self.historique[i_hist] + sep
-                i_hist = i_hist + 1
-            self.print_node = nodeHist
+        i_hist = 0
+        nodeHist = "  <node "
+        while i_hist < len(self.historique):
+            nodeHist = nodeHist + self.historique[i_hist] + "=" + "\"" + \
+                self.historique[i_hist + 1] + "\" "
+            i_hist = i_hist + 2
+        nodeHist = nodeHist + "/>"
+        self.print_node = nodeHist
     
     def setHistorique(self, historique):
         """
@@ -346,15 +341,7 @@ print("------------------------------------------------------------------")
 #------------------------------------------------------------------------
 #lecture des nouveaux batiments :
 #------------------------------------------------------------------------
-file_new = open(fichier_osm_new, "r")
 print("lecture du fichier " + fichier_osm_new + "...")
-ligne = file_new.readline().rstrip('\n\r')
-tabLigne1 = ligne.split("'")
-tabLigne2 = ligne.split("\"")
-if len(tabLigne1) > len(tabLigne2):
-    delim = "'"
-else:
-    delim = "\""
 
 lat_min=90.
 lat_max=0.
@@ -372,29 +359,33 @@ col_id = 0
 col_lat = 0
 col_lon = 0
 
-for ligne in file_new:
-    champsLigne = ligne.rstrip('\n\r').split(delim)
-    if champsLigne[0].find("node id") != -1:
-        col_id = 1
-        col_lat = champsLigne.index(" lat=") + 1
-        col_lon = champsLigne.index(" lon=") + 1
-        if float(champsLigne[col_lat]) < lat_min:
-            lat_min = float(champsLigne[col_lat])
-        if float(champsLigne[col_lat]) > lat_max:
-            lat_max = float(champsLigne[col_lat])
-        if float(champsLigne[col_lon]) < lon_min:
-            lon_min = float(champsLigne[col_lon])
-        if float(champsLigne[col_lon]) > lon_max:
-            lon_max = float(champsLigne[col_lon])
-        new_nodes.append(Point(champsLigne[col_id], champsLigne[col_lat], \
-            champsLigne[col_lon]))
-        new_id_nodes.append(champsLigne[col_id])
-        if champsLigne[1][0] != "-":
-            new_nodes[new_nbre_nodes].setHistorique(champsLigne)
-        else:
-            new_nodes[new_nbre_nodes].setHistorique("")
-        new_nbre_nodes = new_nbre_nodes + 1
-file_new.close()
+utf8_xml_parser = lxml.etree.XMLParser(encoding='utf-8')
+new_bati_etree = lxml.etree.parse(fichier_osm_new, parser=utf8_xml_parser)
+new_nbre_nodes = 0
+new_bati_root = new_bati_etree.getroot()
+
+# lecture des noeuds
+for node in new_bati_root.iter('node'):
+    historique = []
+    node_id = node.get('id')
+    node_lat = node.get('lat')
+    node_lon = node.get('lon')
+    if float(node_lat) < lat_min:
+        lat_min = float(node_lat)
+    if float(node_lat) > lat_max:
+        lat_max = float(node_lat)
+    if float(node_lon) < lon_min:
+        lon_min = float(node_lon)
+    if float(node_lon) > lon_max:
+        lon_max = float(node_lon)
+    new_id_nodes.append(node_id)
+    new_nodes.append(Point(node_id, node_lat, node_lon))
+    info_nodes = node.attrib
+    for i_key in range(len(info_nodes)):
+        historique.append(info_nodes.keys()[i_key])
+        historique.append(info_nodes.get(info_nodes.keys()[i_key]))
+    new_nodes[new_nbre_nodes].setHistorique(historique)
+    new_nbre_nodes = new_nbre_nodes + 1
 
 NB_ZONE_LAT = int((lat_max - lat_min) * (pi/180*6378137) / (2 * BORNE_SUP_MODIF))-1
 NB_ZONE_LON = int((lon_max - lon_min) * (pi/180*6378137) / (2 * BORNE_SUP_MODIF))-1
@@ -408,71 +399,59 @@ for i in range(NB_ZONE):
     for j in range(NB_ZONE):
         new_bati[i] += [[]]
 
-file_new = open(fichier_osm_new, "r")
-for ligne in file_new:
-    champsLigne = ligne.rstrip('\n\r').split(delim)
-    if champsLigne[0].find("way id") != -1:
-        way_id = champsLigne[1]
-        i_nd_ref = 0
-        nodes = []
-        tagKey = []
-        tagValue = []
-        numTag = 0
-    elif champsLigne[0].find("nd ref") != -1:
-        id_nd_ref = champsLigne[1]
-        i_nd_ref = i_nd_ref + 1
-        nodes.append(new_nodes[new_id_nodes.index(id_nd_ref)])
-    elif champsLigne[0].find("tag") != -1:
-        if i_nd_ref != 0:
-            tagKey.append(champsLigne[1])
-            tagValue.append(champsLigne[3])
-            numTag = numTag + 1
-    elif champsLigne[0].find("/way") != -1:
-        unBatiment=Batiment(way_id, i_nd_ref, nodes, numTag, tagKey, tagValue, 1000, 0., "UNKNOWN")
-        unBatiment.BatimentToPoint()
-        if unBatiment.pbAire == "YES":
-            print("  Attention, surface nulle obtenue pour le batiment :" + \
-                unBatiment.bat_id)
-        unBatiment.calculLargeur()
-        unBatiment.setHistorique("")
-        unBatiment.setBatProche("")
-        repereLatitude = int((unBatiment.pt_moy.node_lat-lat_min)/delta_lat)
-        repereLongitude = int((unBatiment.pt_moy.node_lon-lon_min)/delta_lon)
-        if repereLatitude > NB_ZONE-1:
-            repereLatitude = NB_ZONE-1
-        if repereLongitude > NB_ZONE-1:
-            repereLongitude = NB_ZONE-1
-        if repereLatitude < 0:
-            repereLatitude = 0
-        if repereLongitude < 0:
-            repereLongitude = 0
-        new_bati[repereLatitude][repereLongitude].append(unBatiment)
-        new_nbre_ways = new_nbre_ways + 1
-    elif champsLigne[0].find("relation id") !=-1:
-        relation_id = champsLigne[1]
-        nb_member = 0
-        tab_id_member = []
-    elif champsLigne[0].find("member type") != -1:
-        col_ref = champsLigne.index(" ref=") + 1
-        col_role = champsLigne.index(" role=") + 1
-        tab_id_member.append(champsLigne[col_ref])
-        nb_member = nb_member + 1
-    elif champsLigne[0].find("/relation") != -1:
+# lectures des batiments
+for way in new_bati_root.iter('way'):
+    tab_nodes = []
+    tab_key = []
+    tab_value = []
+    way_id = way.get('id')
+    nbre_node = len(way.findall('./nd'))
+    nbre_tag = len(way.findall('./tag'))
+    for node in way.findall('./nd'):
+        id_node = node.get('ref')
+        tab_nodes.append(new_nodes[new_id_nodes.index(id_node)])
+    for tag in way.findall('./tag'):
+        tab_key.append(tag.get('k'))
+        tab_value.append(tag.get('v'))
+    batiment_lu = Batiment(way_id, nbre_node, tab_nodes, nbre_tag, tab_key,\
+        tab_value, 1000, 0., "UNKNOWN")
+    batiment_lu.BatimentToPoint()
+    if batiment_lu.pbAire == "YES":
+        print("  Attention, surface nulle obtenue pour le batiment :" + \
+            batiment_lu.bat_id)
+    batiment_lu.calculLargeur()
+    batiment_lu.setHistorique("")
+    batiment_lu.setBatProche("")
+    repereLatitude = int((batiment_lu.pt_moy.node_lat-lat_min)/delta_lat)
+    repereLongitude = int((batiment_lu.pt_moy.node_lon-lon_min)/delta_lon)
+    if repereLatitude > NB_ZONE-1:
+        repereLatitude = NB_ZONE-1
+    if repereLongitude > NB_ZONE-1:
+        repereLongitude = NB_ZONE-1
+    if repereLatitude < 0:
+        repereLatitude = 0
+    if repereLongitude < 0:
+        repereLongitude = 0
+    new_bati[repereLatitude][repereLongitude].append(batiment_lu)
+    new_nbre_ways = new_nbre_ways + 1
+
+# lectures des relations
+for relation in new_bati_root.iter('relation'):
+    id_relation = relation.get('id')
+    for member in relation.findall('./member'):
+        id_membre = member.get('ref')
+        role = member.get('role')
         for i_lat in range(NB_ZONE):
             for i_lon in range(NB_ZONE):
                 for i_bat in range(len(new_bati[i_lat][i_lon])):
-                    if new_bati[i_lat][i_lon][i_bat].bat_id == tab_id_member[0]: # attention on suppose le outer est toujours le premier...
-                        OuterWay = new_bati[i_lat][i_lon][i_bat]
-                        OuterWay.addRelation(relation_id)
-                        OuterWay.multipolygone = "yes"
-        for i_lat in range(NB_ZONE):
-            for i_lon in range(NB_ZONE):
-                for i_bat in range(len(new_bati[i_lat][i_lon])):           
-                    for i_member in range(1, nb_member):
-                        if new_bati[i_lat][i_lon][i_bat].bat_id == tab_id_member[i_member]:
+                    if new_bati[i_lat][i_lon][i_bat].bat_id == id_membre:
+                        if role == "outer":
+                            OuterWay = new_bati[i_lat][i_lon][i_bat]
+                            OuterWay.addRelation(id_relation)
+                            OuterWay.multipolygone = "yes"
+                        else:
                             new_bati[i_lat][i_lon][i_bat].setRole("inner")
                             OuterWay.addInner(new_bati[i_lat][i_lon][i_bat])
-file_new.close()
 
 print("  " + str(new_nbre_nodes) + " noeuds répertoriés dans le fichier " + \
     fichier_osm_new)
@@ -482,119 +461,100 @@ print("  " + str(new_nbre_ways) + " batiments répertoriés dans le fichier " + 
 #------------------------------------------------------------------------
 #lecture des vieux batiments :
 #------------------------------------------------------------------------
-file_old = open(fichier_osm_old, "r")
+#file_old = open(fichier_osm_old, "r")
 print("lecture du fichier " + fichier_osm_old + "...")
-#détermination du séparateur du fichier : " ou '
-ligne = file_old.readline().rstrip('\n\r')
-tabLigne1 = ligne.split("'")
-tabLigne2 = ligne.split("\"")
-if len(tabLigne1) > len(tabLigne2):
-    delim = "'"
-else:
-    delim = "\""
 
 old_nodes = []
 old_id_nodes = []
+
+old_nbre_nodes = 0
+old_nbre_ways = 0
+i_way = 0
+i_nd_ref = 0
+col_id = 0
+col_lat = 0
+col_lon = 0
+
+utf8_xml_parser = lxml.etree.XMLParser(encoding='utf-8')
+old_bati_etree = lxml.etree.parse(fichier_osm_old, parser=utf8_xml_parser)
+old_nbre_nodes = 0
+old_bati_root = old_bati_etree.getroot()
+
+# lecture des noeuds
+for node in old_bati_root.iter('node'):
+    historique = []
+    node_id = node.get('id')
+    node_lat = node.get('lat')
+    node_lon = node.get('lon')
+    old_id_nodes.append(node_id)
+    old_nodes.append(Point(node_id, node_lat, node_lon))
+    info_nodes = node.attrib
+    for i_key in range(len(info_nodes)):
+        historique.append(info_nodes.keys()[i_key])
+        historique.append(info_nodes.get(info_nodes.keys()[i_key]))
+    old_nodes[old_nbre_nodes].setHistorique(historique)
+    old_nbre_nodes = old_nbre_nodes + 1
+
 old_bati = []
 for i in range(NB_ZONE):
     old_bati += [[]]
     for j in range(NB_ZONE):
         old_bati[i] += [[]]
 
-old_nbre_nodes = 0
-old_nbre_ways = 0
-i_way = 0
-i_nd_ref = 0
+# lectures des batiments
+for way in old_bati_root.iter('way'):
+    tab_nodes = []
+    tab_key = []
+    tab_value = []
+    way_id = way.get('id')
+    nbre_node = len(way.findall('./nd'))
+    nbre_tag = len(way.findall('./tag'))
+    for node in way.findall('./nd'):
+        id_node = node.get('ref')
+        tab_nodes.append(old_nodes[old_id_nodes.index(id_node)])
+    for tag in way.findall('./tag'):
+        tab_key.append(tag.get('k'))
+        tab_value.append(tag.get('v'))
+    batiment_lu = Batiment(way_id, nbre_node, tab_nodes, nbre_tag, tab_key,\
+        tab_value, 1000, 0., "UNKNOWN")
+    batiment_lu.BatimentToPoint()
+    if batiment_lu.pbAire == "YES":
+        print("  Attention, surface nulle obtenue pour le batiment :" + \
+            batiment_lu.bat_id)
+    batiment_lu.calculLargeur()
+    batiment_lu.setHistorique("")
+    batiment_lu.setBatProche("")
+    repereLatitude = int((batiment_lu.pt_moy.node_lat-lat_min)/delta_lat)
+    repereLongitude = int((batiment_lu.pt_moy.node_lon-lon_min)/delta_lon)
+    if repereLatitude > NB_ZONE-1:
+        repereLatitude = NB_ZONE-1
+    if repereLongitude > NB_ZONE-1:
+        repereLongitude = NB_ZONE-1
+    if repereLatitude < 0:
+        repereLatitude = 0
+    if repereLongitude < 0:
+        repereLongitude = 0
+    old_bati[repereLatitude][repereLongitude].append(batiment_lu)
+    old_nbre_ways = old_nbre_ways + 1
 
-col_id = 0
-col_lat = 0
-col_lon = 0
-
-for ligne in file_old:
-    champsLigne = ligne.rstrip('\n\r').split(delim)
-    if champsLigne[0].find("node id") != -1:
-        col_id = 1
-        col_lat = champsLigne.index(" lat=") + 1
-        col_lon = champsLigne.index(" lon=") + 1
-        old_nodes.append(Point(champsLigne[col_id], champsLigne[col_lat], \
-            champsLigne[col_lon]))
-        old_id_nodes.append(champsLigne[col_id])
-        if champsLigne[1][0] != "-":
-            old_nodes[old_nbre_nodes].setHistorique(champsLigne)
-        else:
-            old_nodes[old_nbre_nodes].setHistorique("")
-        old_nbre_nodes = old_nbre_nodes + 1
-file_old.close()
-file_old = open(fichier_osm_old, "r")
-for ligne in file_old:
-    champsLigne = ligne.rstrip('\n\r').split(delim)
-    if champsLigne[0].find("way id") != -1: # nouveau batiment : on initialise les données
-        way_id = champsLigne[1]
-        i_nd_ref = 0
-        nodes = []
-        tagKey = []
-        tagValue = []
-        numTag = 0
-        tabHistorique = champsLigne
-    elif champsLigne[0].find("nd ref") != -1:
-        id_nd_ref = champsLigne[1]
-        i_nd_ref = i_nd_ref + 1
-        nodes.append(old_nodes[old_id_nodes.index(id_nd_ref)])
-    elif champsLigne[0].find("tag") != -1:
-        if i_nd_ref != 0:
-            tagKey.append(champsLigne[1])
-            tagValue.append(champsLigne[3])
-            numTag = numTag + 1
-    elif champsLigne[0].find("/way") != -1:
-        unBatiment=Batiment(way_id, i_nd_ref, nodes, numTag, tagKey, tagValue, 1000, 0., "UNKNOWN")
-        unBatiment.BatimentToPoint()
-        if unBatiment.pbAire == "YES":
-            print("  Attention, surface nulle obtenue pour le batiment :" + \
-                unBatiment.bat_id)
-        unBatiment.calculLargeur()
-        unBatiment.setBatProche("")
-        if way_id[0] != "-":    # alors le way provient d'osm. il faut enregistrer l'historique
-            unBatiment.setHistorique(tabHistorique)
-        else:
-            unBatiment.setHistorique("")
-        repereLatitude = int((unBatiment.pt_moy.node_lat-lat_min)/delta_lat)
-        repereLongitude = int((unBatiment.pt_moy.node_lon-lon_min)/delta_lon)
-        if repereLatitude > NB_ZONE-1:
-            repereLatitude = NB_ZONE-1
-        if repereLongitude > NB_ZONE-1:
-            repereLongitude = NB_ZONE-1
-        if repereLatitude < 0:
-            repereLatitude = 0
-        if repereLongitude < 0:
-            repereLongitude = 0
-        old_bati[repereLatitude][repereLongitude].append(unBatiment)
-        old_nbre_ways = old_nbre_ways + 1 
-    elif champsLigne[0].find("relation id") !=-1:
-        relation_id = champsLigne[1]
-        nb_member = 0
-        tab_id_member = []
-    elif champsLigne[0].find("member type") != -1:
-        col_ref = champsLigne.index(" ref=") + 1
-        col_role = champsLigne.index(" role=") + 1
-        tab_id_member.append(champsLigne[col_ref])
-        nb_member = nb_member + 1
-    elif champsLigne[0].find("/relation") != -1:
+# lectures des relations
+for relation in old_bati_root.iter('relation'):
+    id_relation = relation.get('id')
+    for member in relation.findall('./member'):
+        id_membre = member.get('ref')
+        role = member.get('role')
         for i_lat in range(NB_ZONE):
             for i_lon in range(NB_ZONE):
                 for i_bat in range(len(old_bati[i_lat][i_lon])):
-                    # attention on suppose le outer est toujours le premier...
-                    if old_bati[i_lat][i_lon][i_bat].bat_id == tab_id_member[0]: 
-                        OuterWay = old_bati[i_lat][i_lon][i_bat]
-                        OuterWay.addRelation(relation_id)
-                        OuterWay.multipolygone = "yes"
-        for i_lat in range(NB_ZONE):
-            for i_lon in range(NB_ZONE):
-                for i_bat in range(len(old_bati[i_lat][i_lon])):
-                    for i_member in range(1, nb_member):
-                        if old_bati[i_lat][i_lon][i_bat].bat_id == tab_id_member[i_member]:
+                    if old_bati[i_lat][i_lon][i_bat].bat_id == id_membre:
+                        if role == "outer":
+                            OuterWay = old_bati[i_lat][i_lon][i_bat]
+                            OuterWay.addRelation(id_relation)
+                            OuterWay.multipolygone = "yes"
+                        else:
                             old_bati[i_lat][i_lon][i_bat].setRole("inner")
                             OuterWay.addInner(old_bati[i_lat][i_lon][i_bat])
-file_old.close()
+
 tps2 = time.clock()
 print("  " + str(old_nbre_nodes) + " noeuds répertoriés dans le fichier " + \
     fichier_osm_old)
@@ -602,8 +562,6 @@ print("  " + str(old_nbre_ways) + " batiments répertoriés dans le fichier " + 
     fichier_osm_old)
 print("------------------------------------------------------------------")
 print("Temps de lecture des fichiers : " + str(tps2 - tps1))
-print("------------------------------------------------------------------")
-
 print("------------------------------------------------------------------")
 print("-  Recherche des similitudes et des différences entre batiments  -")
 print("-  NB_ZONE a été calculé à : " + str(NB_ZONE))
@@ -878,21 +836,21 @@ for i_lat in range(NB_ZONE):
             if new_bati[i_lat][i_lon][i_bat].role == "outer":
                 new_bati[i_lat][i_lon][i_bat].export_bat()
                 if new_bati[i_lat][i_lon][i_bat].status == "IDENTIQUE":
-                    file_noMod.write(new_bati[i_lat][i_lon][i_bat].print_bat + "\n")
+                    file_noMod.write((new_bati[i_lat][i_lon][i_bat].print_bat + "\n").encode('utf-8'))
                     Ligne = ["IDENTIQUE", new_bati[i_lat][i_lon][i_bat].bat_id, \
                         str(round(new_bati[i_lat][i_lon][i_bat].dist_mini,9)), \
                         new_bati[i_lat][i_lon][i_bat].id_bat_proche, \
                         nom_file_noMod]
                     file_log.write(formatLog(Ligne,16,"|") + "\n")
                 elif new_bati[i_lat][i_lon][i_bat].status == "MODIFIE":
-                    file_mod.write(new_bati[i_lat][i_lon][i_bat].print_bat + "\n")
+                    file_mod.write((new_bati[i_lat][i_lon][i_bat].print_bat + "\n").encode('utf-8'))
                     Ligne = ["MODIFIE", new_bati[i_lat][i_lon][i_bat].bat_id, \
                         str(round(new_bati[i_lat][i_lon][i_bat].dist_mini,9)), \
                         new_bati[i_lat][i_lon][i_bat].id_bat_proche, \
                         nom_file_mod]
                     file_log.write(formatLog(Ligne,16,"|") + "\n")
                 elif new_bati[i_lat][i_lon][i_bat].status == "NOUVEAU":
-                    file_new.write(new_bati[i_lat][i_lon][i_bat].print_bat + "\n")
+                    file_new.write((new_bati[i_lat][i_lon][i_bat].print_bat + "\n").encode('utf-8'))
                     Ligne = ["NOUVEAU", new_bati[i_lat][i_lon][i_bat].bat_id, \
                         str(round(new_bati[i_lat][i_lon][i_bat].dist_mini,9)), \
                         new_bati[i_lat][i_lon][i_bat].id_bat_proche, \
@@ -912,7 +870,7 @@ for i_lat in range(NB_ZONE):
             if old_bati[i_lat][i_lon][i_bat].role == "outer":
                 if old_bati[i_lat][i_lon][i_bat].status == "SUPPRIME":
                     old_bati[i_lat][i_lon][i_bat].export_bat()
-                    file_del.write(old_bati[i_lat][i_lon][i_bat].print_bat + "\n")
+                    file_del.write((old_bati[i_lat][i_lon][i_bat].print_bat + "\n").encode('utf-8'))
                     Ligne = ["SUPPRIME", old_bati[i_lat][i_lon][i_bat].bat_id, \
                         str(round(old_bati[i_lat][i_lon][i_bat].dist_mini,9)), \
                         nom_file_del]
@@ -1004,7 +962,7 @@ if mode == "debug":
         for i_lon in range(NB_ZONE):
             for i_bat in range(len(new_bati[i_lat][i_lon])):
                 new_bati[i_lat][i_lon][i_bat].pt_moy.export_node()
-                file_debug.write(new_bati[i_lat][i_lon][i_bat].pt_moy.print_node + "\n")     
+                file_debug.write(new_bati[i_lat][i_lon][i_bat].pt_moy.print_node + "\n")
     file_debug.write("</osm>" + "\n")
     file_debug.close()
 
