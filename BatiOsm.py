@@ -207,14 +207,12 @@ class Batiment:
         res_export = ""
         if self.historique != "":
             i_hist = 0
-            wayHist= ""
+            wayHist= "  <way "
             while i_hist < len(self.historique):
-                if (-1)**i_hist == 1:
-                    sep=""
-                else:
-                    sep="\""
-                wayHist= wayHist + sep + self.historique[i_hist] + sep
-                i_hist = i_hist + 1
+                wayHist= wayHist + self.historique[i_hist] + "=" + "\"" + \
+                    self.historique[i_hist + 1] + "\" "
+                i_hist = i_hist + 2
+            wayHist = wayHist + ">"
             export.append(wayHist)
         else:
             export.append("  <way id=\"" + self.bat_id + "\" visible=\"true\">")
@@ -503,10 +501,12 @@ for i in range(NB_ZONE):
 
 # lectures des batiments
 for way in old_bati_root.iter('way'):
+    historique = []
     tab_nodes = []
     tab_key = []
     tab_value = []
     way_id = way.get('id')
+    info_way = way.attrib
     nbre_node = len(way.findall('./nd'))
     nbre_tag = len(way.findall('./tag'))
     for node in way.findall('./nd'):
@@ -515,6 +515,9 @@ for way in old_bati_root.iter('way'):
     for tag in way.findall('./tag'):
         tab_key.append(tag.get('k'))
         tab_value.append(tag.get('v'))
+    for i_key in range(len(info_way)):
+        historique.append(info_way.keys()[i_key])
+        historique.append(info_way.get(info_way.keys()[i_key]))
     batiment_lu = Batiment(way_id, nbre_node, tab_nodes, nbre_tag, tab_key,\
         tab_value, 1000, 0., "UNKNOWN")
     batiment_lu.BatimentToPoint()
@@ -522,7 +525,7 @@ for way in old_bati_root.iter('way'):
         print("  Attention, surface nulle obtenue pour le batiment :" + \
             batiment_lu.bat_id)
     batiment_lu.calculLargeur()
-    batiment_lu.setHistorique("")
+    batiment_lu.setHistorique(historique)
     batiment_lu.setBatProche("")
     repereLatitude = int((batiment_lu.pt_moy.node_lat-lat_min)/delta_lat)
     repereLongitude = int((batiment_lu.pt_moy.node_lon-lon_min)/delta_lon)
