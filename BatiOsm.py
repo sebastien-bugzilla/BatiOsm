@@ -1,5 +1,6 @@
 # -*- coding:Utf-8 -*-
 # !/usr/bin/env python
+import argparse
 import os
 import sys
 import time
@@ -146,10 +147,13 @@ class Building:
             locale_lon.append((point.node_lon - self.nodes[0].node_lon) * EARTH_RADIUS * pi / 180)
 
         for i_node in range(self.node_count - 1):
-            next_point_distance = (locale_lat[i_node] * locale_lon[i_node + 1] - locale_lat[i_node + 1] * locale_lon[i_node])
+            next_point_distance = (
+                        locale_lat[i_node] * locale_lon[i_node + 1] - locale_lat[i_node + 1] * locale_lon[i_node])
             area = area + 0.5 * next_point_distance
-            computed_latitude = (computed_latitude + (locale_lat[i_node] + locale_lat[i_node + 1]) * next_point_distance)
-            computed_longitude = (computed_longitude + (locale_lon[i_node] + locale_lon[i_node + 1]) * next_point_distance)
+            computed_latitude = (
+                        computed_latitude + (locale_lat[i_node] + locale_lat[i_node + 1]) * next_point_distance)
+            computed_longitude = (
+                        computed_longitude + (locale_lon[i_node] + locale_lon[i_node + 1]) * next_point_distance)
 
         if area == 0.0:
             self.area_issue = "YES"
@@ -329,691 +333,701 @@ def log_format(text: list, max_chars: int, split: str):
     return result
 
 
-# ------------------------------------------------------------------------------
-#      D E B U T   D U   P R O G R A M M E
-# ------------------------------------------------------------------------------
+def main():
+    parser = argparse.ArgumentParser(
+        prog="BatiOsm",
+        description="Analyze two OSM files and prepare files to simplify imports and updates")
+    parser.add_argument("source", help="OSM source file", type=str)
+    parser.add_argument("buildings", help="File with Buildings, in general a cadastre export", type=str)
+    parser.add_argument("prefix", help="Prefix for generated files", type=str)
+    parser.add_argument("--debug", help="Enable debug", action='store_true')
 
+    args = parser.parse_args()
+    osm_file_current = args.source
+    osm_file_future = args.buildings
+    file_prefix = args.prefix
+    if args.debug:
+        mode = "debug"
+    else:
+        mode = ""
 
-base_path = os.getcwd()
-osm_file_current = sys.argv[1]
-osm_file_future = sys.argv[2]
-file_prefix = sys.argv[3]
-try:
-    mode = sys.argv[4]
-except:
-    mode = ""
-    pass
-separation = "--------------------------------------------------------------------------------------------------------------------------------"
+    base_path = os.getcwd()
+    separation = "--------------------------------------------------------------------------------------------------------------------------------"
 
-tps1 = time.perf_counter()
+    tps1 = time.perf_counter()
 
-print("------------------------------------------------------------------")
-print("-                    Lecture des données                         -")
-print("------------------------------------------------------------------")
+    print("------------------------------------------------------------------")
+    print("-                    Lecture des données                         -")
+    print("------------------------------------------------------------------")
 
-# ------------------------------------------------------------------------
-# lecture des nouveaux batiments :
-# ------------------------------------------------------------------------
-print("lecture du fichier " + osm_file_future + "...")
+    # ------------------------------------------------------------------------
+    # lecture des nouveaux batiments :
+    # ------------------------------------------------------------------------
+    print("lecture du fichier " + osm_file_future + "...")
 
-lat_min = 90.0
-lat_max = 0.0
-lon_min = 45.0
-lon_max = -45.0
+    lat_min = 90.0
+    lat_max = 0.0
+    lon_min = 45.0
+    lon_max = -45.0
 
-new_nodes = []
-new_id_nodes = []
+    new_nodes = []
+    new_id_nodes = []
 
-future_nodes_count = 0
-future_ways_count = 0
-i_way = 0
-i_nd_ref = 0
-col_id = 0
-col_lat = 0
-col_lon = 0
+    future_nodes_count = 0
+    future_ways_count = 0
+    i_way = 0
+    i_nd_ref = 0
+    col_id = 0
+    col_lat = 0
+    col_lon = 0
 
-utf8_xml_parser = lxml.etree.XMLParser(encoding="utf-8")
-new_bati_etree = lxml.etree.parse(osm_file_future, parser=utf8_xml_parser)
-new_bati_root = new_bati_etree.getroot()
+    utf8_xml_parser = lxml.etree.XMLParser(encoding="utf-8")
+    new_bati_etree = lxml.etree.parse(osm_file_future, parser=utf8_xml_parser)
+    new_bati_root = new_bati_etree.getroot()
 
-# lecture des noeuds
-for node in new_bati_root.iter("node"):
-    attributes = []
-    node_id = node.get("id")
-    node_lat = node.get("lat")
-    node_lon = node.get("lon")
-    if float(node_lat) < lat_min:
-        lat_min = float(node_lat)
-    if float(node_lat) > lat_max:
-        lat_max = float(node_lat)
-    if float(node_lon) < lon_min:
-        lon_min = float(node_lon)
-    if float(node_lon) > lon_max:
-        lon_max = float(node_lon)
-    new_id_nodes.append(node_id)
-    new_nodes.append(Point(node_id, node_lat, node_lon))
-    info_nodes = node.attrib
-    for i_key in range(len(info_nodes)):
-        attributes.append(info_nodes.keys()[i_key])
-        attributes.append(info_nodes.get(info_nodes.keys()[i_key]))
-    new_nodes[future_nodes_count].set_history(attributes)
-    future_nodes_count = future_nodes_count + 1
+    # lecture des noeuds
+    for node in new_bati_root.iter("node"):
+        attributes = []
+        node_id = node.get("id")
+        node_lat = node.get("lat")
+        node_lon = node.get("lon")
+        if float(node_lat) < lat_min:
+            lat_min = float(node_lat)
+        if float(node_lat) > lat_max:
+            lat_max = float(node_lat)
+        if float(node_lon) < lon_min:
+            lon_min = float(node_lon)
+        if float(node_lon) > lon_max:
+            lon_max = float(node_lon)
+        new_id_nodes.append(node_id)
+        new_nodes.append(Point(node_id, node_lat, node_lon))
+        info_nodes = node.attrib
+        for i_key in range(len(info_nodes)):
+            attributes.append(info_nodes.keys()[i_key])
+            attributes.append(info_nodes.get(info_nodes.keys()[i_key]))
+        new_nodes[future_nodes_count].set_history(attributes)
+        future_nodes_count = future_nodes_count + 1
 
-NB_ZONE_LAT = (
-        int((lat_max - lat_min) * (pi / 180 * EARTH_RADIUS) / (2 * BORNE_SUP_MODIF)) - 1
-)
-NB_ZONE_LON = (
-        int((lon_max - lon_min) * (pi / 180 * EARTH_RADIUS) / (2 * BORNE_SUP_MODIF)) - 1
-)
-NB_ZONE = min(NB_ZONE_LAT, NB_ZONE_LON, 500, NB_ZONE_USER)
-delta_lat = (lat_max - lat_min) / NB_ZONE
-delta_lon = (lon_max - lon_min) / NB_ZONE
-
-new_bati = []
-for i in range(NB_ZONE):
-    new_bati += [[]]
-    for j in range(NB_ZONE):
-        new_bati[i] += [[]]
-
-# lectures des batiments
-for way in new_bati_root.iter("way"):
-    tab_nodes = []
-    tab_key = []
-    tab_value = []
-    way_id = way.get("id")
-    nbre_node = len(way.findall("./nd"))
-    nbre_tag = len(way.findall("./tag"))
-    for node in way.findall("./nd"):
-        id_node = node.get("ref")
-        tab_nodes.append(new_nodes[new_id_nodes.index(id_node)])
-    for tag in way.findall("./tag"):
-        tab_key.append(tag.get("k"))
-        tab_value.append(tag.get("v"))
-    batiment_lu = Building(
-        way_id, nbre_node, tab_nodes, nbre_tag, tab_key, tab_value, 1000, 0.0, "UNKNOWN"
+    NB_ZONE_LAT = (
+            int((lat_max - lat_min) * (pi / 180 * EARTH_RADIUS) / (2 * BORNE_SUP_MODIF)) - 1
     )
-    batiment_lu.compute_center()
-    if batiment_lu.area_issue == "YES":
-        print(
-            "  Attention, surface nulle obtenue pour le batiment :" + batiment_lu.bat_id
+    NB_ZONE_LON = (
+            int((lon_max - lon_min) * (pi / 180 * EARTH_RADIUS) / (2 * BORNE_SUP_MODIF)) - 1
+    )
+    NB_ZONE = min(NB_ZONE_LAT, NB_ZONE_LON, 500, NB_ZONE_USER)
+    delta_lat = (lat_max - lat_min) / NB_ZONE
+    delta_lon = (lon_max - lon_min) / NB_ZONE
+
+    new_bati = []
+    for i in range(NB_ZONE):
+        new_bati += [[]]
+        for j in range(NB_ZONE):
+            new_bati[i] += [[]]
+
+    # lectures des batiments
+    for way in new_bati_root.iter("way"):
+        tab_nodes = []
+        tab_key = []
+        tab_value = []
+        way_id = way.get("id")
+        nbre_node = len(way.findall("./nd"))
+        nbre_tag = len(way.findall("./tag"))
+        for node in way.findall("./nd"):
+            id_node = node.get("ref")
+            tab_nodes.append(new_nodes[new_id_nodes.index(id_node)])
+        for tag in way.findall("./tag"):
+            tab_key.append(tag.get("k"))
+            tab_value.append(tag.get("v"))
+        batiment_lu = Building(
+            way_id, nbre_node, tab_nodes, nbre_tag, tab_key, tab_value, 1000, 0.0, "UNKNOWN"
         )
-    batiment_lu.compute_width()
-    batiment_lu.set_history([])
-    batiment_lu.set_close_building("")
-    repereLatitude = int((batiment_lu.center.node_lat - lat_min) / delta_lat)
-    repereLongitude = int((batiment_lu.center.node_lon - lon_min) / delta_lon)
-    if repereLatitude > NB_ZONE - 1:
-        repereLatitude = NB_ZONE - 1
-    if repereLongitude > NB_ZONE - 1:
-        repereLongitude = NB_ZONE - 1
-    if repereLatitude < 0:
-        repereLatitude = 0
-    if repereLongitude < 0:
-        repereLongitude = 0
-    new_bati[repereLatitude][repereLongitude].append(batiment_lu)
-    future_ways_count = future_ways_count + 1
+        batiment_lu.compute_center()
+        if batiment_lu.area_issue == "YES":
+            print(
+                "  Attention, surface nulle obtenue pour le batiment :" + batiment_lu.bat_id
+            )
+        batiment_lu.compute_width()
+        batiment_lu.set_history([])
+        batiment_lu.set_close_building("")
+        repereLatitude = int((batiment_lu.center.node_lat - lat_min) / delta_lat)
+        repereLongitude = int((batiment_lu.center.node_lon - lon_min) / delta_lon)
+        if repereLatitude > NB_ZONE - 1:
+            repereLatitude = NB_ZONE - 1
+        if repereLongitude > NB_ZONE - 1:
+            repereLongitude = NB_ZONE - 1
+        if repereLatitude < 0:
+            repereLatitude = 0
+        if repereLongitude < 0:
+            repereLongitude = 0
+        new_bati[repereLatitude][repereLongitude].append(batiment_lu)
+        future_ways_count = future_ways_count + 1
 
-# lectures des relations
-OuterWay = ""
-for relation in new_bati_root.iter("relation"):
-    id_relation = relation.get("id")
-    for member in relation.findall("./member"):
-        id_membre = member.get("ref")
-        role = member.get("role")
-        for i_lat in range(NB_ZONE):
-            for i_lon in range(NB_ZONE):
-                for i_bat in range(len(new_bati[i_lat][i_lon])):
-                    if new_bati[i_lat][i_lon][i_bat].bat_id == id_membre:
-                        if role == "outer":
-                            OuterWay = new_bati[i_lat][i_lon][i_bat]
-                            OuterWay.add_relation(id_relation)
-                            OuterWay.multipolygone = "yes"
-                        else:
-                            new_bati[i_lat][i_lon][i_bat].set_role("inner")
-                            OuterWay.addInner(new_bati[i_lat][i_lon][i_bat])
+    # lectures des relations
+    OuterWay = ""
+    for relation in new_bati_root.iter("relation"):
+        id_relation = relation.get("id")
+        for member in relation.findall("./member"):
+            id_membre = member.get("ref")
+            role = member.get("role")
+            for i_lat in range(NB_ZONE):
+                for i_lon in range(NB_ZONE):
+                    for i_bat in range(len(new_bati[i_lat][i_lon])):
+                        if new_bati[i_lat][i_lon][i_bat].bat_id == id_membre:
+                            if role == "outer":
+                                OuterWay = new_bati[i_lat][i_lon][i_bat]
+                                OuterWay.add_relation(id_relation)
+                                OuterWay.multipolygone = "yes"
+                            else:
+                                new_bati[i_lat][i_lon][i_bat].set_role("inner")
+                                OuterWay.addInner(new_bati[i_lat][i_lon][i_bat])
 
-print(f"  {future_nodes_count} noeuds répertoriés dans le fichier {osm_file_future}")
-print(f"  {future_ways_count} batiments répertoriés dans le fichier {osm_file_future}")
+    print(f"  {future_nodes_count} noeuds répertoriés dans le fichier {osm_file_future}")
+    print(f"  {future_ways_count} batiments répertoriés dans le fichier {osm_file_future}")
 
-# ------------------------------------------------------------------------
-# lecture des vieux batiments :
-# ------------------------------------------------------------------------
-# file_old = open(fichier_osm_old, "r")
-print(f"lecture du fichier {osm_file_current}...")
+    # ------------------------------------------------------------------------
+    # lecture des vieux batiments :
+    # ------------------------------------------------------------------------
+    # file_old = open(fichier_osm_old, "r")
+    print(f"lecture du fichier {osm_file_current}...")
 
-current_nodes = []
-current_nodes_ids = []
+    current_nodes = []
+    current_nodes_ids = []
 
-current_nodes_count = 0
-current_ways_count = 0
-i_way = 0
-i_nd_ref = 0
-col_id = 0
-col_lat = 0
-col_lon = 0
+    current_nodes_count = 0
+    current_ways_count = 0
+    i_way = 0
+    i_nd_ref = 0
+    col_id = 0
+    col_lat = 0
+    col_lon = 0
 
-utf8_xml_parser = lxml.etree.XMLParser(encoding="utf-8")
+    utf8_xml_parser = lxml.etree.XMLParser(encoding="utf-8")
 
-old_bati_etree = lxml.etree.parse(osm_file_current, parser=utf8_xml_parser)
-old_bati_root = old_bati_etree.getroot()
+    old_bati_etree = lxml.etree.parse(osm_file_current, parser=utf8_xml_parser)
+    old_bati_root = old_bati_etree.getroot()
 
-# lecture des noeuds
-for node in old_bati_root.iter("node"):
-    attributes = []
-    node_id = node.get("id")
-    node_lat = node.get("lat")
-    node_lon = node.get("lon")
-    current_nodes_ids.append(node_id)
-    current_nodes.append(Point(node_id, node_lat, node_lon))
-    info_nodes = node.attrib
-    for i_key in range(len(info_nodes)):
-        attributes.append(info_nodes.keys()[i_key])
-        attributes.append(info_nodes.get(info_nodes.keys()[i_key]))
-    current_nodes[current_nodes_count].set_history(attributes)
-    current_nodes_count = current_nodes_count + 1
+    # lecture des noeuds
+    for node in old_bati_root.iter("node"):
+        attributes = []
+        node_id = node.get("id")
+        node_lat = node.get("lat")
+        node_lon = node.get("lon")
+        current_nodes_ids.append(node_id)
+        current_nodes.append(Point(node_id, node_lat, node_lon))
+        info_nodes = node.attrib
+        for i_key in range(len(info_nodes)):
+            attributes.append(info_nodes.keys()[i_key])
+            attributes.append(info_nodes.get(info_nodes.keys()[i_key]))
+        current_nodes[current_nodes_count].set_history(attributes)
+        current_nodes_count = current_nodes_count + 1
 
-old_bati = []
-for i in range(NB_ZONE):
-    old_bati += [[]]
-    for j in range(NB_ZONE):
-        old_bati[i] += [[]]
+    old_bati = []
+    for i in range(NB_ZONE):
+        old_bati += [[]]
+        for j in range(NB_ZONE):
+            old_bati[i] += [[]]
 
-# lectures des batiments
-for way in old_bati_root.iter("way"):
-    attributes = []
-    tab_nodes = []
-    tab_key = []
-    tab_value = []
-    way_id = way.get("id")
-    info_way = way.attrib
-    nbre_node = len(way.findall("./nd"))
-    nbre_tag = len(way.findall("./tag"))
-    for node in way.findall("./nd"):
-        id_node = node.get("ref")
-        tab_nodes.append(current_nodes[current_nodes_ids.index(id_node)])
-    for tag in way.findall("./tag"):
-        tab_key.append(tag.get("k"))
-        tab_value.append(tag.get("v"))
-    for i_key in range(len(info_way)):
-        attributes.append(info_way.keys()[i_key])
-        attributes.append(info_way.get(info_way.keys()[i_key]))
-    batiment_lu = Building(
-        way_id, nbre_node, tab_nodes, nbre_tag, tab_key, tab_value, 1000, 0.0, "UNKNOWN"
-    )
-    batiment_lu.compute_center()
-    if batiment_lu.area_issue == "YES":
-        print(f"  Attention, surface nulle obtenue pour le batiment :{batiment_lu.bat_id}")
-    batiment_lu.compute_width()
-    batiment_lu.set_history(attributes)
-    batiment_lu.set_close_building("")
-    repereLatitude = int((batiment_lu.center.node_lat - lat_min) / delta_lat)
-    repereLongitude = int((batiment_lu.center.node_lon - lon_min) / delta_lon)
-    if repereLatitude > NB_ZONE - 1:
-        repereLatitude = NB_ZONE - 1
-    if repereLongitude > NB_ZONE - 1:
-        repereLongitude = NB_ZONE - 1
-    if repereLatitude < 0:
-        repereLatitude = 0
-    if repereLongitude < 0:
-        repereLongitude = 0
-    old_bati[repereLatitude][repereLongitude].append(batiment_lu)
-    current_ways_count = current_ways_count + 1
+    # lectures des batiments
+    for way in old_bati_root.iter("way"):
+        attributes = []
+        tab_nodes = []
+        tab_key = []
+        tab_value = []
+        way_id = way.get("id")
+        info_way = way.attrib
+        nbre_node = len(way.findall("./nd"))
+        nbre_tag = len(way.findall("./tag"))
+        for node in way.findall("./nd"):
+            id_node = node.get("ref")
+            tab_nodes.append(current_nodes[current_nodes_ids.index(id_node)])
+        for tag in way.findall("./tag"):
+            tab_key.append(tag.get("k"))
+            tab_value.append(tag.get("v"))
+        for i_key in range(len(info_way)):
+            attributes.append(info_way.keys()[i_key])
+            attributes.append(info_way.get(info_way.keys()[i_key]))
+        batiment_lu = Building(
+            way_id, nbre_node, tab_nodes, nbre_tag, tab_key, tab_value, 1000, 0.0, "UNKNOWN"
+        )
+        batiment_lu.compute_center()
+        if batiment_lu.area_issue == "YES":
+            print(f"  Attention, surface nulle obtenue pour le batiment :{batiment_lu.bat_id}")
+        batiment_lu.compute_width()
+        batiment_lu.set_history(attributes)
+        batiment_lu.set_close_building("")
+        repereLatitude = int((batiment_lu.center.node_lat - lat_min) / delta_lat)
+        repereLongitude = int((batiment_lu.center.node_lon - lon_min) / delta_lon)
+        if repereLatitude > NB_ZONE - 1:
+            repereLatitude = NB_ZONE - 1
+        if repereLongitude > NB_ZONE - 1:
+            repereLongitude = NB_ZONE - 1
+        if repereLatitude < 0:
+            repereLatitude = 0
+        if repereLongitude < 0:
+            repereLongitude = 0
+        old_bati[repereLatitude][repereLongitude].append(batiment_lu)
+        current_ways_count = current_ways_count + 1
 
-# lectures des relations
-for relation in old_bati_root.iter("relation"):
-    id_relation = relation.get("id")
-    for member in relation.findall("./member"):
-        id_membre = member.get("ref")
-        role = member.get("role")
-        for i_lat in range(NB_ZONE):
-            for i_lon in range(NB_ZONE):
-                for i_bat in range(len(old_bati[i_lat][i_lon])):
-                    if old_bati[i_lat][i_lon][i_bat].bat_id == id_membre:
-                        if role == "outer":
-                            OuterWay = old_bati[i_lat][i_lon][i_bat]
-                            OuterWay.add_relation(id_relation)
-                            OuterWay.multipolygone = "yes"
-                        else:
-                            old_bati[i_lat][i_lon][i_bat].set_role("inner")
-                            OuterWay.addInner(old_bati[i_lat][i_lon][i_bat])
+    # lectures des relations
+    for relation in old_bati_root.iter("relation"):
+        id_relation = relation.get("id")
+        for member in relation.findall("./member"):
+            id_membre = member.get("ref")
+            role = member.get("role")
+            for i_lat in range(NB_ZONE):
+                for i_lon in range(NB_ZONE):
+                    for i_bat in range(len(old_bati[i_lat][i_lon])):
+                        if old_bati[i_lat][i_lon][i_bat].bat_id == id_membre:
+                            if role == "outer":
+                                OuterWay = old_bati[i_lat][i_lon][i_bat]
+                                OuterWay.add_relation(id_relation)
+                                OuterWay.multipolygone = "yes"
+                            else:
+                                old_bati[i_lat][i_lon][i_bat].set_role("inner")
+                                OuterWay.addInner(old_bati[i_lat][i_lon][i_bat])
 
-tps2 = time.perf_counter()
-print(f' {current_nodes_count} noeuds répertoriés dans le fichier {osm_file_current}')
-print(f' {current_ways_count} batiments répertoriés dans le fichier {osm_file_current}')
+    tps2 = time.perf_counter()
+    print(f' {current_nodes_count} noeuds répertoriés dans le fichier {osm_file_current}')
+    print(f' {current_ways_count} batiments répertoriés dans le fichier {osm_file_current}')
 
-print("------------------------------------------------------------------")
-print(f'Temps de lecture des fichiers : {tps2 - tps1}')
-print("------------------------------------------------------------------")
-print("-  Recherche des similitudes et des différences entre batiments  -")
-print(f'-  NB_ZONE a été calculé à : {NB_ZONE}')
-print("------------------------------------------------------------------")
-# ------------------------------------------------------------------------------
-# calcul des distances mini entre chaque anciens batiments
-# pour chaque batiment anciens (resp. nouveau) on détermine la distance
-# la plus petite avec tous les nouveaux batiments (resp. anciens)
-# ------------------------------------------------------------------------------
-#
+    print("------------------------------------------------------------------")
+    print(f'Temps de lecture des fichiers : {tps2 - tps1}')
+    print("------------------------------------------------------------------")
+    print("-  Recherche des similitudes et des différences entre batiments  -")
+    print(f'-  NB_ZONE a été calculé à : {NB_ZONE}')
+    print("------------------------------------------------------------------")
+    # ------------------------------------------------------------------------------
+    # calcul des distances mini entre chaque anciens batiments
+    # pour chaque batiment anciens (resp. nouveau) on détermine la distance
+    # la plus petite avec tous les nouveaux batiments (resp. anciens)
+    # ------------------------------------------------------------------------------
+    #
 
-nb_bat_traite = 0
-avancement = 0.0
-nb_comparaison = 0
-for i_lat in range(NB_ZONE):
-    for i_lon in range(NB_ZONE):
-        lat_inf = max(i_lat - 1, 0)
-        lon_inf = max(i_lon - 1, 0)
-        lat_sup = min(i_lat + 1, NB_ZONE - 1) + 1
-        lon_sup = min(i_lon + 1, NB_ZONE - 1) + 1
-        for i_bat in range(len(old_bati[i_lat][i_lon])):
-            if old_bati[i_lat][i_lon][i_bat].role == "outer":
-                nb_bat_traite = nb_bat_traite + 1
-                avancement = float(nb_bat_traite) / (current_ways_count + future_ways_count) * 100.0
-                sys.stdout.write(f'Calcul en cours : {int(avancement)} % {chr(13)}')
-                for n_lat in range(lat_inf, lat_sup):
-                    for n_lon in range(lon_inf, lon_sup):
-                        for n_bat in range(len(new_bati[n_lat][n_lon])):
-                            if new_bati[n_lat][n_lon][n_bat].role == "outer":
-                                distance = old_bati[i_lat][i_lon][
-                                    i_bat
-                                ].center.distance(new_bati[n_lat][n_lon][n_bat].center)
-                                nb_comparaison = nb_comparaison + 1
-                                if old_bati[i_lat][i_lon][i_bat].min_distance > distance:
-                                    old_bati[i_lat][i_lon][i_bat].set_min_distance(distance)
-                                    old_bati[i_lat][i_lon][i_bat].set_close_building(
-                                        new_bati[n_lat][n_lon][n_bat].bat_id
-                                    )
-
-for i_lat in range(NB_ZONE):
-    for i_lon in range(NB_ZONE):
-        lat_inf = max(i_lat - 1, 0)
-        lon_inf = max(i_lon - 1, 0)
-        lat_sup = min(i_lat + 1, NB_ZONE - 1) + 1
-        lon_sup = min(i_lon + 1, NB_ZONE - 1) + 1
-        for i_bat in range(len(new_bati[i_lat][i_lon])):
-            if new_bati[i_lat][i_lon][i_bat].role == "outer":
-                nb_bat_traite = nb_bat_traite + 1
-                avancement = (
-                        float(nb_bat_traite) / (current_ways_count + future_ways_count) * 100.0
-                )
-                sys.stdout.write(f'Calcul en cours : {int(avancement)} % {chr(13)}')
-                for o_lat in range(lat_inf, lat_sup):
-                    for o_lon in range(lon_inf, lon_sup):
-                        for o_bat in range(len(old_bati[o_lat][o_lon])):
-                            if old_bati[o_lat][o_lon][o_bat].role == "outer":
-                                distance = new_bati[i_lat][i_lon][
-                                    i_bat
-                                ].center.distance(old_bati[o_lat][o_lon][o_bat].center)
-                                nb_comparaison = nb_comparaison + 1
-                                if new_bati[i_lat][i_lon][i_bat].min_distance > distance:
-                                    new_bati[i_lat][i_lon][i_bat].set_min_distance(distance)
-                                    new_bati[i_lat][i_lon][i_bat].set_close_building(
-                                        old_bati[o_lat][o_lon][o_bat].bat_id
-                                    )
-                                    if distance < BORNE_INF_MODIF:
-                                        new_bati[i_lat][i_lon][i_bat].copy_tag(
-                                            old_bati[o_lat][o_lon][o_bat], "IDENTIQUE"
-                                        )
-                                    elif (
-                                            BORNE_INF_MODIF < distance < BORNE_SUP_MODIF
-                                    ):
-                                        new_bati[i_lat][i_lon][i_bat].copy_tag(
-                                            old_bati[o_lat][o_lon][o_bat], "MODIFIE"
-                                        )
-# ------------------------------------------------------------------------
-# Classement des batiments :
-#  - dist_mini < BORNE_INF_MODIF : identique
-#  - BORNE_INF_MODIF < dist_mini < BORNE_SUP_MODIF : modifié
-#  - dist_mini > BORNE_SUP_MODIF : nouveau ou supprimé
-#  - dist_mini > largeur : nouveau ou supprimé
-# ------------------------------------------------------------------------
-for i_lat in range(NB_ZONE):
-    for i_lon in range(NB_ZONE):
-        # Classement des anciens batiments
-        for i_bat in range(len(old_bati[i_lat][i_lon])):
-            if old_bati[i_lat][i_lon][i_bat].role == "outer":
-                if old_bati[i_lat][i_lon][i_bat].min_distance > BORNE_SUP_MODIF:
-                    old_bati[i_lat][i_lon][i_bat].set_status("SUPPRIME")
-                if (
-                        old_bati[i_lat][i_lon][i_bat].min_distance
-                        > old_bati[i_lat][i_lon][i_bat].width
-                ):
-                    old_bati[i_lat][i_lon][i_bat].set_status("SUPPRIME")
-        # Classement des nouveaux batiments
-        for i_bat in range(len(new_bati[i_lat][i_lon])):
-            if new_bati[i_lat][i_lon][i_bat].role == "outer":
-                if new_bati[i_lat][i_lon][i_bat].min_distance < BORNE_INF_MODIF:
-                    new_bati[i_lat][i_lon][i_bat].set_status("IDENTIQUE")
-                elif (
-                        BORNE_INF_MODIF < new_bati[i_lat][i_lon][i_bat].min_distance < BORNE_SUP_MODIF
-                ):
-                    new_bati[i_lat][i_lon][i_bat].set_status("MODIFIE")
-                elif new_bati[i_lat][i_lon][i_bat].min_distance > BORNE_SUP_MODIF:
-                    new_bati[i_lat][i_lon][i_bat].set_status("NOUVEAU")
-                if (
-                        new_bati[i_lat][i_lon][i_bat].min_distance
-                        > new_bati[i_lat][i_lon][i_bat].width
-                ):
-                    new_bati[i_lat][i_lon][i_bat].set_status("NOUVEAU")
-
-nb_bat_new = 0
-nb_bat_mod = 0
-nb_bat_del = 0
-nb_bat_noMod = 0
-
-# Comptage des batiment de chaque catégorie.
-for i_lat in range(NB_ZONE):
-    for i_lon in range(NB_ZONE):
-        for i_bat in range(len(old_bati[i_lat][i_lon])):
-            if old_bati[i_lat][i_lon][i_bat].role == "outer":
-                if old_bati[i_lat][i_lon][i_bat].status == "SUPPRIME":
-                    nb_bat_del = nb_bat_del + 1
-        for i_bat in range(len(new_bati[i_lat][i_lon])):
-            if new_bati[i_lat][i_lon][i_bat].role == "outer":
-                if new_bati[i_lat][i_lon][i_bat].status == "IDENTIQUE":
-                    nb_bat_noMod = nb_bat_noMod + 1
-                elif new_bati[i_lat][i_lon][i_bat].status == "MODIFIE":
-                    nb_bat_mod = nb_bat_mod + 1
-                elif new_bati[i_lat][i_lon][i_bat].status == "NOUVEAU":
-                    nb_bat_new = nb_bat_new + 1
-
-# Vérification de la cohérence des résultats. On chercher à vérifier que :
-# nb_bat_apres = nb_bat_avant + nouveaux - supprimés
-# si l'équation n'est pas vérifié et que la zone compte des batiments modifiés
-# suffisant pour rétablir l'équilibre, alors on déclare les batiments modifiés
-# comme nouveaux sinon on affiche un warning
-warning_equilibre = ["Erreur d'équilibre : nb_bat_apres <> nb_bat_avant + nouveaux - supprimés"]
-for i_lat in range(NB_ZONE):
-    for i_lon in range(NB_ZONE):
-        nb_nouveaux = 0
-        nb_supprimes = 0
-        nb_modifies = 0
-        nb_identiques = 0
-        nb_innner = 0
-        nb_bat_apres = len(new_bati[i_lat][i_lon])
-        nb_bat_avant = len(old_bati[i_lat][i_lon])
-        for i_bat in range(len(old_bati[i_lat][i_lon])):
-            if old_bati[i_lat][i_lon][i_bat].status == "SUPPRIME":
-                nb_supprimes = nb_supprimes + 1
-        for i_bat in range(len(new_bati[i_lat][i_lon])):
-            if new_bati[i_lat][i_lon][i_bat].status == "NOUVEAU":
-                nb_nouveaux = nb_nouveaux + 1
-            elif new_bati[i_lat][i_lon][i_bat].status == "MODIFIE":
-                nb_modifies = nb_modifies + 1
-            elif new_bati[i_lat][i_lon][i_bat].status == "IDENTIQUE":
-                nb_identiques = nb_identiques + 1
-            elif new_bati[i_lat][i_lon][i_bat].role == "inner":
-                nb_innner = nb_innner + 1
-        if nb_bat_apres != nb_bat_avant + nb_nouveaux - nb_supprimes:
-            if nb_bat_apres == nb_bat_avant + nb_nouveaux + nb_modifies - nb_supprimes:
-                for i_bat in range(len(new_bati[i_lat][i_lon])):
-                    if new_bati[i_lat][i_lon][i_bat].status == "MODIFIE":
-                        new_bati[i_lat][i_lon][i_bat].set_status("NOUVEAU")
-            else:
-                warning_equilibre.append(f"Erreur d'équilibre pour la zone i_lat / i_lon {i_lat}/{i_lon}")
-                warning_equilibre.append(
-                    f"   Avant : {nb_bat_avant}   Après : {nb_bat_apres}   Nouveaux : {nb_nouveaux}   Supprimés : {nb_supprimes}   Modifiés : {nb_modifies}")
-
-nb_bat_new = 0
-nb_bat_mod = 0
-nb_bat_del = 0
-nb_bat_noMod = 0
-
-# Comptage des batiment de chaque catégorie.
-for i_lat in range(NB_ZONE):
-    for i_lon in range(NB_ZONE):
-        for i_bat in range(len(old_bati[i_lat][i_lon])):
-            if old_bati[i_lat][i_lon][i_bat].role == "outer":
-                if old_bati[i_lat][i_lon][i_bat].status == "SUPPRIME":
-                    nb_bat_del = nb_bat_del + 1
-        for i_bat in range(len(new_bati[i_lat][i_lon])):
-            if new_bati[i_lat][i_lon][i_bat].role == "outer":
-                if new_bati[i_lat][i_lon][i_bat].status == "IDENTIQUE":
-                    nb_bat_noMod = nb_bat_noMod + 1
-                elif new_bati[i_lat][i_lon][i_bat].status == "MODIFIE":
-                    nb_bat_mod = nb_bat_mod + 1
-                elif new_bati[i_lat][i_lon][i_bat].status == "NOUVEAU":
-                    nb_bat_new = nb_bat_new + 1
-
-print("------------------------------------------------------------------")
-print("-                    Création des fichiers                       -")
-print("------------------------------------------------------------------")
-print(f"{nb_comparaison} comparaisons entre batiments effectuées")
-print(f"{nb_bat_noMod} batiments identiques")
-print(f"{nb_bat_mod} batiments modifiés")
-print(f"{nb_bat_new} batiments nouveaux")
-print(f"{nb_bat_del} batiments supprimés")
-
-tps3 = time.perf_counter()
-
-file_log = open(os.path.join(base_path, f'{file_prefix}_log.txt'), "w")
-file_log.write("Rappel des input : \n")
-file_log.write(f"    BORNE_INF_MODIF : {BORNE_INF_MODIF}\n")
-file_log.write(f"    BORNE_SUP_MODIF : {BORNE_SUP_MODIF}\n")
-file_log.write(f"    NB_ZONE : {NB_ZONE}\n")
-file_log.write(f"Le fichier {osm_file_current} contient :\n")
-file_log.write(f"    - {current_nodes_count} noeuds\n")
-file_log.write(f"    - {current_ways_count} batiments\n")
-file_log.write(f"Le fichier {osm_file_future} contient :\n")
-file_log.write(f"    - {future_nodes_count} noeuds\n")
-file_log.write(f"    - {future_ways_count} batiments\n")
-file_log.write("Résultat de la comparaison :\n")
-file_log.write(f"    Nombre de comparaisons effectuées : {nb_comparaison}\n")
-file_log.write(f"    Nombre de batiments identiques trouvés : {nb_bat_noMod}\n")
-file_log.write(f"    Nombre de batiments modifiés trouvés : {nb_bat_mod}\n")
-file_log.write(f"    Nombre de batiments nouveaux trouvés : {nb_bat_new}\n")
-file_log.write(f"    Nombre de batiments supprimés trouvés : {nb_bat_del}\n")
-file_log.write(f"Temps de lecture des fichiers : {tps2 - tps1} secondes.\n"
-               )
-file_log.write(f"Temps de calcul : {tps3 - tps2} secondes.\n")
-file_log.write(f"Temps d'execution totale : {tps3 - tps1} secondes.\n")
-file_log.write(f"{separation}\n")
-i_warn = 0
-for i_warn in range(len(warning_equilibre)):
-    file_log.write(f"{warning_equilibre[i_warn]}\n")
-file_log.write(f"{separation}\n")
-file_log.write(f"Récapitulatif des batiments issus de {osm_file_future}\n")
-file_log.write(f"{separation}\n")
-
-for i_lat in range(NB_ZONE):
-    for i_lon in range(NB_ZONE):
-        for i_bat in range(len(new_bati[i_lat][i_lon])):
-            Resultat = [
-                new_bati[i_lat][i_lon][i_bat].bat_id,
-                new_bati[i_lat][i_lon][i_bat].status,
-                str(round(new_bati[i_lat][i_lon][i_bat].min_distance, 9)),
-                str(round(new_bati[i_lat][i_lon][i_bat].center.node_lat, 7)),
-                str(round(new_bati[i_lat][i_lon][i_bat].center.node_lon, 7)),
-                str(round(new_bati[i_lat][i_lon][i_bat].area, 1)),
-            ]
-            file_log.write(log_format(Resultat, 16, "|") + "\n")
-file_log.write(f"{separation}\n")
-file_log.write(f"Récapitulatif des batiments issus de {osm_file_current}\n")
-file_log.write(f"{separation}\n")
-
-for i_lat in range(NB_ZONE):
-    for i_lon in range(NB_ZONE):
-        for i_bat in range(len(old_bati[i_lat][i_lon])):
-            # print(old_bati[i_lat][i_lon][i_bat].aire)
-            Resultat = [
-                old_bati[i_lat][i_lon][i_bat].bat_id,
-                old_bati[i_lat][i_lon][i_bat].status,
-                str(round(old_bati[i_lat][i_lon][i_bat].min_distance, 9)),
-                str(round(old_bati[i_lat][i_lon][i_bat].center.node_lat, 7)),
-                str(round(old_bati[i_lat][i_lon][i_bat].center.node_lon, 7)),
-                str(round(old_bati[i_lat][i_lon][i_bat].area, 1)),
-            ]
-            file_log.write(log_format(Resultat, 16, "|") + "\n")
-file_log.write(f"{separation}\n")
-
-nom_file_noMod = f"{file_prefix}_unModified.osm"
-file_noMod = open(os.path.join(base_path, nom_file_noMod), "w")
-file_noMod.write('<?xml version="1.0" encoding="UTF-8"?>' + "\n")
-file_noMod.write('<osm version="0.6" upload="true" generator="JOSM">' + "\n")
-
-nom_file_mod = f"{file_prefix}_mod_1_a_{nb_bat_mod}.osm"
-file_mod = open(os.path.join(base_path, nom_file_mod), "w")
-file_mod.write('<?xml version="1.0" encoding="UTF-8"?>' + "\n")
-file_mod.write('<osm version="0.6" upload="true" generator="JOSM">' + "\n")
-
-nom_file_new = f"{file_prefix}_new_1_a_{nb_bat_new}.osm"
-file_new = open(os.path.join(base_path, nom_file_new), "w")
-file_new.write('<?xml version="1.0" encoding="UTF-8"?>' + "\n")
-file_new.write('<osm version="0.6" upload="true" generator="JOSM">' + "\n")
-
-nom_file_del = f"{file_prefix}_sup_1_a_{nb_bat_del}.osm"
-file_del = open(os.path.join(base_path, nom_file_del), "w")
-file_del.write('<?xml version="1.0" encoding="UTF-8"?>' + "\n")
-file_del.write('<osm version="0.6" upload="true" generator="JOSM">' + "\n")
-
-# Ecriture des nouveaux batiments
-enTete = ["STAT", "ANCIEN BAT.", "TOL", "NOUVEAU BAT.", "fichier"]
-file_log.write("NOUVEAUX BATIMENTS" + "\n")
-file_log.write(separation + "\n")
-file_log.write(log_format(enTete, 16, "|") + "\n")
-file_log.write(separation + "\n")
-for i_lat in range(NB_ZONE):
-    for i_lon in range(NB_ZONE):
-        for i_bat in range(len(new_bati[i_lat][i_lon])):
-            if new_bati[i_lat][i_lon][i_bat].role == "outer":
-                new_bati[i_lat][i_lon][i_bat].export_bat()
-                if new_bati[i_lat][i_lon][i_bat].status == "IDENTIQUE":
-                    file_noMod.write((new_bati[i_lat][i_lon][i_bat].print_bat + "\n"))
-                    Ligne = [
-                        "IDENTIQUE",
-                        new_bati[i_lat][i_lon][i_bat].bat_id,
-                        str(round(new_bati[i_lat][i_lon][i_bat].min_distance, 9)),
-                        new_bati[i_lat][i_lon][i_bat].close_building_id,
-                        nom_file_noMod,
-                    ]
-                    file_log.write(log_format(Ligne, 16, "|") + "\n")
-                elif new_bati[i_lat][i_lon][i_bat].status == "MODIFIE":
-                    file_mod.write((new_bati[i_lat][i_lon][i_bat].print_bat + "\n"))
-                    Ligne = [
-                        "MODIFIE",
-                        new_bati[i_lat][i_lon][i_bat].bat_id,
-                        str(round(new_bati[i_lat][i_lon][i_bat].min_distance, 9)),
-                        new_bati[i_lat][i_lon][i_bat].close_building_id,
-                        nom_file_mod,
-                    ]
-                    file_log.write(log_format(Ligne, 16, "|") + "\n")
-                elif new_bati[i_lat][i_lon][i_bat].status == "NOUVEAU":
-                    file_new.write((new_bati[i_lat][i_lon][i_bat].print_bat + "\n"))
-                    Ligne = [
-                        "NOUVEAU",
-                        new_bati[i_lat][i_lon][i_bat].bat_id,
-                        str(round(new_bati[i_lat][i_lon][i_bat].min_distance, 9)),
-                        new_bati[i_lat][i_lon][i_bat].close_building_id,
-                        nom_file_new,
-                    ]
-                    file_log.write(log_format(Ligne, 16, "|") + "\n")
-
-# Ecriture des anciens batiments (seulement ceux qui sont supprimés)
-enTete = ["STAT", "ANCIEN BAT.", "TOL", "fichier"]
-file_log.write(separation + "\n")
-file_log.write("ANCIENS BATIMENTS" + "\n")
-file_log.write(separation + "\n")
-file_log.write(log_format(enTete, 16, "|") + "\n")
-file_log.write(separation + "\n")
-for i_lat in range(NB_ZONE):
-    for i_lon in range(NB_ZONE):
-        for i_bat in range(len(old_bati[i_lat][i_lon])):
-            if old_bati[i_lat][i_lon][i_bat].role == "outer":
-                if old_bati[i_lat][i_lon][i_bat].status == "SUPPRIME":
-                    old_bati[i_lat][i_lon][i_bat].export_bat()
-                    file_del.write((old_bati[i_lat][i_lon][i_bat].print_bat + "\n"))
-                    Ligne = [
-                        "SUPPRIME",
-                        old_bati[i_lat][i_lon][i_bat].bat_id,
-                        str(round(old_bati[i_lat][i_lon][i_bat].min_distance, 9)),
-                        nom_file_del,
-                    ]
-                    file_log.write(log_format(Ligne, 16, "|") + "\n")
-# cloture des fichiers osm
-file_del.write("</osm>")
-file_del.close()
-file_noMod.write("</osm>")
-file_noMod.close()
-file_mod.write("</osm>")
-file_mod.close()
-file_new.write("</osm>")
-file_new.close()
-file_log.write(separation + "\n")
-# Enregistrement de la 'densité' de batiments.
-file_log.write(f"Densité de batiments issus du fichier {osm_file_current}\n")
-file_log.write(separation + "\n")
-enTete = ["", ""]
-i_zone = 0
-while i_zone < NB_ZONE:
-    enTete.append(str(i_zone))
-    i_zone = i_zone + 1
-file_log.write(log_format(enTete, 4, " ") + "\n")
-for i_lat in range(NB_ZONE):
-    densite_old = [str(i_lat), "|"]
-    for i_lon in range(NB_ZONE):
-        densite_old.append(str(len(old_bati[i_lat][i_lon])))
-    file_log.write(log_format(densite_old, 4, " ") + "\n")
-
-file_log.write(separation + "\n")
-file_log.write(f"Densité de batiments issus du fichier {osm_file_future}\n")
-file_log.write(separation + "\n")
-file_log.write(log_format(enTete, 4, " ") + "\n")
-for i_lat in range(NB_ZONE):
-    densite_new = [str(i_lat), "|"]
-    for i_lon in range(NB_ZONE):
-        densite_new.append(str(len(new_bati[i_lat][i_lon])))
-    file_log.write(log_format(densite_new, 4, " ") + "\n")
-file_log.close()
-
-if mode == "debug":
-    # sauvegarde dans un fichier des zones définies
-    nom_file_debug = file_prefix + "_debug.osm"
-    node_id = 100000
-    way_id = 1
-    file_debug = open(base_path + "/" + nom_file_debug, "w")
-    file_debug.write('<?xml version="1.0" encoding="UTF-8"?>' + "\n")
-    file_debug.write('<osm version="0.6" upload="true" generator="JOSM">' + "\n")
+    nb_bat_traite = 0
+    avancement = 0.0
+    nb_comparaison = 0
     for i_lat in range(NB_ZONE):
-        lat = lat_min + i_lat * delta_lat
-        node1 = f'  <node id="-{node_id}" action="modify" visible="true" lat="{lat}" lon="{lon_min}" />'
-        node2 = f'  <node id="-{node_id + 1}" action="modify" visible="true" lat="{lat}" lon="{lon_max}" />'
-        way1 = f'  <way id="-{way_id}" action="modify"' + ' visible="true">'
-        way2 = f'    <nd ref="-{node_id}" />'
-        way3 = f'    <nd ref="-{node_id + 1}" />'
-        way4 = f"  </way>"
-        file_debug.write(node1 + "\n")
-        file_debug.write(node2 + "\n")
-        file_debug.write(way1 + "\n")
-        file_debug.write(way2 + "\n")
-        file_debug.write(way3 + "\n")
-        file_debug.write(way4 + "\n")
-        node_id = node_id + 2
-        way_id = way_id + 1
-    for i_lon in range(NB_ZONE):
-        lon = lon_min + i_lon * delta_lon
-        node1 = f'  <node id="-{node_id}" action="modify" visible="true" lat="{lat_min}" lon="{lon}" />'
-        node2 = f'  <node id="-{node_id + 1}" action="modify" visible="true" lat="{lat_max}" lon="{lon}" />'
-        way1 = f'  <way id="-{way_id}" action="modify"' + ' visible="true">'
-        way2 = f'    <nd ref="-{node_id}" />'
-        way3 = f'    <nd ref="-{node_id + 1}" />'
-        way4 = "  </way>"
-        file_debug.write(node1 + "\n")
-        file_debug.write(node2 + "\n")
-        file_debug.write(way1 + "\n")
-        file_debug.write(way2 + "\n")
-        file_debug.write(way3 + "\n")
-        file_debug.write(way4 + "\n")
-        node_id = node_id + 2
-        way_id = way_id + 1
-    # Transcription des points au cdg des batiments
+        for i_lon in range(NB_ZONE):
+            lat_inf = max(i_lat - 1, 0)
+            lon_inf = max(i_lon - 1, 0)
+            lat_sup = min(i_lat + 1, NB_ZONE - 1) + 1
+            lon_sup = min(i_lon + 1, NB_ZONE - 1) + 1
+            for i_bat in range(len(old_bati[i_lat][i_lon])):
+                if old_bati[i_lat][i_lon][i_bat].role == "outer":
+                    nb_bat_traite = nb_bat_traite + 1
+                    avancement = float(nb_bat_traite) / (current_ways_count + future_ways_count) * 100.0
+                    sys.stdout.write(f'Calcul en cours : {int(avancement)} % {chr(13)}')
+                    for n_lat in range(lat_inf, lat_sup):
+                        for n_lon in range(lon_inf, lon_sup):
+                            for n_bat in range(len(new_bati[n_lat][n_lon])):
+                                if new_bati[n_lat][n_lon][n_bat].role == "outer":
+                                    distance = old_bati[i_lat][i_lon][
+                                        i_bat
+                                    ].center.distance(new_bati[n_lat][n_lon][n_bat].center)
+                                    nb_comparaison = nb_comparaison + 1
+                                    if old_bati[i_lat][i_lon][i_bat].min_distance > distance:
+                                        old_bati[i_lat][i_lon][i_bat].set_min_distance(distance)
+                                        old_bati[i_lat][i_lon][i_bat].set_close_building(
+                                            new_bati[n_lat][n_lon][n_bat].bat_id
+                                        )
+
+    for i_lat in range(NB_ZONE):
+        for i_lon in range(NB_ZONE):
+            lat_inf = max(i_lat - 1, 0)
+            lon_inf = max(i_lon - 1, 0)
+            lat_sup = min(i_lat + 1, NB_ZONE - 1) + 1
+            lon_sup = min(i_lon + 1, NB_ZONE - 1) + 1
+            for i_bat in range(len(new_bati[i_lat][i_lon])):
+                if new_bati[i_lat][i_lon][i_bat].role == "outer":
+                    nb_bat_traite = nb_bat_traite + 1
+                    avancement = (
+                            float(nb_bat_traite) / (current_ways_count + future_ways_count) * 100.0
+                    )
+                    sys.stdout.write(f'Calcul en cours : {int(avancement)} % {chr(13)}')
+                    for o_lat in range(lat_inf, lat_sup):
+                        for o_lon in range(lon_inf, lon_sup):
+                            for o_bat in range(len(old_bati[o_lat][o_lon])):
+                                if old_bati[o_lat][o_lon][o_bat].role == "outer":
+                                    distance = new_bati[i_lat][i_lon][
+                                        i_bat
+                                    ].center.distance(old_bati[o_lat][o_lon][o_bat].center)
+                                    nb_comparaison = nb_comparaison + 1
+                                    if new_bati[i_lat][i_lon][i_bat].min_distance > distance:
+                                        new_bati[i_lat][i_lon][i_bat].set_min_distance(distance)
+                                        new_bati[i_lat][i_lon][i_bat].set_close_building(
+                                            old_bati[o_lat][o_lon][o_bat].bat_id
+                                        )
+                                        if distance < BORNE_INF_MODIF:
+                                            new_bati[i_lat][i_lon][i_bat].copy_tag(
+                                                old_bati[o_lat][o_lon][o_bat], "IDENTIQUE"
+                                            )
+                                        elif (
+                                                BORNE_INF_MODIF < distance < BORNE_SUP_MODIF
+                                        ):
+                                            new_bati[i_lat][i_lon][i_bat].copy_tag(
+                                                old_bati[o_lat][o_lon][o_bat], "MODIFIE"
+                                            )
+    # ------------------------------------------------------------------------
+    # Classement des batiments :
+    #  - dist_mini < BORNE_INF_MODIF : identique
+    #  - BORNE_INF_MODIF < dist_mini < BORNE_SUP_MODIF : modifié
+    #  - dist_mini > BORNE_SUP_MODIF : nouveau ou supprimé
+    #  - dist_mini > largeur : nouveau ou supprimé
+    # ------------------------------------------------------------------------
+    for i_lat in range(NB_ZONE):
+        for i_lon in range(NB_ZONE):
+            # Classement des anciens batiments
+            for i_bat in range(len(old_bati[i_lat][i_lon])):
+                if old_bati[i_lat][i_lon][i_bat].role == "outer":
+                    if old_bati[i_lat][i_lon][i_bat].min_distance > BORNE_SUP_MODIF:
+                        old_bati[i_lat][i_lon][i_bat].set_status("SUPPRIME")
+                    if (
+                            old_bati[i_lat][i_lon][i_bat].min_distance
+                            > old_bati[i_lat][i_lon][i_bat].width
+                    ):
+                        old_bati[i_lat][i_lon][i_bat].set_status("SUPPRIME")
+            # Classement des nouveaux batiments
+            for i_bat in range(len(new_bati[i_lat][i_lon])):
+                if new_bati[i_lat][i_lon][i_bat].role == "outer":
+                    if new_bati[i_lat][i_lon][i_bat].min_distance < BORNE_INF_MODIF:
+                        new_bati[i_lat][i_lon][i_bat].set_status("IDENTIQUE")
+                    elif (
+                            BORNE_INF_MODIF < new_bati[i_lat][i_lon][i_bat].min_distance < BORNE_SUP_MODIF
+                    ):
+                        new_bati[i_lat][i_lon][i_bat].set_status("MODIFIE")
+                    elif new_bati[i_lat][i_lon][i_bat].min_distance > BORNE_SUP_MODIF:
+                        new_bati[i_lat][i_lon][i_bat].set_status("NOUVEAU")
+                    if (
+                            new_bati[i_lat][i_lon][i_bat].min_distance
+                            > new_bati[i_lat][i_lon][i_bat].width
+                    ):
+                        new_bati[i_lat][i_lon][i_bat].set_status("NOUVEAU")
+
+    nb_bat_new = 0
+    nb_bat_mod = 0
+    nb_bat_del = 0
+    nb_bat_noMod = 0
+
+    # Comptage des batiment de chaque catégorie.
+    for i_lat in range(NB_ZONE):
+        for i_lon in range(NB_ZONE):
+            for i_bat in range(len(old_bati[i_lat][i_lon])):
+                if old_bati[i_lat][i_lon][i_bat].role == "outer":
+                    if old_bati[i_lat][i_lon][i_bat].status == "SUPPRIME":
+                        nb_bat_del = nb_bat_del + 1
+            for i_bat in range(len(new_bati[i_lat][i_lon])):
+                if new_bati[i_lat][i_lon][i_bat].role == "outer":
+                    if new_bati[i_lat][i_lon][i_bat].status == "IDENTIQUE":
+                        nb_bat_noMod = nb_bat_noMod + 1
+                    elif new_bati[i_lat][i_lon][i_bat].status == "MODIFIE":
+                        nb_bat_mod = nb_bat_mod + 1
+                    elif new_bati[i_lat][i_lon][i_bat].status == "NOUVEAU":
+                        nb_bat_new = nb_bat_new + 1
+
+    # Vérification de la cohérence des résultats. On chercher à vérifier que :
+    # nb_bat_apres = nb_bat_avant + nouveaux - supprimés
+    # si l'équation n'est pas vérifié et que la zone compte des batiments modifiés
+    # suffisant pour rétablir l'équilibre, alors on déclare les batiments modifiés
+    # comme nouveaux sinon on affiche un warning
+    warning_equilibre = ["Erreur d'équilibre : nb_bat_apres <> nb_bat_avant + nouveaux - supprimés"]
+    for i_lat in range(NB_ZONE):
+        for i_lon in range(NB_ZONE):
+            nb_nouveaux = 0
+            nb_supprimes = 0
+            nb_modifies = 0
+            nb_identiques = 0
+            nb_innner = 0
+            nb_bat_apres = len(new_bati[i_lat][i_lon])
+            nb_bat_avant = len(old_bati[i_lat][i_lon])
+            for i_bat in range(len(old_bati[i_lat][i_lon])):
+                if old_bati[i_lat][i_lon][i_bat].status == "SUPPRIME":
+                    nb_supprimes = nb_supprimes + 1
+            for i_bat in range(len(new_bati[i_lat][i_lon])):
+                if new_bati[i_lat][i_lon][i_bat].status == "NOUVEAU":
+                    nb_nouveaux = nb_nouveaux + 1
+                elif new_bati[i_lat][i_lon][i_bat].status == "MODIFIE":
+                    nb_modifies = nb_modifies + 1
+                elif new_bati[i_lat][i_lon][i_bat].status == "IDENTIQUE":
+                    nb_identiques = nb_identiques + 1
+                elif new_bati[i_lat][i_lon][i_bat].role == "inner":
+                    nb_innner = nb_innner + 1
+            if nb_bat_apres != nb_bat_avant + nb_nouveaux - nb_supprimes:
+                if nb_bat_apres == nb_bat_avant + nb_nouveaux + nb_modifies - nb_supprimes:
+                    for i_bat in range(len(new_bati[i_lat][i_lon])):
+                        if new_bati[i_lat][i_lon][i_bat].status == "MODIFIE":
+                            new_bati[i_lat][i_lon][i_bat].set_status("NOUVEAU")
+                else:
+                    warning_equilibre.append(f"Erreur d'équilibre pour la zone i_lat / i_lon {i_lat}/{i_lon}")
+                    warning_equilibre.append(
+                        f"   Avant : {nb_bat_avant}   Après : {nb_bat_apres}   Nouveaux : {nb_nouveaux}   Supprimés : {nb_supprimes}   Modifiés : {nb_modifies}")
+
+    nb_bat_new = 0
+    nb_bat_mod = 0
+    nb_bat_del = 0
+    nb_bat_noMod = 0
+
+    # Comptage des batiment de chaque catégorie.
+    for i_lat in range(NB_ZONE):
+        for i_lon in range(NB_ZONE):
+            for i_bat in range(len(old_bati[i_lat][i_lon])):
+                if old_bati[i_lat][i_lon][i_bat].role == "outer":
+                    if old_bati[i_lat][i_lon][i_bat].status == "SUPPRIME":
+                        nb_bat_del = nb_bat_del + 1
+            for i_bat in range(len(new_bati[i_lat][i_lon])):
+                if new_bati[i_lat][i_lon][i_bat].role == "outer":
+                    if new_bati[i_lat][i_lon][i_bat].status == "IDENTIQUE":
+                        nb_bat_noMod = nb_bat_noMod + 1
+                    elif new_bati[i_lat][i_lon][i_bat].status == "MODIFIE":
+                        nb_bat_mod = nb_bat_mod + 1
+                    elif new_bati[i_lat][i_lon][i_bat].status == "NOUVEAU":
+                        nb_bat_new = nb_bat_new + 1
+
+    print("------------------------------------------------------------------")
+    print("-                    Création des fichiers                       -")
+    print("------------------------------------------------------------------")
+    print(f"{nb_comparaison} comparaisons entre batiments effectuées")
+    print(f"{nb_bat_noMod} batiments identiques")
+    print(f"{nb_bat_mod} batiments modifiés")
+    print(f"{nb_bat_new} batiments nouveaux")
+    print(f"{nb_bat_del} batiments supprimés")
+
+    tps3 = time.perf_counter()
+
+    file_log = open(os.path.join(base_path, f'{file_prefix}_log.txt'), "w")
+    file_log.write("Rappel des input : \n")
+    file_log.write(f"    BORNE_INF_MODIF : {BORNE_INF_MODIF}\n")
+    file_log.write(f"    BORNE_SUP_MODIF : {BORNE_SUP_MODIF}\n")
+    file_log.write(f"    NB_ZONE : {NB_ZONE}\n")
+    file_log.write(f"Le fichier {osm_file_current} contient :\n")
+    file_log.write(f"    - {current_nodes_count} noeuds\n")
+    file_log.write(f"    - {current_ways_count} batiments\n")
+    file_log.write(f"Le fichier {osm_file_future} contient :\n")
+    file_log.write(f"    - {future_nodes_count} noeuds\n")
+    file_log.write(f"    - {future_ways_count} batiments\n")
+    file_log.write("Résultat de la comparaison :\n")
+    file_log.write(f"    Nombre de comparaisons effectuées : {nb_comparaison}\n")
+    file_log.write(f"    Nombre de batiments identiques trouvés : {nb_bat_noMod}\n")
+    file_log.write(f"    Nombre de batiments modifiés trouvés : {nb_bat_mod}\n")
+    file_log.write(f"    Nombre de batiments nouveaux trouvés : {nb_bat_new}\n")
+    file_log.write(f"    Nombre de batiments supprimés trouvés : {nb_bat_del}\n")
+    file_log.write(f"Temps de lecture des fichiers : {tps2 - tps1} secondes.\n"
+                   )
+    file_log.write(f"Temps de calcul : {tps3 - tps2} secondes.\n")
+    file_log.write(f"Temps d'execution totale : {tps3 - tps1} secondes.\n")
+    file_log.write(f"{separation}\n")
+    i_warn = 0
+    for i_warn in range(len(warning_equilibre)):
+        file_log.write(f"{warning_equilibre[i_warn]}\n")
+    file_log.write(f"{separation}\n")
+    file_log.write(f"Récapitulatif des batiments issus de {osm_file_future}\n")
+    file_log.write(f"{separation}\n")
+
     for i_lat in range(NB_ZONE):
         for i_lon in range(NB_ZONE):
             for i_bat in range(len(new_bati[i_lat][i_lon])):
-                new_bati[i_lat][i_lon][i_bat].center.to_xml()
-                file_debug.write(f'{new_bati[i_lat][i_lon][i_bat].center.print_node}\n')
-    file_debug.write("</osm>\n")
-    file_debug.close()
+                Resultat = [
+                    new_bati[i_lat][i_lon][i_bat].bat_id,
+                    new_bati[i_lat][i_lon][i_bat].status,
+                    str(round(new_bati[i_lat][i_lon][i_bat].min_distance, 9)),
+                    str(round(new_bati[i_lat][i_lon][i_bat].center.node_lat, 7)),
+                    str(round(new_bati[i_lat][i_lon][i_bat].center.node_lon, 7)),
+                    str(round(new_bati[i_lat][i_lon][i_bat].area, 1)),
+                ]
+                file_log.write(log_format(Resultat, 16, "|") + "\n")
+    file_log.write(f"{separation}\n")
+    file_log.write(f"Récapitulatif des batiments issus de {osm_file_current}\n")
+    file_log.write(f"{separation}\n")
 
-print(f"Durée du calcul : {tps3 - tps2}")
-print(f"Durée totale : {tps3 - tps1}")
-print("------------------------------------------------------------------")
-print("-                       FIN DU PROCESS                           -")
-print("------------------------------------------------------------------")
+    for i_lat in range(NB_ZONE):
+        for i_lon in range(NB_ZONE):
+            for i_bat in range(len(old_bati[i_lat][i_lon])):
+                # print(old_bati[i_lat][i_lon][i_bat].aire)
+                Resultat = [
+                    old_bati[i_lat][i_lon][i_bat].bat_id,
+                    old_bati[i_lat][i_lon][i_bat].status,
+                    str(round(old_bati[i_lat][i_lon][i_bat].min_distance, 9)),
+                    str(round(old_bati[i_lat][i_lon][i_bat].center.node_lat, 7)),
+                    str(round(old_bati[i_lat][i_lon][i_bat].center.node_lon, 7)),
+                    str(round(old_bati[i_lat][i_lon][i_bat].area, 1)),
+                ]
+                file_log.write(log_format(Resultat, 16, "|") + "\n")
+    file_log.write(f"{separation}\n")
+
+    nom_file_noMod = f"{file_prefix}_unModified.osm"
+    file_noMod = open(os.path.join(base_path, nom_file_noMod), "w")
+    file_noMod.write('<?xml version="1.0" encoding="UTF-8"?>' + "\n")
+    file_noMod.write('<osm version="0.6" upload="true" generator="JOSM">' + "\n")
+
+    nom_file_mod = f"{file_prefix}_mod_1_a_{nb_bat_mod}.osm"
+    file_mod = open(os.path.join(base_path, nom_file_mod), "w")
+    file_mod.write('<?xml version="1.0" encoding="UTF-8"?>' + "\n")
+    file_mod.write('<osm version="0.6" upload="true" generator="JOSM">' + "\n")
+
+    nom_file_new = f"{file_prefix}_new_1_a_{nb_bat_new}.osm"
+    file_new = open(os.path.join(base_path, nom_file_new), "w")
+    file_new.write('<?xml version="1.0" encoding="UTF-8"?>' + "\n")
+    file_new.write('<osm version="0.6" upload="true" generator="JOSM">' + "\n")
+
+    nom_file_del = f"{file_prefix}_sup_1_a_{nb_bat_del}.osm"
+    file_del = open(os.path.join(base_path, nom_file_del), "w")
+    file_del.write('<?xml version="1.0" encoding="UTF-8"?>' + "\n")
+    file_del.write('<osm version="0.6" upload="true" generator="JOSM">' + "\n")
+
+    # Ecriture des nouveaux batiments
+    enTete = ["STAT", "ANCIEN BAT.", "TOL", "NOUVEAU BAT.", "fichier"]
+    file_log.write("NOUVEAUX BATIMENTS" + "\n")
+    file_log.write(separation + "\n")
+    file_log.write(log_format(enTete, 16, "|") + "\n")
+    file_log.write(separation + "\n")
+    for i_lat in range(NB_ZONE):
+        for i_lon in range(NB_ZONE):
+            for i_bat in range(len(new_bati[i_lat][i_lon])):
+                if new_bati[i_lat][i_lon][i_bat].role == "outer":
+                    new_bati[i_lat][i_lon][i_bat].export_bat()
+                    if new_bati[i_lat][i_lon][i_bat].status == "IDENTIQUE":
+                        file_noMod.write((new_bati[i_lat][i_lon][i_bat].print_bat + "\n"))
+                        Ligne = [
+                            "IDENTIQUE",
+                            new_bati[i_lat][i_lon][i_bat].bat_id,
+                            str(round(new_bati[i_lat][i_lon][i_bat].min_distance, 9)),
+                            new_bati[i_lat][i_lon][i_bat].close_building_id,
+                            nom_file_noMod,
+                        ]
+                        file_log.write(log_format(Ligne, 16, "|") + "\n")
+                    elif new_bati[i_lat][i_lon][i_bat].status == "MODIFIE":
+                        file_mod.write((new_bati[i_lat][i_lon][i_bat].print_bat + "\n"))
+                        Ligne = [
+                            "MODIFIE",
+                            new_bati[i_lat][i_lon][i_bat].bat_id,
+                            str(round(new_bati[i_lat][i_lon][i_bat].min_distance, 9)),
+                            new_bati[i_lat][i_lon][i_bat].close_building_id,
+                            nom_file_mod,
+                        ]
+                        file_log.write(log_format(Ligne, 16, "|") + "\n")
+                    elif new_bati[i_lat][i_lon][i_bat].status == "NOUVEAU":
+                        file_new.write((new_bati[i_lat][i_lon][i_bat].print_bat + "\n"))
+                        Ligne = [
+                            "NOUVEAU",
+                            new_bati[i_lat][i_lon][i_bat].bat_id,
+                            str(round(new_bati[i_lat][i_lon][i_bat].min_distance, 9)),
+                            new_bati[i_lat][i_lon][i_bat].close_building_id,
+                            nom_file_new,
+                        ]
+                        file_log.write(log_format(Ligne, 16, "|") + "\n")
+
+    # Ecriture des anciens batiments (seulement ceux qui sont supprimés)
+    enTete = ["STAT", "ANCIEN BAT.", "TOL", "fichier"]
+    file_log.write(separation + "\n")
+    file_log.write("ANCIENS BATIMENTS" + "\n")
+    file_log.write(separation + "\n")
+    file_log.write(log_format(enTete, 16, "|") + "\n")
+    file_log.write(separation + "\n")
+    for i_lat in range(NB_ZONE):
+        for i_lon in range(NB_ZONE):
+            for i_bat in range(len(old_bati[i_lat][i_lon])):
+                if old_bati[i_lat][i_lon][i_bat].role == "outer":
+                    if old_bati[i_lat][i_lon][i_bat].status == "SUPPRIME":
+                        old_bati[i_lat][i_lon][i_bat].export_bat()
+                        file_del.write((old_bati[i_lat][i_lon][i_bat].print_bat + "\n"))
+                        Ligne = [
+                            "SUPPRIME",
+                            old_bati[i_lat][i_lon][i_bat].bat_id,
+                            str(round(old_bati[i_lat][i_lon][i_bat].min_distance, 9)),
+                            nom_file_del,
+                        ]
+                        file_log.write(log_format(Ligne, 16, "|") + "\n")
+    # cloture des fichiers osm
+    file_del.write("</osm>")
+    file_del.close()
+    file_noMod.write("</osm>")
+    file_noMod.close()
+    file_mod.write("</osm>")
+    file_mod.close()
+    file_new.write("</osm>")
+    file_new.close()
+    file_log.write(separation + "\n")
+    # Enregistrement de la 'densité' de batiments.
+    file_log.write(f"Densité de batiments issus du fichier {osm_file_current}\n")
+    file_log.write(separation + "\n")
+    enTete = ["", ""]
+    i_zone = 0
+    while i_zone < NB_ZONE:
+        enTete.append(str(i_zone))
+        i_zone = i_zone + 1
+    file_log.write(log_format(enTete, 4, " ") + "\n")
+    for i_lat in range(NB_ZONE):
+        densite_old = [str(i_lat), "|"]
+        for i_lon in range(NB_ZONE):
+            densite_old.append(str(len(old_bati[i_lat][i_lon])))
+        file_log.write(log_format(densite_old, 4, " ") + "\n")
+
+    file_log.write(separation + "\n")
+    file_log.write(f"Densité de batiments issus du fichier {osm_file_future}\n")
+    file_log.write(separation + "\n")
+    file_log.write(log_format(enTete, 4, " ") + "\n")
+    for i_lat in range(NB_ZONE):
+        densite_new = [str(i_lat), "|"]
+        for i_lon in range(NB_ZONE):
+            densite_new.append(str(len(new_bati[i_lat][i_lon])))
+        file_log.write(log_format(densite_new, 4, " ") + "\n")
+    file_log.close()
+
+    if mode == "debug":
+        # sauvegarde dans un fichier des zones définies
+        nom_file_debug = file_prefix + "_debug.osm"
+        node_id = 100000
+        way_id = 1
+        file_debug = open(base_path + "/" + nom_file_debug, "w")
+        file_debug.write('<?xml version="1.0" encoding="UTF-8"?>' + "\n")
+        file_debug.write('<osm version="0.6" upload="true" generator="JOSM">' + "\n")
+        for i_lat in range(NB_ZONE):
+            lat = lat_min + i_lat * delta_lat
+            node1 = f'  <node id="-{node_id}" action="modify" visible="true" lat="{lat}" lon="{lon_min}" />'
+            node2 = f'  <node id="-{node_id + 1}" action="modify" visible="true" lat="{lat}" lon="{lon_max}" />'
+            way1 = f'  <way id="-{way_id}" action="modify"' + ' visible="true">'
+            way2 = f'    <nd ref="-{node_id}" />'
+            way3 = f'    <nd ref="-{node_id + 1}" />'
+            way4 = f"  </way>"
+            file_debug.write(node1 + "\n")
+            file_debug.write(node2 + "\n")
+            file_debug.write(way1 + "\n")
+            file_debug.write(way2 + "\n")
+            file_debug.write(way3 + "\n")
+            file_debug.write(way4 + "\n")
+            node_id = node_id + 2
+            way_id = way_id + 1
+        for i_lon in range(NB_ZONE):
+            lon = lon_min + i_lon * delta_lon
+            node1 = f'  <node id="-{node_id}" action="modify" visible="true" lat="{lat_min}" lon="{lon}" />'
+            node2 = f'  <node id="-{node_id + 1}" action="modify" visible="true" lat="{lat_max}" lon="{lon}" />'
+            way1 = f'  <way id="-{way_id}" action="modify"' + ' visible="true">'
+            way2 = f'    <nd ref="-{node_id}" />'
+            way3 = f'    <nd ref="-{node_id + 1}" />'
+            way4 = "  </way>"
+            file_debug.write(node1 + "\n")
+            file_debug.write(node2 + "\n")
+            file_debug.write(way1 + "\n")
+            file_debug.write(way2 + "\n")
+            file_debug.write(way3 + "\n")
+            file_debug.write(way4 + "\n")
+            node_id = node_id + 2
+            way_id = way_id + 1
+        # Transcription des points au cdg des batiments
+        for i_lat in range(NB_ZONE):
+            for i_lon in range(NB_ZONE):
+                for i_bat in range(len(new_bati[i_lat][i_lon])):
+                    new_bati[i_lat][i_lon][i_bat].center.to_xml()
+                    file_debug.write(f'{new_bati[i_lat][i_lon][i_bat].center.print_node}\n')
+        file_debug.write("</osm>\n")
+        file_debug.close()
+
+    print(f"Durée du calcul : {tps3 - tps2}")
+    print(f"Durée totale : {tps3 - tps1}")
+    print("------------------------------------------------------------------")
+    print("-                       FIN DU PROCESS                           -")
+    print("------------------------------------------------------------------")
+
+
+if __name__ == "__main__":
+    print("C'est parti")
+    main()
