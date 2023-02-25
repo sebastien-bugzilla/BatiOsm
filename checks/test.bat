@@ -2,7 +2,6 @@
 
 # stop on error
 # unset variable is to be considered as an error
-set -eu
 
 DIR=$(pwd)
 WORK_DIR=$(mktemp -d)
