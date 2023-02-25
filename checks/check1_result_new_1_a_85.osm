@@ -1,0 +1,1486 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" upload="true" generator="JOSM">
+  <way id="-1185" visible="true">
+    <nd ref="-6045" />
+    <nd ref="-6046" />
+    <nd ref="-6047" />
+    <nd ref="-6048" />
+    <nd ref="-6049" />
+    <nd ref="-6050" />
+    <nd ref="-6051" />
+    <nd ref="-6052" />
+    <nd ref="-6053" />
+    <nd ref="-6054" />
+    <nd ref="-6045" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+  </way>
+  <node id="-6045" lat="43.127870" lon="-0.464668" />
+  <node id="-6046" lat="43.127904" lon="-0.464719" />
+  <node id="-6047" lat="43.127899" lon="-0.464844" />
+  <node id="-6048" lat="43.127838" lon="-0.464919" />
+  <node id="-6049" lat="43.127791" lon="-0.464847" />
+  <node id="-6050" lat="43.127815" lon="-0.464817" />
+  <node id="-6051" lat="43.127823" lon="-0.464828" />
+  <node id="-6052" lat="43.127839" lon="-0.464808" />
+  <node id="-6053" lat="43.127847" lon="-0.464776" />
+  <node id="-6054" lat="43.127818" lon="-0.464732" />
+  <node id="-6045" lat="43.127870" lon="-0.464668" />
+  <way id="-1057" visible="true">
+    <nd ref="-5468" />
+    <nd ref="-5469" />
+    <nd ref="-5470" />
+    <nd ref="-5471" />
+    <nd ref="-5472" />
+    <nd ref="-5473" />
+    <nd ref="-5468" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+  </way>
+  <node id="-5468" lat="43.127915" lon="-0.444853" />
+  <node id="-5469" lat="43.127891" lon="-0.444935" />
+  <node id="-5470" lat="43.127819" lon="-0.445005" />
+  <node id="-5471" lat="43.127778" lon="-0.444925" />
+  <node id="-5472" lat="43.127831" lon="-0.444873" />
+  <node id="-5473" lat="43.127847" lon="-0.444813" />
+  <node id="-5468" lat="43.127915" lon="-0.444853" />
+  <way id="-1187" visible="true">
+    <nd ref="-6063" />
+    <nd ref="-6064" />
+    <nd ref="-6065" />
+    <nd ref="-6066" />
+    <nd ref="-6063" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+    <tag k="wall" v="no" />
+  </way>
+  <node id="-6063" lat="43.128113" lon="-0.464854" />
+  <node id="-6064" lat="43.128098" lon="-0.464879" />
+  <node id="-6065" lat="43.128070" lon="-0.464848" />
+  <node id="-6066" lat="43.128086" lon="-0.464822" />
+  <node id="-6063" lat="43.128113" lon="-0.464854" />
+  <way id="-1188" visible="true">
+    <nd ref="-6067" />
+    <nd ref="-6068" />
+    <nd ref="-6069" />
+    <nd ref="-6070" />
+    <nd ref="-6071" />
+    <nd ref="-6072" />
+    <nd ref="-6064" />
+    <nd ref="-6063" />
+    <nd ref="-6066" />
+    <nd ref="-6073" />
+    <nd ref="-6074" />
+    <nd ref="-6075" />
+    <nd ref="-6067" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+  </way>
+  <node id="-6067" lat="43.128196" lon="-0.464834" />
+  <node id="-6068" lat="43.128190" lon="-0.464843" />
+  <node id="-6069" lat="43.128261" lon="-0.464924" />
+  <node id="-6070" lat="43.128215" lon="-0.465000" />
+  <node id="-6071" lat="43.128136" lon="-0.464910" />
+  <node id="-6072" lat="43.128131" lon="-0.464918" />
+  <node id="-6064" lat="43.128098" lon="-0.464879" />
+  <node id="-6063" lat="43.128113" lon="-0.464854" />
+  <node id="-6066" lat="43.128086" lon="-0.464822" />
+  <node id="-6073" lat="43.128122" lon="-0.464764" />
+  <node id="-6074" lat="43.128149" lon="-0.464795" />
+  <node id="-6075" lat="43.128154" lon="-0.464787" />
+  <node id="-6067" lat="43.128196" lon="-0.464834" />
+  <way id="-1182" visible="true">
+    <nd ref="-6027" />
+    <nd ref="-6028" />
+    <nd ref="-6029" />
+    <nd ref="-6030" />
+    <nd ref="-6027" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+  </way>
+  <node id="-6027" lat="43.129269" lon="-0.466605" />
+  <node id="-6028" lat="43.129332" lon="-0.466677" />
+  <node id="-6029" lat="43.129270" lon="-0.466777" />
+  <node id="-6030" lat="43.129208" lon="-0.466705" />
+  <node id="-6027" lat="43.129269" lon="-0.466605" />
+  <way id="-1183" visible="true">
+    <nd ref="-6031" />
+    <nd ref="-6032" />
+    <nd ref="-6033" />
+    <nd ref="-6034" />
+    <nd ref="-6031" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+    <tag k="wall" v="no" />
+  </way>
+  <node id="-6031" lat="43.129447" lon="-0.466989" />
+  <node id="-6032" lat="43.129451" lon="-0.467051" />
+  <node id="-6033" lat="43.129414" lon="-0.467056" />
+  <node id="-6034" lat="43.129409" lon="-0.466995" />
+  <node id="-6031" lat="43.129447" lon="-0.466989" />
+  <way id="-1184" visible="true">
+    <nd ref="-6035" />
+    <nd ref="-6036" />
+    <nd ref="-6037" />
+    <nd ref="-6038" />
+    <nd ref="-6039" />
+    <nd ref="-6040" />
+    <nd ref="-6033" />
+    <nd ref="-6041" />
+    <nd ref="-6042" />
+    <nd ref="-6043" />
+    <nd ref="-6044" />
+    <nd ref="-6035" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+  </way>
+  <node id="-6035" lat="43.129379" lon="-0.466928" />
+  <node id="-6036" lat="43.129381" lon="-0.466928" />
+  <node id="-6037" lat="43.129378" lon="-0.466893" />
+  <node id="-6038" lat="43.129410" lon="-0.466889" />
+  <node id="-6039" lat="43.129415" lon="-0.466956" />
+  <node id="-6040" lat="43.129406" lon="-0.466957" />
+  <node id="-6033" lat="43.129414" lon="-0.467056" />
+  <node id="-6041" lat="43.129347" lon="-0.467065" />
+  <node id="-6042" lat="43.129346" lon="-0.467065" />
+  <node id="-6043" lat="43.129345" lon="-0.467065" />
+  <node id="-6044" lat="43.129335" lon="-0.466934" />
+  <node id="-6035" lat="43.129379" lon="-0.466928" />
+  <way id="-1156" visible="true">
+    <nd ref="-5885" />
+    <nd ref="-5886" />
+    <nd ref="-5887" />
+    <nd ref="-5888" />
+    <nd ref="-5885" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+    <tag k="wall" v="no" />
+  </way>
+  <node id="-5885" lat="43.130248" lon="-0.456549" />
+  <node id="-5886" lat="43.130265" lon="-0.456585" />
+  <node id="-5887" lat="43.129814" lon="-0.456991" />
+  <node id="-5888" lat="43.129797" lon="-0.456955" />
+  <node id="-5885" lat="43.130248" lon="-0.456549" />
+  <way id="-1099" visible="true">
+    <nd ref="-5658" />
+    <nd ref="-5659" />
+    <nd ref="-5660" />
+    <nd ref="-5658" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+  </way>
+  <node id="-5658" lat="43.129876" lon="-0.449296" />
+  <node id="-5659" lat="43.129903" lon="-0.449285" />
+  <node id="-5660" lat="43.129926" lon="-0.449414" />
+  <node id="-5658" lat="43.129876" lon="-0.449296" />
+  <way id="-1101" visible="true">
+    <nd ref="-5663" />
+    <nd ref="-5658" />
+    <nd ref="-5660" />
+    <nd ref="-5664" />
+    <nd ref="-5663" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+  </way>
+  <node id="-5663" lat="43.129849" lon="-0.449306" />
+  <node id="-5658" lat="43.129876" lon="-0.449296" />
+  <node id="-5660" lat="43.129926" lon="-0.449414" />
+  <node id="-5664" lat="43.129903" lon="-0.449423" />
+  <node id="-5663" lat="43.129849" lon="-0.449306" />
+  <way id="-1157" visible="true">
+    <nd ref="-5886" />
+    <nd ref="-5889" />
+    <nd ref="-5890" />
+    <nd ref="-5887" />
+    <nd ref="-5886" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+  </way>
+  <node id="-5886" lat="43.130265" lon="-0.456585" />
+  <node id="-5889" lat="43.130342" lon="-0.456744" />
+  <node id="-5890" lat="43.129891" lon="-0.457150" />
+  <node id="-5887" lat="43.129814" lon="-0.456991" />
+  <node id="-5886" lat="43.130265" lon="-0.456585" />
+  <way id="-1169" visible="true">
+    <nd ref="-5957" />
+    <nd ref="-5958" />
+    <nd ref="-5959" />
+    <nd ref="-5960" />
+    <nd ref="-5957" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+  </way>
+  <node id="-5957" lat="43.130377" lon="-0.460334" />
+  <node id="-5958" lat="43.130387" lon="-0.460488" />
+  <node id="-5959" lat="43.130360" lon="-0.460491" />
+  <node id="-5960" lat="43.130350" lon="-0.460337" />
+  <node id="-5957" lat="43.130377" lon="-0.460334" />
+  <way id="-1172" visible="true">
+    <nd ref="-5968" />
+    <nd ref="-5969" />
+    <nd ref="-5970" />
+    <nd ref="-5971" />
+    <nd ref="-5972" />
+    <nd ref="-5973" />
+    <nd ref="-5968" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+  </way>
+  <node id="-5968" lat="43.130448" lon="-0.464456" />
+  <node id="-5969" lat="43.130483" lon="-0.464529" />
+  <node id="-5970" lat="43.130504" lon="-0.464588" />
+  <node id="-5971" lat="43.130500" lon="-0.464590" />
+  <node id="-5972" lat="43.130437" lon="-0.464632" />
+  <node id="-5973" lat="43.130388" lon="-0.464497" />
+  <node id="-5968" lat="43.130448" lon="-0.464456" />
+  <way id="-1173" visible="true">
+    <nd ref="-5974" />
+    <nd ref="-5975" />
+    <nd ref="-5976" />
+    <nd ref="-5977" />
+    <nd ref="-5978" />
+    <nd ref="-5979" />
+    <nd ref="-5980" />
+    <nd ref="-5981" />
+    <nd ref="-5982" />
+    <nd ref="-5983" />
+    <nd ref="-5974" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+  </way>
+  <node id="-5974" lat="43.130480" lon="-0.463166" />
+  <node id="-5975" lat="43.130539" lon="-0.463223" />
+  <node id="-5976" lat="43.130496" lon="-0.463307" />
+  <node id="-5977" lat="43.130497" lon="-0.463320" />
+  <node id="-5978" lat="43.130522" lon="-0.463344" />
+  <node id="-5979" lat="43.130493" lon="-0.463400" />
+  <node id="-5980" lat="43.130466" lon="-0.463375" />
+  <node id="-5981" lat="43.130477" lon="-0.463355" />
+  <node id="-5982" lat="43.130421" lon="-0.463302" />
+  <node id="-5983" lat="43.130419" lon="-0.463284" />
+  <node id="-5974" lat="43.130480" lon="-0.463166" />
+  <way id="-1174" visible="true">
+    <nd ref="-5984" />
+    <nd ref="-5985" />
+    <nd ref="-5986" />
+    <nd ref="-5987" />
+    <nd ref="-5988" />
+    <nd ref="-5989" />
+    <nd ref="-5990" />
+    <nd ref="-5991" />
+    <nd ref="-5992" />
+    <nd ref="-5993" />
+    <nd ref="-5994" />
+    <nd ref="-5995" />
+    <nd ref="-5984" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+  </way>
+  <node id="-5984" lat="43.130533" lon="-0.462887" />
+  <node id="-5985" lat="43.130532" lon="-0.462877" />
+  <node id="-5986" lat="43.130568" lon="-0.462873" />
+  <node id="-5987" lat="43.130575" lon="-0.462977" />
+  <node id="-5988" lat="43.130544" lon="-0.462981" />
+  <node id="-5989" lat="43.130551" lon="-0.463063" />
+  <node id="-5990" lat="43.130443" lon="-0.463077" />
+  <node id="-5991" lat="43.130436" lon="-0.462982" />
+  <node id="-5992" lat="43.130474" lon="-0.462977" />
+  <node id="-5993" lat="43.130469" lon="-0.462915" />
+  <node id="-5994" lat="43.130468" lon="-0.462896" />
+  <node id="-5995" lat="43.130482" lon="-0.462895" />
+  <node id="-5984" lat="43.130533" lon="-0.462887" />
+  <way id="-1162" visible="true">
+    <nd ref="-5927" />
+    <nd ref="-5928" />
+    <nd ref="-5929" />
+    <nd ref="-5930" />
+    <nd ref="-5927" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+    <tag k="wall" v="no" />
+  </way>
+  <node id="-5927" lat="43.130486" lon="-0.462562" />
+  <node id="-5928" lat="43.130475" lon="-0.462577" />
+  <node id="-5929" lat="43.130448" lon="-0.462541" />
+  <node id="-5930" lat="43.130459" lon="-0.462526" />
+  <node id="-5927" lat="43.130486" lon="-0.462562" />
+  <way id="-1163" visible="true">
+    <nd ref="-5931" />
+    <nd ref="-5930" />
+    <nd ref="-5929" />
+    <nd ref="-5928" />
+    <nd ref="-5927" />
+    <nd ref="-5932" />
+    <nd ref="-5933" />
+    <nd ref="-5934" />
+    <nd ref="-5935" />
+    <nd ref="-5936" />
+    <nd ref="-5931" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+  </way>
+  <node id="-5931" lat="43.130401" lon="-0.462449" />
+  <node id="-5930" lat="43.130459" lon="-0.462526" />
+  <node id="-5929" lat="43.130448" lon="-0.462541" />
+  <node id="-5928" lat="43.130475" lon="-0.462577" />
+  <node id="-5927" lat="43.130486" lon="-0.462562" />
+  <node id="-5932" lat="43.130530" lon="-0.462620" />
+  <node id="-5933" lat="43.130463" lon="-0.462716" />
+  <node id="-5934" lat="43.130418" lon="-0.462657" />
+  <node id="-5935" lat="43.130391" lon="-0.462621" />
+  <node id="-5936" lat="43.130333" lon="-0.462544" />
+  <node id="-5931" lat="43.130401" lon="-0.462449" />
+  <way id="-1055" visible="true">
+    <nd ref="-5458" />
+    <nd ref="-5459" />
+    <nd ref="-5460" />
+    <nd ref="-5461" />
+    <nd ref="-5458" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+  </way>
+  <node id="-5458" lat="43.130578" lon="-0.448547" />
+  <node id="-5459" lat="43.130604" lon="-0.448506" />
+  <node id="-5460" lat="43.130619" lon="-0.448530" />
+  <node id="-5461" lat="43.130596" lon="-0.448568" />
+  <node id="-5458" lat="43.130578" lon="-0.448547" />
+  <way id="-1100" visible="true">
+    <nd ref="-5661" />
+    <nd ref="-5561" />
+    <nd ref="-5565" />
+    <nd ref="-5622" />
+    <nd ref="-5625" />
+    <nd ref="-5662" />
+    <nd ref="-5661" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+  </way>
+  <node id="-5661" lat="43.130695" lon="-0.452877" />
+  <node id="-5561" lat="43.130770" lon="-0.452799" />
+  <node id="-5565" lat="43.130809" lon="-0.452762" />
+  <node id="-5622" lat="43.130827" lon="-0.452745" />
+  <node id="-5625" lat="43.130854" lon="-0.452796" />
+  <node id="-5662" lat="43.130730" lon="-0.452943" />
+  <node id="-5661" lat="43.130695" lon="-0.452877" />
+  <way id="-1171" visible="true">
+    <nd ref="-5964" />
+    <nd ref="-5965" />
+    <nd ref="-5966" />
+    <nd ref="-5967" />
+    <nd ref="-5964" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+  </way>
+  <node id="-5964" lat="43.130857" lon="-0.462084" />
+  <node id="-5965" lat="43.130880" lon="-0.462143" />
+  <node id="-5966" lat="43.130839" lon="-0.462173" />
+  <node id="-5967" lat="43.130816" lon="-0.462113" />
+  <node id="-5964" lat="43.130857" lon="-0.462084" />
+  <way id="-586" visible="true">
+    <nd ref="-2974" />
+    <nd ref="-2975" />
+    <nd ref="-2976" />
+    <nd ref="-2977" />
+    <nd ref="-2974" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+  </way>
+  <node id="-2974" lat="43.131170" lon="-0.455671" />
+  <node id="-2975" lat="43.131138" lon="-0.455622" />
+  <node id="-2976" lat="43.131369" lon="-0.455353" />
+  <node id="-2977" lat="43.131448" lon="-0.455474" />
+  <node id="-2974" lat="43.131170" lon="-0.455671" />
+  <way id="-565" visible="true">
+    <nd ref="-2830" />
+    <nd ref="-2833" />
+    <nd ref="-2834" />
+    <nd ref="-2835" />
+    <nd ref="-2830" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+  </way>
+  <node id="-2830" lat="43.131550" lon="-0.464690" />
+  <node id="-2833" lat="43.131435" lon="-0.464527" />
+  <node id="-2834" lat="43.131467" lon="-0.464497" />
+  <node id="-2835" lat="43.131559" lon="-0.464681" />
+  <node id="-2830" lat="43.131550" lon="-0.464690" />
+  <way id="-778" visible="true">
+    <nd ref="-4108" />
+    <nd ref="-4103" />
+    <nd ref="-4102" />
+    <nd ref="-4101" />
+    <nd ref="-4108" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+  </way>
+  <node id="-4108" lat="43.131428" lon="-0.463532" />
+  <node id="-4103" lat="43.131402" lon="-0.463564" />
+  <node id="-4102" lat="43.131338" lon="-0.463476" />
+  <node id="-4101" lat="43.131342" lon="-0.463470" />
+  <node id="-4108" lat="43.131428" lon="-0.463532" />
+  <way id="-587" visible="true">
+    <nd ref="-2974" />
+    <nd ref="-2977" />
+    <nd ref="-2978" />
+    <nd ref="-2979" />
+    <nd ref="-2974" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+  </way>
+  <node id="-2974" lat="43.131170" lon="-0.455671" />
+  <node id="-2977" lat="43.131448" lon="-0.455474" />
+  <node id="-2978" lat="43.131488" lon="-0.455536" />
+  <node id="-2979" lat="43.131256" lon="-0.455808" />
+  <node id="-2974" lat="43.131170" lon="-0.455671" />
+  <way id="-1167" visible="true">
+    <nd ref="-5951" />
+    <nd ref="-5952" />
+    <nd ref="-5953" />
+    <nd ref="-5954" />
+    <nd ref="-5951" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+  </way>
+  <node id="-5951" lat="43.131630" lon="-0.462394" />
+  <node id="-5952" lat="43.131600" lon="-0.462445" />
+  <node id="-5953" lat="43.131575" lon="-0.462418" />
+  <node id="-5954" lat="43.131606" lon="-0.462367" />
+  <node id="-5951" lat="43.131630" lon="-0.462394" />
+  <way id="-1168" visible="true">
+    <nd ref="-5953" />
+    <nd ref="-5952" />
+    <nd ref="-5955" />
+    <nd ref="-5956" />
+    <nd ref="-5953" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+  </way>
+  <node id="-5953" lat="43.131575" lon="-0.462418" />
+  <node id="-5952" lat="43.131600" lon="-0.462445" />
+  <node id="-5955" lat="43.131577" lon="-0.462482" />
+  <node id="-5956" lat="43.131553" lon="-0.462454" />
+  <node id="-5953" lat="43.131575" lon="-0.462418" />
+  <way id="-588" visible="true">
+    <nd ref="-2980" />
+    <nd ref="-2981" />
+    <nd ref="-2982" />
+    <nd ref="-2983" />
+    <nd ref="-2980" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+  </way>
+  <node id="-2980" lat="43.131583" lon="-0.455058" />
+  <node id="-2981" lat="43.131664" lon="-0.455223" />
+  <node id="-2982" lat="43.131655" lon="-0.455232" />
+  <node id="-2983" lat="43.131561" lon="-0.455083" />
+  <node id="-2980" lat="43.131583" lon="-0.455058" />
+  <way id="-1091" visible="true">
+    <nd ref="-5609" />
+    <nd ref="-5610" />
+    <nd ref="-5611" />
+    <nd ref="-5612" />
+    <nd ref="-5613" />
+    <nd ref="-5614" />
+    <nd ref="-5615" />
+    <nd ref="-5616" />
+    <nd ref="-5617" />
+    <nd ref="-5618" />
+    <nd ref="-5619" />
+    <nd ref="-5620" />
+    <nd ref="-5609" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+  </way>
+  <node id="-5609" lat="43.131668" lon="-0.453242" />
+  <node id="-5610" lat="43.131762" lon="-0.453413" />
+  <node id="-5611" lat="43.131681" lon="-0.453495" />
+  <node id="-5612" lat="43.131669" lon="-0.453475" />
+  <node id="-5613" lat="43.131644" lon="-0.453500" />
+  <node id="-5614" lat="43.131626" lon="-0.453464" />
+  <node id="-5615" lat="43.131637" lon="-0.453447" />
+  <node id="-5616" lat="43.131594" lon="-0.453369" />
+  <node id="-5617" lat="43.131615" lon="-0.453349" />
+  <node id="-5618" lat="43.131630" lon="-0.453370" />
+  <node id="-5619" lat="43.131651" lon="-0.453350" />
+  <node id="-5620" lat="43.131620" lon="-0.453288" />
+  <node id="-5609" lat="43.131668" lon="-0.453242" />
+  <way id="-589" visible="true">
+    <nd ref="-2980" />
+    <nd ref="-2984" />
+    <nd ref="-2985" />
+    <nd ref="-2986" />
+    <nd ref="-2987" />
+    <nd ref="-2981" />
+    <nd ref="-2980" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+  </way>
+  <node id="-2980" lat="43.131583" lon="-0.455058" />
+  <node id="-2984" lat="43.131700" lon="-0.454924" />
+  <node id="-2985" lat="43.131723" lon="-0.454962" />
+  <node id="-2986" lat="43.131798" lon="-0.455076" />
+  <node id="-2987" lat="43.131684" lon="-0.455201" />
+  <node id="-2981" lat="43.131664" lon="-0.455223" />
+  <node id="-2980" lat="43.131583" lon="-0.455058" />
+  <way id="-874" visible="true">
+    <nd ref="-4591" />
+    <nd ref="-4592" />
+    <nd ref="-4593" />
+    <nd ref="-4594" />
+    <nd ref="-2986" />
+    <nd ref="-2985" />
+    <nd ref="-4591" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="wall" v="no" />
+  </way>
+  <node id="-4591" lat="43.131795" lon="-0.454879" />
+  <node id="-4592" lat="43.131853" lon="-0.455006" />
+  <node id="-4593" lat="43.131855" lon="-0.455011" />
+  <node id="-4594" lat="43.131805" lon="-0.455069" />
+  <node id="-2986" lat="43.131798" lon="-0.455076" />
+  <node id="-2985" lat="43.131723" lon="-0.454962" />
+  <node id="-4591" lat="43.131795" lon="-0.454879" />
+  <way id="-1096" visible="true">
+    <nd ref="-5639" />
+    <nd ref="-5640" />
+    <nd ref="-5641" />
+    <nd ref="-5642" />
+    <nd ref="-5639" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+  </way>
+  <node id="-5639" lat="43.131683" lon="-0.453084" />
+  <node id="-5640" lat="43.131733" lon="-0.453189" />
+  <node id="-5641" lat="43.131709" lon="-0.453208" />
+  <node id="-5642" lat="43.131657" lon="-0.453108" />
+  <node id="-5639" lat="43.131683" lon="-0.453084" />
+  <way id="-686" visible="true">
+    <nd ref="-3569" />
+    <nd ref="-3573" />
+    <nd ref="-3572" />
+    <nd ref="-3574" />
+    <nd ref="-3575" />
+    <nd ref="-3569" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+  </way>
+  <node id="-3569" lat="43.132227" lon="-0.460013" />
+  <node id="-3573" lat="43.132221" lon="-0.459978" />
+  <node id="-3572" lat="43.132216" lon="-0.459897" />
+  <node id="-3574" lat="43.132237" lon="-0.459889" />
+  <node id="-3575" lat="43.132260" lon="-0.459999" />
+  <node id="-3569" lat="43.132227" lon="-0.460013" />
+  <way id="-619" visible="true">
+    <nd ref="-3174" />
+    <nd ref="-3173" />
+    <nd ref="-3180" />
+    <nd ref="-3181" />
+    <nd ref="-3182" />
+    <nd ref="-3183" />
+    <nd ref="-3174" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+  </way>
+  <node id="-3174" lat="43.132487" lon="-0.458720" />
+  <node id="-3173" lat="43.132499" lon="-0.458888" />
+  <node id="-3180" lat="43.132489" lon="-0.458892" />
+  <node id="-3181" lat="43.132463" lon="-0.458795" />
+  <node id="-3182" lat="43.132457" lon="-0.458796" />
+  <node id="-3183" lat="43.132443" lon="-0.458741" />
+  <node id="-3174" lat="43.132487" lon="-0.458720" />
+  <way id="-1165" visible="true">
+    <nd ref="-5941" />
+    <nd ref="-5942" />
+    <nd ref="-5943" />
+    <nd ref="-5944" />
+    <nd ref="-5941" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+  </way>
+  <node id="-5941" lat="43.132704" lon="-0.457335" />
+  <node id="-5942" lat="43.132699" lon="-0.457405" />
+  <node id="-5943" lat="43.132605" lon="-0.457392" />
+  <node id="-5944" lat="43.132610" lon="-0.457322" />
+  <node id="-5941" lat="43.132704" lon="-0.457335" />
+  <way id="-1181" visible="true">
+    <nd ref="-6022" />
+    <nd ref="-6021" />
+    <nd ref="-6025" />
+    <nd ref="-6026" />
+    <nd ref="-6022" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+    <tag k="wall" v="no" />
+  </way>
+  <node id="-6022" lat="43.132763" lon="-0.456320" />
+  <node id="-6021" lat="43.132779" lon="-0.456378" />
+  <node id="-6025" lat="43.132771" lon="-0.456382" />
+  <node id="-6026" lat="43.132754" lon="-0.456326" />
+  <node id="-6022" lat="43.132763" lon="-0.456320" />
+  <way id="-614" visible="true">
+    <nd ref="-3163" />
+    <nd ref="-3164" />
+    <nd ref="-3165" />
+    <nd ref="-3166" />
+    <nd ref="-3167" />
+    <nd ref="-3163" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+  </way>
+  <node id="-3163" lat="43.132834" lon="-0.458054" />
+  <node id="-3164" lat="43.132847" lon="-0.458056" />
+  <node id="-3165" lat="43.132843" lon="-0.458193" />
+  <node id="-3166" lat="43.132760" lon="-0.458188" />
+  <node id="-3167" lat="43.132761" lon="-0.458051" />
+  <node id="-3163" lat="43.132834" lon="-0.458054" />
+  <way id="-1164" visible="true">
+    <nd ref="-5937" />
+    <nd ref="-5938" />
+    <nd ref="-5939" />
+    <nd ref="-5940" />
+    <nd ref="-5937" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+  </way>
+  <node id="-5937" lat="43.133080" lon="-0.462837" />
+  <node id="-5938" lat="43.133049" lon="-0.462892" />
+  <node id="-5939" lat="43.133003" lon="-0.462844" />
+  <node id="-5940" lat="43.133033" lon="-0.462789" />
+  <node id="-5937" lat="43.133080" lon="-0.462837" />
+  <way id="-7" visible="true">
+    <nd ref="-30" />
+    <nd ref="-29" />
+    <nd ref="-28" />
+    <nd ref="-31" />
+    <nd ref="-30" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="wall" v="no" />
+  </way>
+  <node id="-30" lat="43.132956" lon="-0.458084" />
+  <node id="-29" lat="43.133030" lon="-0.458064" />
+  <node id="-28" lat="43.133033" lon="-0.458101" />
+  <node id="-31" lat="43.132956" lon="-0.458105" />
+  <node id="-30" lat="43.132956" lon="-0.458084" />
+  <way id="-1153" visible="true">
+    <nd ref="-5869" />
+    <nd ref="-5870" />
+    <nd ref="-5871" />
+    <nd ref="-5872" />
+    <nd ref="-5869" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+    <tag k="wall" v="no" />
+  </way>
+  <node id="-5869" lat="43.132986" lon="-0.455363" />
+  <node id="-5870" lat="43.132960" lon="-0.455406" />
+  <node id="-5871" lat="43.132929" lon="-0.455371" />
+  <node id="-5872" lat="43.132955" lon="-0.455328" />
+  <node id="-5869" lat="43.132986" lon="-0.455363" />
+  <way id="-1139" visible="true">
+    <nd ref="-5773" />
+    <nd ref="-5774" />
+    <nd ref="-5775" />
+    <nd ref="-5776" />
+    <nd ref="-5773" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+    <tag k="wall" v="no" />
+  </way>
+  <node id="-5773" lat="43.133108" lon="-0.453402" />
+  <node id="-5774" lat="43.133138" lon="-0.453456" />
+  <node id="-5775" lat="43.132990" lon="-0.453606" />
+  <node id="-5776" lat="43.132961" lon="-0.453552" />
+  <node id="-5773" lat="43.133108" lon="-0.453402" />
+  <way id="-653" visible="true">
+    <nd ref="-3387" />
+    <nd ref="-3383" />
+    <nd ref="-3382" />
+    <nd ref="-3381" />
+    <nd ref="-3380" />
+    <nd ref="-3379" />
+    <nd ref="-3388" />
+    <nd ref="-3387" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+  </way>
+  <node id="-3387" lat="43.133122" lon="-0.458997" />
+  <node id="-3383" lat="43.133029" lon="-0.458889" />
+  <node id="-3382" lat="43.133086" lon="-0.458939" />
+  <node id="-3381" lat="43.133179" lon="-0.458783" />
+  <node id="-3380" lat="43.133155" lon="-0.458756" />
+  <node id="-3379" lat="43.133205" lon="-0.458673" />
+  <node id="-3388" lat="43.133276" lon="-0.458755" />
+  <node id="-3387" lat="43.133122" lon="-0.458997" />
+  <way id="-1154" visible="true">
+    <nd ref="-5873" />
+    <nd ref="-5874" />
+    <nd ref="-5875" />
+    <nd ref="-5876" />
+    <nd ref="-5873" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+    <tag k="wall" v="no" />
+  </way>
+  <node id="-5873" lat="43.133289" lon="-0.455621" />
+  <node id="-5874" lat="43.133270" lon="-0.455639" />
+  <node id="-5875" lat="43.133233" lon="-0.455569" />
+  <node id="-5876" lat="43.133251" lon="-0.455551" />
+  <node id="-5873" lat="43.133289" lon="-0.455621" />
+  <way id="-1155" visible="true">
+    <nd ref="-5877" />
+    <nd ref="-5878" />
+    <nd ref="-5879" />
+    <nd ref="-5880" />
+    <nd ref="-5881" />
+    <nd ref="-5873" />
+    <nd ref="-5876" />
+    <nd ref="-5882" />
+    <nd ref="-5883" />
+    <nd ref="-5884" />
+    <nd ref="-5877" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+  </way>
+  <node id="-5877" lat="43.133346" lon="-0.455581" />
+  <node id="-5878" lat="43.133341" lon="-0.455586" />
+  <node id="-5879" lat="43.133353" lon="-0.455608" />
+  <node id="-5880" lat="43.133343" lon="-0.455736" />
+  <node id="-5881" lat="43.133280" lon="-0.455727" />
+  <node id="-5873" lat="43.133289" lon="-0.455621" />
+  <node id="-5876" lat="43.133251" lon="-0.455551" />
+  <node id="-5882" lat="43.133206" lon="-0.455543" />
+  <node id="-5883" lat="43.133214" lon="-0.455458" />
+  <node id="-5884" lat="43.133287" lon="-0.455470" />
+  <node id="-5877" lat="43.133346" lon="-0.455581" />
+  <way id="-1175" visible="true">
+    <nd ref="-5996" />
+    <nd ref="-5997" />
+    <nd ref="-5998" />
+    <nd ref="-5999" />
+    <nd ref="-5996" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+    <tag k="wall" v="no" />
+  </way>
+  <node id="-5996" lat="43.133383" lon="-0.462460" />
+  <node id="-5997" lat="43.133390" lon="-0.462485" />
+  <node id="-5998" lat="43.133373" lon="-0.462493" />
+  <node id="-5999" lat="43.133367" lon="-0.462469" />
+  <node id="-5996" lat="43.133383" lon="-0.462460" />
+  <way id="-1152" visible="true">
+    <nd ref="-5860" />
+    <nd ref="-5861" />
+    <nd ref="-5862" />
+    <nd ref="-5863" />
+    <nd ref="-5864" />
+    <nd ref="-5865" />
+    <nd ref="-5866" />
+    <nd ref="-5867" />
+    <nd ref="-5868" />
+    <nd ref="-5860" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+  </way>
+  <node id="-5860" lat="43.133477" lon="-0.455280" />
+  <node id="-5861" lat="43.133532" lon="-0.455363" />
+  <node id="-5862" lat="43.133473" lon="-0.455437" />
+  <node id="-5863" lat="43.133518" lon="-0.455506" />
+  <node id="-5864" lat="43.133481" lon="-0.455551" />
+  <node id="-5865" lat="43.133395" lon="-0.455421" />
+  <node id="-5866" lat="43.133396" lon="-0.455400" />
+  <node id="-5867" lat="43.133439" lon="-0.455347" />
+  <node id="-5868" lat="43.133431" lon="-0.455336" />
+  <node id="-5860" lat="43.133477" lon="-0.455280" />
+  <way id="-669" visible="true">
+    <nd ref="-3479" />
+    <nd ref="-3480" />
+    <nd ref="-3481" />
+    <nd ref="-3482" />
+    <nd ref="-3483" />
+    <nd ref="-3484" />
+    <nd ref="-3485" />
+    <nd ref="-3486" />
+    <nd ref="-3487" />
+    <nd ref="-3488" />
+    <nd ref="-3489" />
+    <nd ref="-3490" />
+    <nd ref="-3491" />
+    <nd ref="-3492" />
+    <nd ref="-3493" />
+    <nd ref="-3494" />
+    <nd ref="-3495" />
+    <nd ref="-3479" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+  </way>
+  <node id="-3479" lat="43.133659" lon="-0.459207" />
+  <node id="-3480" lat="43.133761" lon="-0.459385" />
+  <node id="-3481" lat="43.133723" lon="-0.459426" />
+  <node id="-3482" lat="43.133807" lon="-0.459573" />
+  <node id="-3483" lat="43.133796" lon="-0.459586" />
+  <node id="-3484" lat="43.133814" lon="-0.459621" />
+  <node id="-3485" lat="43.133757" lon="-0.459684" />
+  <node id="-3486" lat="43.133754" lon="-0.459686" />
+  <node id="-3487" lat="43.133733" lon="-0.459652" />
+  <node id="-3488" lat="43.133727" lon="-0.459659" />
+  <node id="-3489" lat="43.133640" lon="-0.459515" />
+  <node id="-3490" lat="43.133603" lon="-0.459552" />
+  <node id="-3491" lat="43.133501" lon="-0.459378" />
+  <node id="-3492" lat="43.133536" lon="-0.459343" />
+  <node id="-3493" lat="43.133543" lon="-0.459281" />
+  <node id="-3494" lat="43.133578" lon="-0.459241" />
+  <node id="-3495" lat="43.133622" lon="-0.459249" />
+  <node id="-3479" lat="43.133659" lon="-0.459207" />
+  <way id="-1158" visible="true">
+    <nd ref="-5891" />
+    <nd ref="-5892" />
+    <nd ref="-5893" />
+    <nd ref="-5894" />
+    <nd ref="-5895" />
+    <nd ref="-5896" />
+    <nd ref="-5891" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+    <tag k="wall" v="no" />
+  </way>
+  <node id="-5891" lat="43.133922" lon="-0.460830" />
+  <node id="-5892" lat="43.133911" lon="-0.460842" />
+  <node id="-5893" lat="43.133883" lon="-0.460792" />
+  <node id="-5894" lat="43.133882" lon="-0.460789" />
+  <node id="-5895" lat="43.133887" lon="-0.460784" />
+  <node id="-5896" lat="43.133892" lon="-0.460778" />
+  <node id="-5891" lat="43.133922" lon="-0.460830" />
+  <way id="-1179" visible="true">
+    <nd ref="-6013" />
+    <nd ref="-6014" />
+    <nd ref="-6015" />
+    <nd ref="-6016" />
+    <nd ref="-6013" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+  </way>
+  <node id="-6013" lat="43.134060" lon="-0.458120" />
+  <node id="-6014" lat="43.134075" lon="-0.458296" />
+  <node id="-6015" lat="43.134004" lon="-0.458307" />
+  <node id="-6016" lat="43.133989" lon="-0.458131" />
+  <node id="-6013" lat="43.134060" lon="-0.458120" />
+  <way id="-1151" visible="true">
+    <nd ref="-5851" />
+    <nd ref="-5852" />
+    <nd ref="-5853" />
+    <nd ref="-5854" />
+    <nd ref="-5855" />
+    <nd ref="-5856" />
+    <nd ref="-5857" />
+    <nd ref="-5858" />
+    <nd ref="-5859" />
+    <nd ref="-5851" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+  </way>
+  <node id="-5851" lat="43.133926" lon="-0.454928" />
+  <node id="-5852" lat="43.133913" lon="-0.455055" />
+  <node id="-5853" lat="43.133877" lon="-0.455047" />
+  <node id="-5854" lat="43.133875" lon="-0.455060" />
+  <node id="-5855" lat="43.133843" lon="-0.455053" />
+  <node id="-5856" lat="43.133853" lon="-0.454954" />
+  <node id="-5857" lat="43.133826" lon="-0.454904" />
+  <node id="-5858" lat="43.133829" lon="-0.454883" />
+  <node id="-5859" lat="43.133876" lon="-0.454836" />
+  <node id="-5851" lat="43.133926" lon="-0.454928" />
+  <way id="-1150" visible="true">
+    <nd ref="-5847" />
+    <nd ref="-5848" />
+    <nd ref="-5849" />
+    <nd ref="-5850" />
+    <nd ref="-5847" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+  </way>
+  <node id="-5847" lat="43.133861" lon="-0.453952" />
+  <node id="-5848" lat="43.133891" lon="-0.453979" />
+  <node id="-5849" lat="43.133868" lon="-0.454026" />
+  <node id="-5850" lat="43.133835" lon="-0.454005" />
+  <node id="-5847" lat="43.133861" lon="-0.453952" />
+  <way id="-1149" visible="true">
+    <nd ref="-5838" />
+    <nd ref="-5839" />
+    <nd ref="-5840" />
+    <nd ref="-5841" />
+    <nd ref="-5842" />
+    <nd ref="-5843" />
+    <nd ref="-5844" />
+    <nd ref="-5845" />
+    <nd ref="-5846" />
+    <nd ref="-5838" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+  </way>
+  <node id="-5838" lat="43.133980" lon="-0.453602" />
+  <node id="-5839" lat="43.133932" lon="-0.453699" />
+  <node id="-5840" lat="43.133975" lon="-0.453738" />
+  <node id="-5841" lat="43.133929" lon="-0.453834" />
+  <node id="-5842" lat="43.133854" lon="-0.453767" />
+  <node id="-5843" lat="43.133899" lon="-0.453674" />
+  <node id="-5844" lat="43.133872" lon="-0.453650" />
+  <node id="-5845" lat="43.133877" lon="-0.453640" />
+  <node id="-5846" lat="43.133921" lon="-0.453549" />
+  <node id="-5838" lat="43.133980" lon="-0.453602" />
+  <way id="-498" visible="true">
+    <nd ref="-2404" />
+    <nd ref="-2408" />
+    <nd ref="-2405" />
+    <nd ref="-2404" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+  </way>
+  <node id="-2404" lat="43.134322" lon="-0.457312" />
+  <node id="-2408" lat="43.134333" lon="-0.457310" />
+  <node id="-2405" lat="43.134338" lon="-0.457431" />
+  <node id="-2404" lat="43.134322" lon="-0.457312" />
+  <way id="-397" visible="true">
+    <nd ref="-1914" />
+    <nd ref="-1915" />
+    <nd ref="-1916" />
+    <nd ref="-1917" />
+    <nd ref="-1914" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+  </way>
+  <node id="-1914" lat="43.134313" lon="-0.440232" />
+  <node id="-1915" lat="43.134313" lon="-0.440063" />
+  <node id="-1916" lat="43.134365" lon="-0.440065" />
+  <node id="-1917" lat="43.134363" lon="-0.440232" />
+  <node id="-1914" lat="43.134313" lon="-0.440232" />
+  <way id="-400" visible="true">
+    <nd ref="-1916" />
+    <nd ref="-1926" />
+    <nd ref="-1927" />
+    <nd ref="-1928" />
+    <nd ref="-1917" />
+    <nd ref="-1916" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+  </way>
+  <node id="-1916" lat="43.134365" lon="-0.440065" />
+  <node id="-1926" lat="43.134369" lon="-0.440065" />
+  <node id="-1927" lat="43.134384" lon="-0.440133" />
+  <node id="-1928" lat="43.134398" lon="-0.440235" />
+  <node id="-1917" lat="43.134363" lon="-0.440232" />
+  <node id="-1916" lat="43.134365" lon="-0.440065" />
+  <way id="-415" visible="true">
+    <nd ref="-1928" />
+    <nd ref="-1927" />
+    <nd ref="-1926" />
+    <nd ref="-1989" />
+    <nd ref="-1990" />
+    <nd ref="-1928" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+  </way>
+  <node id="-1928" lat="43.134398" lon="-0.440235" />
+  <node id="-1927" lat="43.134384" lon="-0.440133" />
+  <node id="-1926" lat="43.134369" lon="-0.440065" />
+  <node id="-1989" lat="43.134413" lon="-0.440066" />
+  <node id="-1990" lat="43.134411" lon="-0.440235" />
+  <node id="-1928" lat="43.134398" lon="-0.440235" />
+  <way id="-895" visible="true">
+    <nd ref="-4686" />
+    <nd ref="-4687" />
+    <nd ref="-4688" />
+    <nd ref="-4689" />
+    <nd ref="-4686" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+  </way>
+  <node id="-4686" lat="43.134624" lon="-0.468277" />
+  <node id="-4687" lat="43.134680" lon="-0.468405" />
+  <node id="-4688" lat="43.134538" lon="-0.468510" />
+  <node id="-4689" lat="43.134482" lon="-0.468384" />
+  <node id="-4686" lat="43.134624" lon="-0.468277" />
+  <way id="-1178" visible="true">
+    <nd ref="-6009" />
+    <nd ref="-6010" />
+    <nd ref="-6011" />
+    <nd ref="-6012" />
+    <nd ref="-6009" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+  </way>
+  <node id="-6009" lat="43.134792" lon="-0.457519" />
+  <node id="-6010" lat="43.134801" lon="-0.457558" />
+  <node id="-6011" lat="43.134771" lon="-0.457571" />
+  <node id="-6012" lat="43.134762" lon="-0.457532" />
+  <node id="-6009" lat="43.134792" lon="-0.457519" />
+  <way id="-505" visible="true">
+    <nd ref="-2439" />
+    <nd ref="-2447" />
+    <nd ref="-2440" />
+    <nd ref="-2439" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+  </way>
+  <node id="-2439" lat="43.135124" lon="-0.458531" />
+  <node id="-2447" lat="43.135133" lon="-0.458530" />
+  <node id="-2440" lat="43.135135" lon="-0.458574" />
+  <node id="-2439" lat="43.135124" lon="-0.458531" />
+  <way id="-792" visible="true">
+    <nd ref="-4212" />
+    <nd ref="-4213" />
+    <nd ref="-4214" />
+    <nd ref="-4215" />
+    <nd ref="-4212" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+  </way>
+  <node id="-4212" lat="43.135164" lon="-0.457459" />
+  <node id="-4213" lat="43.135182" lon="-0.457554" />
+  <node id="-4214" lat="43.135091" lon="-0.457584" />
+  <node id="-4215" lat="43.135077" lon="-0.457490" />
+  <node id="-4212" lat="43.135164" lon="-0.457459" />
+  <way id="-390" visible="true">
+    <nd ref="-1876" />
+    <nd ref="-1877" />
+    <nd ref="-1878" />
+    <nd ref="-1879" />
+    <nd ref="-1880" />
+    <nd ref="-1881" />
+    <nd ref="-1882" />
+    <nd ref="-1883" />
+    <nd ref="-1884" />
+    <nd ref="-1885" />
+    <nd ref="-1876" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+  </way>
+  <node id="-1876" lat="43.141334" lon="-0.445037" />
+  <node id="-1877" lat="43.141379" lon="-0.445145" />
+  <node id="-1878" lat="43.141429" lon="-0.445108" />
+  <node id="-1879" lat="43.141462" lon="-0.445192" />
+  <node id="-1880" lat="43.141451" lon="-0.445197" />
+  <node id="-1881" lat="43.141445" lon="-0.445184" />
+  <node id="-1882" lat="43.141388" lon="-0.445224" />
+  <node id="-1883" lat="43.141341" lon="-0.445260" />
+  <node id="-1884" lat="43.141316" lon="-0.445280" />
+  <node id="-1885" lat="43.141243" lon="-0.445110" />
+  <node id="-1876" lat="43.141334" lon="-0.445037" />
+  <way id="-391" visible="true">
+    <nd ref="-1879" />
+    <nd ref="-1886" />
+    <nd ref="-1887" />
+    <nd ref="-1880" />
+    <nd ref="-1879" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+  </way>
+  <node id="-1879" lat="43.141462" lon="-0.445192" />
+  <node id="-1886" lat="43.141468" lon="-0.445207" />
+  <node id="-1887" lat="43.141456" lon="-0.445215" />
+  <node id="-1880" lat="43.141451" lon="-0.445197" />
+  <node id="-1879" lat="43.141462" lon="-0.445192" />
+  <way id="-1142" visible="true">
+    <nd ref="-5785" />
+    <nd ref="-5786" />
+    <nd ref="-5787" />
+    <nd ref="-5788" />
+    <nd ref="-5785" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+    <tag k="wall" v="no" />
+  </way>
+  <node id="-5785" lat="43.143118" lon="-0.449905" />
+  <node id="-5786" lat="43.143036" lon="-0.449956" />
+  <node id="-5787" lat="43.142908" lon="-0.449572" />
+  <node id="-5788" lat="43.142990" lon="-0.449521" />
+  <node id="-5785" lat="43.143118" lon="-0.449905" />
+  <way id="-1146" visible="true">
+    <nd ref="-5826" />
+    <nd ref="-5827" />
+    <nd ref="-5828" />
+    <nd ref="-5829" />
+    <nd ref="-5826" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+  </way>
+  <node id="-5826" lat="43.146993" lon="-0.453707" />
+  <node id="-5827" lat="43.147045" lon="-0.453989" />
+  <node id="-5828" lat="43.146962" lon="-0.454018" />
+  <node id="-5829" lat="43.146909" lon="-0.453736" />
+  <node id="-5826" lat="43.146993" lon="-0.453707" />
+  <way id="-1085" visible="true">
+    <nd ref="-5584" />
+    <nd ref="-5585" />
+    <nd ref="-5586" />
+    <nd ref="-5587" />
+    <nd ref="-5584" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+  </way>
+  <node id="-5584" lat="43.147262" lon="-0.448550" />
+  <node id="-5585" lat="43.147263" lon="-0.448687" />
+  <node id="-5586" lat="43.147186" lon="-0.448688" />
+  <node id="-5587" lat="43.147184" lon="-0.448551" />
+  <node id="-5584" lat="43.147262" lon="-0.448550" />
+  <way id="-1141" visible="true">
+    <nd ref="-5781" />
+    <nd ref="-5782" />
+    <nd ref="-5783" />
+    <nd ref="-5784" />
+    <nd ref="-5781" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+    <tag k="wall" v="no" />
+  </way>
+  <node id="-5781" lat="43.147250" lon="-0.448686" />
+  <node id="-5782" lat="43.147250" lon="-0.448726" />
+  <node id="-5783" lat="43.147199" lon="-0.448727" />
+  <node id="-5784" lat="43.147198" lon="-0.448688" />
+  <node id="-5781" lat="43.147250" lon="-0.448686" />
+  <way id="-1144" visible="true">
+    <nd ref="-5811" />
+    <nd ref="-5812" />
+    <nd ref="-5813" />
+    <nd ref="-5814" />
+    <nd ref="-5811" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+  </way>
+  <node id="-5811" lat="43.148143" lon="-0.453391" />
+  <node id="-5812" lat="43.148159" lon="-0.453474" />
+  <node id="-5813" lat="43.148072" lon="-0.453506" />
+  <node id="-5814" lat="43.148056" lon="-0.453423" />
+  <node id="-5811" lat="43.148143" lon="-0.453391" />
+  <way id="-168" visible="true">
+    <nd ref="-809" />
+    <nd ref="-812" />
+    <nd ref="-813" />
+    <nd ref="-814" />
+    <nd ref="-809" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+  </way>
+  <node id="-809" lat="43.148620" lon="-0.432831" />
+  <node id="-812" lat="43.149141" lon="-0.432635" />
+  <node id="-813" lat="43.149154" lon="-0.432705" />
+  <node id="-814" lat="43.148638" lon="-0.432919" />
+  <node id="-809" lat="43.148620" lon="-0.432831" />
+  <way id="-1138" visible="true">
+    <nd ref="-5769" />
+    <nd ref="-5770" />
+    <nd ref="-5771" />
+    <nd ref="-5772" />
+    <nd ref="-5769" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+  </way>
+  <node id="-5769" lat="43.155913" lon="-0.405895" />
+  <node id="-5770" lat="43.155899" lon="-0.405837" />
+  <node id="-5771" lat="43.155998" lon="-0.405784" />
+  <node id="-5772" lat="43.156011" lon="-0.405837" />
+  <node id="-5769" lat="43.155913" lon="-0.405895" />
+  <way id="-150" visible="true">
+    <nd ref="-693" />
+    <nd ref="-692" />
+    <nd ref="-705" />
+    <nd ref="-693" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+  </way>
+  <node id="-693" lat="43.158304" lon="-0.429722" />
+  <node id="-692" lat="43.158238" lon="-0.429719" />
+  <node id="-705" lat="43.158242" lon="-0.429702" />
+  <node id="-693" lat="43.158304" lon="-0.429722" />
+  <way id="-185" visible="true">
+    <nd ref="-921" />
+    <nd ref="-922" />
+    <nd ref="-923" />
+    <nd ref="-924" />
+    <nd ref="-925" />
+    <nd ref="-926" />
+    <nd ref="-927" />
+    <nd ref="-928" />
+    <nd ref="-929" />
+    <nd ref="-930" />
+    <nd ref="-931" />
+    <nd ref="-932" />
+    <nd ref="-933" />
+    <nd ref="-921" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+  </way>
+  <node id="-921" lat="43.158554" lon="-0.428891" />
+  <node id="-922" lat="43.158575" lon="-0.428905" />
+  <node id="-923" lat="43.158614" lon="-0.428772" />
+  <node id="-924" lat="43.158668" lon="-0.428802" />
+  <node id="-925" lat="43.158683" lon="-0.428758" />
+  <node id="-926" lat="43.158700" lon="-0.428765" />
+  <node id="-927" lat="43.158687" lon="-0.428810" />
+  <node id="-928" lat="43.158727" lon="-0.428833" />
+  <node id="-929" lat="43.158689" lon="-0.428950" />
+  <node id="-930" lat="43.158687" lon="-0.428983" />
+  <node id="-931" lat="43.158640" lon="-0.428958" />
+  <node id="-932" lat="43.158628" lon="-0.429003" />
+  <node id="-933" lat="43.158537" lon="-0.428953" />
+  <node id="-921" lat="43.158554" lon="-0.428891" />
+  <way id="-184" visible="true">
+    <nd ref="-917" />
+    <nd ref="-918" />
+    <nd ref="-919" />
+    <nd ref="-920" />
+    <nd ref="-917" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+  </way>
+  <node id="-917" lat="43.158771" lon="-0.428503" />
+  <node id="-918" lat="43.158793" lon="-0.428436" />
+  <node id="-919" lat="43.158847" lon="-0.428470" />
+  <node id="-920" lat="43.158827" lon="-0.428531" />
+  <node id="-917" lat="43.158771" lon="-0.428503" />
+  <way id="-178" visible="true">
+    <nd ref="-881" />
+    <nd ref="-882" />
+    <nd ref="-883" />
+    <nd ref="-884" />
+    <nd ref="-885" />
+    <nd ref="-886" />
+    <nd ref="-881" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+  </way>
+  <node id="-881" lat="43.159273" lon="-0.429333" />
+  <node id="-882" lat="43.159273" lon="-0.429230" />
+  <node id="-883" lat="43.159256" lon="-0.429231" />
+  <node id="-884" lat="43.159258" lon="-0.429169" />
+  <node id="-885" lat="43.159359" lon="-0.429175" />
+  <node id="-886" lat="43.159353" lon="-0.429340" />
+  <node id="-881" lat="43.159273" lon="-0.429333" />
+  <way id="-179" visible="true">
+    <nd ref="-887" />
+    <nd ref="-888" />
+    <nd ref="-889" />
+    <nd ref="-890" />
+    <nd ref="-891" />
+    <nd ref="-892" />
+    <nd ref="-887" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+  </way>
+  <node id="-887" lat="43.159425" lon="-0.428921" />
+  <node id="-888" lat="43.159389" lon="-0.428867" />
+  <node id="-889" lat="43.159483" lon="-0.428753" />
+  <node id="-890" lat="43.159534" lon="-0.428832" />
+  <node id="-891" lat="43.159461" lon="-0.428916" />
+  <node id="-892" lat="43.159447" lon="-0.428900" />
+  <node id="-887" lat="43.159425" lon="-0.428921" />
+  <way id="-213" visible="true">
+    <nd ref="-1022" />
+    <nd ref="-1023" />
+    <nd ref="-1024" />
+    <nd ref="-1025" />
+    <nd ref="-1026" />
+    <nd ref="-1027" />
+    <nd ref="-1028" />
+    <nd ref="-1029" />
+    <nd ref="-1030" />
+    <nd ref="-1031" />
+    <nd ref="-1032" />
+    <nd ref="-1022" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+  </way>
+  <node id="-1022" lat="43.159651" lon="-0.441565" />
+  <node id="-1023" lat="43.159641" lon="-0.441571" />
+  <node id="-1024" lat="43.159571" lon="-0.441399" />
+  <node id="-1025" lat="43.159603" lon="-0.441372" />
+  <node id="-1026" lat="43.159542" lon="-0.441215" />
+  <node id="-1027" lat="43.159700" lon="-0.441089" />
+  <node id="-1028" lat="43.159734" lon="-0.441192" />
+  <node id="-1029" lat="43.159653" lon="-0.441255" />
+  <node id="-1030" lat="43.159731" lon="-0.441452" />
+  <node id="-1031" lat="43.159785" lon="-0.441426" />
+  <node id="-1032" lat="43.159799" lon="-0.441464" />
+  <node id="-1022" lat="43.159651" lon="-0.441565" />
+  <way id="-54" visible="true">
+    <nd ref="-265" />
+    <nd ref="-266" />
+    <nd ref="-267" />
+    <nd ref="-268" />
+    <nd ref="-265" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+  </way>
+  <node id="-265" lat="43.162511" lon="-0.413280" />
+  <node id="-266" lat="43.162570" lon="-0.413260" />
+  <node id="-267" lat="43.162595" lon="-0.413377" />
+  <node id="-268" lat="43.162531" lon="-0.413406" />
+  <node id="-265" lat="43.162511" lon="-0.413280" />
+  <way id="-26" visible="true">
+    <nd ref="-128" />
+    <nd ref="-129" />
+    <nd ref="-130" />
+    <nd ref="-131" />
+    <nd ref="-128" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+  </way>
+  <node id="-128" lat="43.164231" lon="-0.422472" />
+  <node id="-129" lat="43.164217" lon="-0.422396" />
+  <node id="-130" lat="43.164344" lon="-0.422329" />
+  <node id="-131" lat="43.164360" lon="-0.422412" />
+  <node id="-128" lat="43.164231" lon="-0.422472" />
+  <way id="-80" visible="true">
+    <nd ref="-425" />
+    <nd ref="-426" />
+    <nd ref="-427" />
+    <nd ref="-428" />
+    <nd ref="-425" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+  </way>
+  <node id="-425" lat="43.165984" lon="-0.420865" />
+  <node id="-426" lat="43.166021" lon="-0.420846" />
+  <node id="-427" lat="43.166053" lon="-0.420964" />
+  <node id="-428" lat="43.166016" lon="-0.420984" />
+  <node id="-425" lat="43.165984" lon="-0.420865" />
+  <way id="-116" visible="true">
+    <nd ref="-563" />
+    <nd ref="-274" />
+    <nd ref="-273" />
+    <nd ref="-564" />
+    <nd ref="-563" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="wall" v="no" />
+  </way>
+  <node id="-563" lat="43.166400" lon="-0.408811" />
+  <node id="-274" lat="43.166285" lon="-0.408928" />
+  <node id="-273" lat="43.166197" lon="-0.408759" />
+  <node id="-564" lat="43.166311" lon="-0.408648" />
+  <node id="-563" lat="43.166400" lon="-0.408811" />
+  <way id="-115" visible="true">
+    <nd ref="-556" />
+    <nd ref="-562" />
+    <nd ref="-560" />
+    <nd ref="-557" />
+    <nd ref="-556" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+    <tag k="wall" v="no" />
+  </way>
+  <node id="-556" lat="43.166545" lon="-0.409022" />
+  <node id="-562" lat="43.166441" lon="-0.409123" />
+  <node id="-560" lat="43.166381" lon="-0.409005" />
+  <node id="-557" lat="43.166539" lon="-0.409011" />
+  <node id="-556" lat="43.166545" lon="-0.409022" />
+  <way id="-114" visible="true">
+    <nd ref="-559" />
+    <nd ref="-558" />
+    <nd ref="-557" />
+    <nd ref="-560" />
+    <nd ref="-561" />
+    <nd ref="-559" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+    <tag k="wall" v="no" />
+  </way>
+  <node id="-559" lat="43.166483" lon="-0.408885" />
+  <node id="-558" lat="43.166520" lon="-0.408979" />
+  <node id="-557" lat="43.166539" lon="-0.409011" />
+  <node id="-560" lat="43.166381" lon="-0.409005" />
+  <node id="-561" lat="43.166373" lon="-0.408990" />
+  <node id="-559" lat="43.166483" lon="-0.408885" />
+  <way id="-99" visible="true">
+    <nd ref="-517" />
+    <nd ref="-518" />
+    <nd ref="-519" />
+    <nd ref="-520" />
+    <nd ref="-517" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+  </way>
+  <node id="-517" lat="43.166532" lon="-0.420581" />
+  <node id="-518" lat="43.166511" lon="-0.420544" />
+  <node id="-519" lat="43.166609" lon="-0.420458" />
+  <node id="-520" lat="43.166629" lon="-0.420500" />
+  <node id="-517" lat="43.166532" lon="-0.420581" />
+  <way id="-112" visible="true">
+    <nd ref="-550" />
+    <nd ref="-551" />
+    <nd ref="-552" />
+    <nd ref="-553" />
+    <nd ref="-554" />
+    <nd ref="-555" />
+    <nd ref="-550" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="wall" v="no" />
+  </way>
+  <node id="-550" lat="43.166596" lon="-0.408777" />
+  <node id="-551" lat="43.166668" lon="-0.408903" />
+  <node id="-552" lat="43.166558" lon="-0.409011" />
+  <node id="-553" lat="43.166530" lon="-0.408964" />
+  <node id="-554" lat="43.166508" lon="-0.408891" />
+  <node id="-555" lat="43.166504" lon="-0.408865" />
+  <node id="-550" lat="43.166596" lon="-0.408777" />
+  <way id="-78" visible="true">
+    <nd ref="-411" />
+    <nd ref="-412" />
+    <nd ref="-413" />
+    <nd ref="-414" />
+    <nd ref="-415" />
+    <nd ref="-416" />
+    <nd ref="-417" />
+    <nd ref="-418" />
+    <nd ref="-411" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="building" v="yes" />
+  </way>
+  <node id="-411" lat="43.167197" lon="-0.419781" />
+  <node id="-412" lat="43.167143" lon="-0.419838" />
+  <node id="-413" lat="43.167160" lon="-0.419870" />
+  <node id="-414" lat="43.167105" lon="-0.419931" />
+  <node id="-415" lat="43.167082" lon="-0.419891" />
+  <node id="-416" lat="43.167104" lon="-0.419863" />
+  <node id="-417" lat="43.167068" lon="-0.419798" />
+  <node id="-418" lat="43.167158" lon="-0.419701" />
+  <node id="-411" lat="43.167197" lon="-0.419781" />
+  <way id="-21" visible="true">
+    <nd ref="-94" />
+    <nd ref="-95" />
+    <nd ref="-96" />
+    <nd ref="-97" />
+    <nd ref="-98" />
+    <nd ref="-99" />
+    <nd ref="-100" />
+    <nd ref="-101" />
+    <nd ref="-94" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+  </way>
+  <node id="-94" lat="43.170040" lon="-0.415121" />
+  <node id="-95" lat="43.170106" lon="-0.415256" />
+  <node id="-96" lat="43.170088" lon="-0.415339" />
+  <node id="-97" lat="43.169979" lon="-0.415433" />
+  <node id="-98" lat="43.169950" lon="-0.415381" />
+  <node id="-99" lat="43.170019" lon="-0.415323" />
+  <node id="-100" lat="43.170034" lon="-0.415238" />
+  <node id="-101" lat="43.169998" lon="-0.415155" />
+  <node id="-94" lat="43.170040" lon="-0.415121" />
+  <way id="-102" visible="true">
+    <nd ref="-89" />
+    <nd ref="-529" />
+    <nd ref="-91" />
+    <nd ref="-90" />
+    <nd ref="-89" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="wall" v="no" />
+  </way>
+  <node id="-89" lat="43.170213" lon="-0.414968" />
+  <node id="-529" lat="43.170193" lon="-0.414927" />
+  <node id="-91" lat="43.170210" lon="-0.414915" />
+  <node id="-90" lat="43.170228" lon="-0.414954" />
+  <node id="-89" lat="43.170213" lon="-0.414968" />
+</osm>
