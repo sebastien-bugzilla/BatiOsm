@@ -2,11 +2,10 @@
 # !/usr/bin/env python
 import argparse
 import logging
+import math
 import os
 import sys
 import time
-from math import pi
-from math import sqrt
 
 import lxml.etree
 
@@ -27,24 +26,24 @@ class Point:
     - longitude (float)
     """
 
-    node_lat = 0.0
-    node_lon = 0.0
+    lat = 0.0
+    lon = 0.0
 
-    def __init__(self, identifier: str, latitude: float, longitude: float):
+    def __init__(self, identifier: str, lat: float, lon: float):
         self.print_node = str
         self.node_id = identifier
-        self.node_lat = float(latitude)
-        self.node_lon = float(longitude)
+        self.lat = float(lat)
+        self.lon = float(lon)
         self.history = []
 
     def print(self):
-        print(self.node_id, self.node_lat, self.node_lon)
+        print(self.node_id, self.lat, self.lon)
 
     def distance(self, other):
         """Compute distance between two points"""
-        d_lat = self.node_lat - other.node_lat
-        d_lon = self.node_lon - other.node_lon
-        return sqrt(d_lat ** 2 + d_lon ** 2) * pi / 180 * EARTH_RADIUS
+        lat = self.lat - other.lat
+        lon = self.lon - other.lon
+        return math.sqrt(lat ** 2 + lon ** 2) * math.pi / 180 * EARTH_RADIUS
 
     def to_xml(self):
         """Convert into xml"""
@@ -144,28 +143,28 @@ class Building:
         locale_lon = []
 
         for point in self.nodes:
-            locale_lat.append((point.node_lat - self.nodes[0].node_lat) * EARTH_RADIUS * pi / 180)
-            locale_lon.append((point.node_lon - self.nodes[0].node_lon) * EARTH_RADIUS * pi / 180)
+            locale_lat.append((point.lat - self.nodes[0].lat) * EARTH_RADIUS * math.pi / 180)
+            locale_lon.append((point.lon - self.nodes[0].lon) * EARTH_RADIUS * math.pi / 180)
 
         for i_node in range(self.node_count - 1):
             next_point_distance = (
-                        locale_lat[i_node] * locale_lon[i_node + 1] - locale_lat[i_node + 1] * locale_lon[i_node])
+                    locale_lat[i_node] * locale_lon[i_node + 1] - locale_lat[i_node + 1] * locale_lon[i_node])
             area = area + 0.5 * next_point_distance
             computed_latitude = (
-                        computed_latitude + (locale_lat[i_node] + locale_lat[i_node + 1]) * next_point_distance)
+                    computed_latitude + (locale_lat[i_node] + locale_lat[i_node + 1]) * next_point_distance)
             computed_longitude = (
-                        computed_longitude + (locale_lon[i_node] + locale_lon[i_node + 1]) * next_point_distance)
+                    computed_longitude + (locale_lon[i_node] + locale_lon[i_node + 1]) * next_point_distance)
 
         if area == 0.0:
             self.area_issue = "YES"
             for point in self.nodes:
-                sum_lat = sum_lat + point.node_lat
-                sum_lon = sum_lon + point.node_lon
+                sum_lat = sum_lat + point.lat
+                sum_lon = sum_lon + point.lon
             latitude = sum_lat / self.node_count
             longitude = sum_lon / self.node_count
         else:
-            latitude = self.nodes[0].node_lat + computed_latitude / (6 * area) * 180 / (pi * EARTH_RADIUS)
-            longitude = self.nodes[0].node_lon + computed_longitude / (6 * area) * 180 / (pi * EARTH_RADIUS)
+            latitude = self.nodes[0].lat + computed_latitude / (6 * area) * 180 / (math.pi * EARTH_RADIUS)
+            longitude = self.nodes[0].lon + computed_longitude / (6 * area) * 180 / (math.pi * EARTH_RADIUS)
             self.area = area
         self.center = Point(self.bat_id, latitude, longitude)
         self.center.set_history([])
@@ -177,19 +176,15 @@ class Building:
         du status du batiment. Si la distance mini est supérieure à cette
         largeur alors cela veut dire que le batiment est nouveau ou
         supprimé."""
-        latitudes = []
-        longitudes = []
-
-        for point in self.nodes:
-            latitudes.append(point.node_lat)
-            longitudes.append(point.node_lon)
+        latitudes = [n.lat for n in self.nodes]
+        longitudes = [n.lon for n in self.nodes]
 
         min_lat = min(latitudes)
         max_lat = max(latitudes)
         min_lon = min(longitudes)
         max_lon = max(longitudes)
 
-        self.width = sqrt((max_lat - min_lat) ** 2 + (max_lon - min_lon) ** 2) * pi / 180 * EARTH_RADIUS
+        self.width = math.sqrt((max_lat - min_lat) ** 2 + (max_lon - min_lon) ** 2) * math.pi / 180 * EARTH_RADIUS
 
     def set_min_distance(self, min_distance):
         """Cette méthode permet de définir la distance mini comme étant celle
@@ -416,8 +411,8 @@ def main():
         new_nodes[future_nodes_count].set_history(attributes)
         future_nodes_count = future_nodes_count + 1
 
-    nb_zone_lat = int((lat_max - lat_min) * (pi / 180 * EARTH_RADIUS) / (2 * BORNE_SUP_MODIF)) - 1
-    nb_zone_lon = int((lon_max - lon_min) * (pi / 180 * EARTH_RADIUS) / (2 * BORNE_SUP_MODIF)) - 1
+    nb_zone_lat = int((lat_max - lat_min) * (math.pi / 180 * EARTH_RADIUS) / (2 * BORNE_SUP_MODIF)) - 1
+    nb_zone_lon = int((lon_max - lon_min) * (math.pi / 180 * EARTH_RADIUS) / (2 * BORNE_SUP_MODIF)) - 1
     nb_zone = min(nb_zone_lat, nb_zone_lon, 500, NB_ZONE_USER)
     delta_lat = (lat_max - lat_min) / nb_zone
     delta_lon = (lon_max - lon_min) / nb_zone
@@ -451,8 +446,8 @@ def main():
         batiment_lu.compute_width()
         batiment_lu.set_history([])
         batiment_lu.set_close_building("")
-        repere_latitude = int((batiment_lu.center.node_lat - lat_min) / delta_lat)
-        repere_longitude = int((batiment_lu.center.node_lon - lon_min) / delta_lon)
+        repere_latitude = int((batiment_lu.center.lat - lat_min) / delta_lat)
+        repere_longitude = int((batiment_lu.center.lon - lon_min) / delta_lon)
         if repere_latitude > nb_zone - 1:
             repere_latitude = nb_zone - 1
         if repere_longitude > nb_zone - 1:
@@ -551,8 +546,8 @@ def main():
         batiment_lu.compute_width()
         batiment_lu.set_history(attributes)
         batiment_lu.set_close_building("")
-        repere_latitude = int((batiment_lu.center.node_lat - lat_min) / delta_lat)
-        repere_longitude = int((batiment_lu.center.node_lon - lon_min) / delta_lon)
+        repere_latitude = int((batiment_lu.center.lat - lat_min) / delta_lat)
+        repere_longitude = int((batiment_lu.center.lon - lon_min) / delta_lon)
         if repere_latitude > nb_zone - 1:
             repere_latitude = nb_zone - 1
         if repere_longitude > nb_zone - 1:
@@ -824,8 +819,8 @@ def main():
                     new_bati[i_lat][i_lon][i_bat].bat_id,
                     new_bati[i_lat][i_lon][i_bat].status,
                     str(round(new_bati[i_lat][i_lon][i_bat].min_distance, 9)),
-                    str(round(new_bati[i_lat][i_lon][i_bat].center.node_lat, 7)),
-                    str(round(new_bati[i_lat][i_lon][i_bat].center.node_lon, 7)),
+                    str(round(new_bati[i_lat][i_lon][i_bat].center.lat, 7)),
+                    str(round(new_bati[i_lat][i_lon][i_bat].center.lon, 7)),
                     str(round(new_bati[i_lat][i_lon][i_bat].area, 1)),
                 ]
                 file_log.write(log_format(resultat, 16, "|") + "\n")
@@ -840,8 +835,8 @@ def main():
                     old_bati[i_lat][i_lon][i_bat].bat_id,
                     old_bati[i_lat][i_lon][i_bat].status,
                     str(round(old_bati[i_lat][i_lon][i_bat].min_distance, 9)),
-                    str(round(old_bati[i_lat][i_lon][i_bat].center.node_lat, 7)),
-                    str(round(old_bati[i_lat][i_lon][i_bat].center.node_lon, 7)),
+                    str(round(old_bati[i_lat][i_lon][i_bat].center.lat, 7)),
+                    str(round(old_bati[i_lat][i_lon][i_bat].center.lon, 7)),
                     str(round(old_bati[i_lat][i_lon][i_bat].area, 1)),
                 ]
                 file_log.write(log_format(resultat, 16, "|") + "\n")
