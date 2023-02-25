@@ -1,13 +1,11 @@
 # -*- coding:Utf-8 -*-
 #!/usr/bin/env python
 import sys
-import os
-from math import sqrt
-import lxml.etree
-from io import StringIO
-from math import pi
 import time
-from operator import attrgetter
+from math import pi
+from math import sqrt
+
+import lxml.etree
 
 BORNE_INF_MODIF = 1.
 BORNE_SUP_MODIF = 10.
@@ -330,7 +328,7 @@ except:
 separation = "--------------------------------------------------------------------------------------------------------------------------------"
 
 
-tps1 = time.clock()
+tps1 = time.perf_counter()
 
 print("------------------------------------------------------------------")
 print("-                    Lecture des données                         -")
@@ -558,7 +556,7 @@ for relation in old_bati_root.iter('relation'):
                             old_bati[i_lat][i_lon][i_bat].setRole("inner")
                             OuterWay.addInner(old_bati[i_lat][i_lon][i_bat])
 
-tps2 = time.clock()
+tps2 = time.perf_counter()
 print("  " + str(old_nbre_nodes) + " noeuds répertoriés dans le fichier " + \
     fichier_osm_old)
 print("  " + str(old_nbre_ways) + " batiments répertoriés dans le fichier " + \
@@ -745,7 +743,7 @@ print(str(nb_bat_mod) +  " batiments modifiés")
 print(str(nb_bat_new) + " batiments nouveaux")
 print(str(nb_bat_del) + " batiments supprimés")
 
-tps3 = time.clock()
+tps3 = time.perf_counter()
 
 file_log = open(adresse + "/" + prefixe + "_log.txt", "w")
 file_log.write("Rappel des input : \n")
@@ -839,21 +837,21 @@ for i_lat in range(NB_ZONE):
             if new_bati[i_lat][i_lon][i_bat].role == "outer":
                 new_bati[i_lat][i_lon][i_bat].export_bat()
                 if new_bati[i_lat][i_lon][i_bat].status == "IDENTIQUE":
-                    file_noMod.write((new_bati[i_lat][i_lon][i_bat].print_bat + "\n").encode('utf-8'))
+                    file_noMod.write((new_bati[i_lat][i_lon][i_bat].print_bat + "\n"))
                     Ligne = ["IDENTIQUE", new_bati[i_lat][i_lon][i_bat].bat_id, \
                         str(round(new_bati[i_lat][i_lon][i_bat].dist_mini,9)), \
                         new_bati[i_lat][i_lon][i_bat].id_bat_proche, \
                         nom_file_noMod]
                     file_log.write(formatLog(Ligne,16,"|") + "\n")
                 elif new_bati[i_lat][i_lon][i_bat].status == "MODIFIE":
-                    file_mod.write((new_bati[i_lat][i_lon][i_bat].print_bat + "\n").encode('utf-8'))
+                    file_mod.write((new_bati[i_lat][i_lon][i_bat].print_bat + "\n"))
                     Ligne = ["MODIFIE", new_bati[i_lat][i_lon][i_bat].bat_id, \
                         str(round(new_bati[i_lat][i_lon][i_bat].dist_mini,9)), \
                         new_bati[i_lat][i_lon][i_bat].id_bat_proche, \
                         nom_file_mod]
                     file_log.write(formatLog(Ligne,16,"|") + "\n")
                 elif new_bati[i_lat][i_lon][i_bat].status == "NOUVEAU":
-                    file_new.write((new_bati[i_lat][i_lon][i_bat].print_bat + "\n").encode('utf-8'))
+                    file_new.write((new_bati[i_lat][i_lon][i_bat].print_bat + "\n"))
                     Ligne = ["NOUVEAU", new_bati[i_lat][i_lon][i_bat].bat_id, \
                         str(round(new_bati[i_lat][i_lon][i_bat].dist_mini,9)), \
                         new_bati[i_lat][i_lon][i_bat].id_bat_proche, \
@@ -873,7 +871,7 @@ for i_lat in range(NB_ZONE):
             if old_bati[i_lat][i_lon][i_bat].role == "outer":
                 if old_bati[i_lat][i_lon][i_bat].status == "SUPPRIME":
                     old_bati[i_lat][i_lon][i_bat].export_bat()
-                    file_del.write((old_bati[i_lat][i_lon][i_bat].print_bat + "\n").encode('utf-8'))
+                    file_del.write((old_bati[i_lat][i_lon][i_bat].print_bat + "\n"))
                     Ligne = ["SUPPRIME", old_bati[i_lat][i_lon][i_bat].bat_id, \
                         str(round(old_bati[i_lat][i_lon][i_bat].dist_mini,9)), \
                         nom_file_del]
