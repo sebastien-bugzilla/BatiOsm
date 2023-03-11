@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" upload="true" generator="JOSM">
+  <way id="284903201" version="1" timestamp="2014-05-28T20:44:30Z" changeset="22608138" uid="10610" user="RedFox" >
+    <nd ref="2886020937" />
+    <nd ref="2886020936" />
+    <nd ref="2886021089" />
+    <nd ref="2886021090" />
+    <nd ref="2886020937" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014" />
+    <tag k="wall" v="no" />
+  </way>
+  <node id="2886020937" lat="43.1298160" lon="-0.4569860" version="1" timestamp="2014-05-28T20:42:03Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886020936" lat="43.1297970" lon="-0.4569480" version="1" timestamp="2014-05-28T20:42:03Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886021089" lat="43.1300700" lon="-0.4567070" version="1" timestamp="2014-05-28T20:42:07Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886021090" lat="43.1300860" lon="-0.4567420" version="1" timestamp="2014-05-28T20:42:07Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886020937" lat="43.1298160" lon="-0.4569860" version="1" timestamp="2014-05-28T20:42:03Z" changeset="22608138" uid="10610" user="RedFox" />
+  <way id="284903434" version="1" timestamp="2014-05-28T20:44:46Z" changeset="22608138" uid="10610" user="RedFox" >
+    <nd ref="2886020937" />
+    <nd ref="2886021090" />
+    <nd ref="2886021227" />
+    <nd ref="2886020981" />
+    <nd ref="2886020937" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014" />
+  </way>
+  <node id="2886020937" lat="43.1298160" lon="-0.4569860" version="1" timestamp="2014-05-28T20:42:03Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886021090" lat="43.1300860" lon="-0.4567420" version="1" timestamp="2014-05-28T20:42:07Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886021227" lat="43.1301620" lon="-0.4569060" version="1" timestamp="2014-05-28T20:42:08Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886020981" lat="43.1298910" lon="-0.4571500" version="1" timestamp="2014-05-28T20:42:04Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886020937" lat="43.1298160" lon="-0.4569860" version="1" timestamp="2014-05-28T20:42:03Z" changeset="22608138" uid="10610" user="RedFox" />
+  <way id="284904270" version="1" timestamp="2014-05-28T20:45:54Z" changeset="22608138" uid="10610" user="RedFox" >
+    <nd ref="2886023286" />
+    <nd ref="2886023287" />
+    <nd ref="2886023320" />
+    <nd ref="2886023321" />
+    <nd ref="2886023298" />
+    <nd ref="2886023274" />
+    <nd ref="2886023261" />
+    <nd ref="2886023240" />
+    <nd ref="2886023218" />
+    <nd ref="2886023286" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014" />
+  </way>
+  <node id="2886023286" lat="43.1329080" lon="-0.4570669" version="1" timestamp="2014-05-28T20:42:44Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886023287" lat="43.1329290" lon="-0.4570649" version="1" timestamp="2014-05-28T20:42:44Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886023320" lat="43.1329750" lon="-0.4571939" version="1" timestamp="2014-05-28T20:42:44Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886023321" lat="43.1329600" lon="-0.4572049" version="1" timestamp="2014-05-28T20:42:44Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886023298" lat="43.1329540" lon="-0.4571899" version="1" timestamp="2014-05-28T20:42:44Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886023274" lat="43.1328810" lon="-0.4572399" version="1" timestamp="2014-05-28T20:42:43Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886023261" lat="43.1328530" lon="-0.4572539" version="1" timestamp="2014-05-28T20:42:43Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886023240" lat="43.1328440" lon="-0.4572309" version="1" timestamp="2014-05-28T20:42:42Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886023218" lat="43.1328070" lon="-0.4571299" version="1" timestamp="2014-05-28T20:42:42Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886023286" lat="43.1329080" lon="-0.4570669" version="1" timestamp="2014-05-28T20:42:44Z" changeset="22608138" uid="10610" user="RedFox" />
+  <way id="284903194" version="1" timestamp="2014-05-28T20:44:29Z" changeset="22608138" uid="10610" user="RedFox" >
+    <nd ref="2886023541" />
+    <nd ref="2886023542" />
+    <nd ref="2886023531" />
+    <nd ref="2886023520" />
+    <nd ref="2886023541" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014" />
+    <tag k="wall" v="no" />
+  </way>
+  <node id="2886023541" lat="43.1336370" lon="-0.4610170" version="1" timestamp="2014-05-28T20:42:50Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886023542" lat="43.1336480" lon="-0.4610420" version="1" timestamp="2014-05-28T20:42:50Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886023531" lat="43.1336090" lon="-0.4610820" version="1" timestamp="2014-05-28T20:42:50Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886023520" lat="43.1335960" lon="-0.4610600" version="1" timestamp="2014-05-28T20:42:49Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886023541" lat="43.1336370" lon="-0.4610170" version="1" timestamp="2014-05-28T20:42:50Z" changeset="22608138" uid="10610" user="RedFox" />
+  <way id="284903138" version="1" timestamp="2014-05-28T20:44:25Z" changeset="22608138" uid="10610" user="RedFox" >
+    <nd ref="2886026401" />
+    <nd ref="2886026406" />
+    <nd ref="2886026407" />
+    <nd ref="2886026421" />
+    <nd ref="2886026423" />
+    <nd ref="2886026427" />
+    <nd ref="2886026428" />
+    <nd ref="2886026429" />
+    <nd ref="2886026430" />
+    <nd ref="2886026431" />
+    <nd ref="2886026439" />
+    <nd ref="2886026410" />
+    <nd ref="2886026409" />
+    <nd ref="2886026402" />
+    <nd ref="2886026196" />
+    <nd ref="2886026408" />
+    <nd ref="2886026401" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014" />
+  </way>
+  <node id="2886026401" lat="43.1447690" lon="-0.4478960" version="1" timestamp="2014-05-28T20:43:26Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886026406" lat="43.1448230" lon="-0.4478650" version="1" timestamp="2014-05-28T20:43:26Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886026407" lat="43.1448300" lon="-0.4478910" version="1" timestamp="2014-05-28T20:43:26Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886026421" lat="43.1448940" lon="-0.4478720" version="1" timestamp="2014-05-28T20:43:27Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886026423" lat="43.1449010" lon="-0.4478990" version="1" timestamp="2014-05-28T20:43:27Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886026427" lat="43.1449160" lon="-0.4478920" version="1" timestamp="2014-05-28T20:43:27Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886026428" lat="43.1449230" lon="-0.4479140" version="1" timestamp="2014-05-28T20:43:27Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886026429" lat="43.1449080" lon="-0.4479220" version="1" timestamp="2014-05-28T20:43:27Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886026430" lat="43.1449200" lon="-0.4479780" version="1" timestamp="2014-05-28T20:43:27Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886026431" lat="43.1449070" lon="-0.4479870" version="1" timestamp="2014-05-28T20:43:27Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886026439" lat="43.1450010" lon="-0.4483040" version="1" timestamp="2014-05-28T20:43:27Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886026410" lat="43.1448350" lon="-0.4483930" version="1" timestamp="2014-05-28T20:43:26Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886026409" lat="43.1448260" lon="-0.4483610" version="1" timestamp="2014-05-28T20:43:26Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886026402" lat="43.1447780" lon="-0.4483870" version="1" timestamp="2014-05-28T20:43:26Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886026196" lat="43.1447110" lon="-0.4481540" version="1" timestamp="2014-05-28T20:43:26Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886026408" lat="43.1448300" lon="-0.4480860" version="1" timestamp="2014-05-28T20:43:26Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886026401" lat="43.1447690" lon="-0.4478960" version="1" timestamp="2014-05-28T20:43:26Z" changeset="22608138" uid="10610" user="RedFox" />
+  <way id="284904091" version="1" timestamp="2014-05-28T20:45:39Z" changeset="22608138" uid="10610" user="RedFox" >
+    <nd ref="2886026405" />
+    <nd ref="2886026419" />
+    <nd ref="2886026420" />
+    <nd ref="2886026422" />
+    <nd ref="2886026421" />
+    <nd ref="2886026407" />
+    <nd ref="2886026406" />
+    <nd ref="2886026405" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014" />
+  </way>
+  <node id="2886026405" lat="43.1448160" lon="-0.4478330" version="1" timestamp="2014-05-28T20:43:26Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886026419" lat="43.1448830" lon="-0.4478010" version="1" timestamp="2014-05-28T20:43:27Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886026420" lat="43.1449010" lon="-0.4478490" version="1" timestamp="2014-05-28T20:43:27Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886026422" lat="43.1448890" lon="-0.4478570" version="1" timestamp="2014-05-28T20:43:27Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886026421" lat="43.1448940" lon="-0.4478720" version="1" timestamp="2014-05-28T20:43:27Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886026407" lat="43.1448300" lon="-0.4478910" version="1" timestamp="2014-05-28T20:43:26Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886026406" lat="43.1448230" lon="-0.4478650" version="1" timestamp="2014-05-28T20:43:26Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886026405" lat="43.1448160" lon="-0.4478330" version="1" timestamp="2014-05-28T20:43:26Z" changeset="22608138" uid="10610" user="RedFox" />
+  <way id="284904018" version="1" timestamp="2014-05-28T20:45:33Z" changeset="22608138" uid="10610" user="RedFox" >
+    <nd ref="2886026410" />
+    <nd ref="2886026439" />
+    <nd ref="2886026454" />
+    <nd ref="2886026441" />
+    <nd ref="2886026437" />
+    <nd ref="2886026412" />
+    <nd ref="2886026410" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014" />
+  </way>
+  <node id="2886026410" lat="43.1448350" lon="-0.4483930" version="1" timestamp="2014-05-28T20:43:26Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886026439" lat="43.1450010" lon="-0.4483040" version="1" timestamp="2014-05-28T20:43:27Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886026454" lat="43.1450930" lon="-0.4486100" version="1" timestamp="2014-05-28T20:43:28Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886026441" lat="43.1450340" lon="-0.4486390" version="1" timestamp="2014-05-28T20:43:27Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886026437" lat="43.1449690" lon="-0.4484230" version="1" timestamp="2014-05-28T20:43:27Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886026412" lat="43.1448600" lon="-0.4484810" version="1" timestamp="2014-05-28T20:43:27Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886026410" lat="43.1448350" lon="-0.4483930" version="1" timestamp="2014-05-28T20:43:26Z" changeset="22608138" uid="10610" user="RedFox" />
+  <way id="336042731" version="1" timestamp="2015-04-02T08:10:02Z" changeset="29922219" uid="10610" user="RedFox" >
+    <nd ref="3431263827" />
+    <nd ref="3431263829" />
+    <nd ref="3431263830" />
+    <nd ref="3431263828" />
+    <nd ref="3431263827" />
+    <tag k="building" v="yes" />
+  </way>
+  <node id="3431263827" lat="43.1481127" lon="-0.4556858" version="1" timestamp="2015-04-02T08:10:02Z" changeset="29922219" uid="10610" user="RedFox" />
+  <node id="3431263829" lat="43.1483203" lon="-0.4555835" version="1" timestamp="2015-04-02T08:10:02Z" changeset="29922219" uid="10610" user="RedFox" />
+  <node id="3431263830" lat="43.1483580" lon="-0.4557275" version="1" timestamp="2015-04-02T08:10:02Z" changeset="29922219" uid="10610" user="RedFox" />
+  <node id="3431263828" lat="43.1481504" lon="-0.4558297" version="1" timestamp="2015-04-02T08:10:02Z" changeset="29922219" uid="10610" user="RedFox" />
+  <node id="3431263827" lat="43.1481127" lon="-0.4556858" version="1" timestamp="2015-04-02T08:10:02Z" changeset="29922219" uid="10610" user="RedFox" />
+  <way id="284903288" version="1" timestamp="2014-05-28T20:44:38Z" changeset="22608138" uid="10610" user="RedFox" >
+    <nd ref="2886027878" />
+    <nd ref="2886027872" />
+    <nd ref="2886027877" />
+    <nd ref="2886027882" />
+    <nd ref="2886027878" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014" />
+    <tag k="wall" v="no" />
+  </way>
+  <node id="2886027878" lat="43.1586900" lon="-0.4284416" version="1" timestamp="2014-05-28T20:43:50Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886027872" lat="43.1586680" lon="-0.4284286" version="1" timestamp="2014-05-28T20:43:50Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886027877" lat="43.1586930" lon="-0.4283566" version="1" timestamp="2014-05-28T20:43:50Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886027882" lat="43.1587120" lon="-0.4283746" version="1" timestamp="2014-05-28T20:43:50Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886027878" lat="43.1586900" lon="-0.4284416" version="1" timestamp="2014-05-28T20:43:50Z" changeset="22608138" uid="10610" user="RedFox" />
+  <way id="284903462" version="1" timestamp="2014-05-28T20:44:48Z" changeset="22608138" uid="10610" user="RedFox" >
+    <nd ref="2886028733" />
+    <nd ref="2886028737" />
+    <nd ref="2886028738" />
+    <nd ref="2886028739" />
+    <nd ref="2886028733" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="wall" v="no" />
+  </way>
+  <node id="2886028733" lat="43.1626941" lon="-0.4105406" version="1" timestamp="2014-05-28T20:44:03Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886028737" lat="43.1627151" lon="-0.4105266" version="1" timestamp="2014-05-28T20:44:04Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886028738" lat="43.1627331" lon="-0.4105546" version="1" timestamp="2014-05-28T20:44:04Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886028739" lat="43.1627131" lon="-0.4105746" version="1" timestamp="2014-05-28T20:44:04Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886028733" lat="43.1626941" lon="-0.4105406" version="1" timestamp="2014-05-28T20:44:03Z" changeset="22608138" uid="10610" user="RedFox" />
+  <way id="336038038" version="1" timestamp="2015-04-02T07:28:01Z" changeset="29921478" uid="10610" user="RedFox" >
+    <nd ref="3431224562" />
+    <nd ref="3431224567" />
+    <nd ref="3431224566" />
+    <nd ref="3431224563" />
+    <nd ref="3431224564" />
+    <nd ref="3431224561" />
+    <nd ref="3431224562" />
+    <tag k="building" v="yes" />
+  </way>
+  <node id="3431224562" lat="43.1627396" lon="-0.4208262" version="1" timestamp="2015-04-02T07:28:00Z" changeset="29921478" uid="10610" user="RedFox" />
+  <node id="3431224567" lat="43.1628632" lon="-0.4208151" version="1" timestamp="2015-04-02T07:28:00Z" changeset="29921478" uid="10610" user="RedFox" />
+  <node id="3431224566" lat="43.1628506" lon="-0.4205487" version="1" timestamp="2015-04-02T07:28:00Z" changeset="29921478" uid="10610" user="RedFox" />
+  <node id="3431224563" lat="43.1627490" lon="-0.4205578" version="1" timestamp="2015-04-02T07:28:00Z" changeset="29921478" uid="10610" user="RedFox" />
+  <node id="3431224564" lat="43.1627516" lon="-0.4206125" version="1" timestamp="2015-04-02T07:28:00Z" changeset="29921478" uid="10610" user="RedFox" />
+  <node id="3431224561" lat="43.1627295" lon="-0.4206145" version="1" timestamp="2015-04-02T07:28:00Z" changeset="29921478" uid="10610" user="RedFox" />
+  <node id="3431224562" lat="43.1627396" lon="-0.4208262" version="1" timestamp="2015-04-02T07:28:00Z" changeset="29921478" uid="10610" user="RedFox" />
+  <way id="284903208" version="1" timestamp="2014-05-28T20:44:31Z" changeset="22608138" uid="10610" user="RedFox" >
+    <nd ref="2886029150" />
+    <nd ref="2886029154" />
+    <nd ref="2886029161" />
+    <nd ref="2886029153" />
+    <nd ref="2886029150" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014" />
+  </way>
+  <node id="2886029150" lat="43.1659790" lon="-0.4207741" version="1" timestamp="2014-05-28T20:44:07Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886029154" lat="43.1660160" lon="-0.4207551" version="1" timestamp="2014-05-28T20:44:07Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886029161" lat="43.1660480" lon="-0.4208731" version="1" timestamp="2014-05-28T20:44:08Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886029153" lat="43.1660110" lon="-0.4208931" version="1" timestamp="2014-05-28T20:44:07Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886029150" lat="43.1659790" lon="-0.4207741" version="1" timestamp="2014-05-28T20:44:07Z" changeset="22608138" uid="10610" user="RedFox" />
+  <way id="284903768" version="1" timestamp="2014-05-28T20:45:11Z" changeset="22608138" uid="10610" user="RedFox" >
+    <nd ref="2886029188" />
+    <nd ref="2886029185" />
+    <nd ref="2886029195" />
+    <nd ref="2886029196" />
+    <nd ref="2886029188" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014" />
+  </way>
+  <node id="2886029188" lat="43.1665045" lon="-0.4204953" version="1" timestamp="2014-05-28T20:44:08Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886029185" lat="43.1664835" lon="-0.4204583" version="1" timestamp="2014-05-28T20:44:08Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886029195" lat="43.1665815" lon="-0.4203723" version="1" timestamp="2014-05-28T20:44:09Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886029196" lat="43.1666015" lon="-0.4204143" version="1" timestamp="2014-05-28T20:44:09Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886029188" lat="43.1665045" lon="-0.4204953" version="1" timestamp="2014-05-28T20:44:08Z" changeset="22608138" uid="10610" user="RedFox" />
+  <way id="284904194" version="1" timestamp="2014-05-28T20:45:48Z" changeset="22608138" uid="10610" user="RedFox" >
+    <nd ref="2886029405" />
+    <nd ref="2886029403" />
+    <nd ref="2886029404" />
+    <nd ref="2886029401" />
+    <nd ref="2886029199" />
+    <nd ref="2886029200" />
+    <nd ref="2886029198" />
+    <nd ref="2886029402" />
+    <nd ref="2886029405" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014" />
+  </way>
+  <node id="2886029405" lat="43.1672095" lon="-0.4195873" version="1" timestamp="2014-05-28T20:44:09Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886029403" lat="43.1671555" lon="-0.4196443" version="1" timestamp="2014-05-28T20:44:09Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886029404" lat="43.1671725" lon="-0.4196763" version="1" timestamp="2014-05-28T20:44:09Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886029401" lat="43.1671175" lon="-0.4197373" version="1" timestamp="2014-05-28T20:44:09Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886029199" lat="43.1670945" lon="-0.4196973" version="1" timestamp="2014-05-28T20:44:09Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886029200" lat="43.1671165" lon="-0.4196693" version="1" timestamp="2014-05-28T20:44:09Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886029198" lat="43.1670805" lon="-0.4196043" version="1" timestamp="2014-05-28T20:44:09Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886029402" lat="43.1671705" lon="-0.4195073" version="1" timestamp="2014-05-28T20:44:09Z" changeset="22608138" uid="10610" user="RedFox" />
+  <node id="2886029405" lat="43.1672095" lon="-0.4195873" version="1" timestamp="2014-05-28T20:44:09Z" changeset="22608138" uid="10610" user="RedFox" />
+  <way id="284903760" version="1" timestamp="2014-05-28T20:45:11Z" changeset="22608138" uid="10610" user="RedFox" >
+    <nd ref="2886029478" />
+    <nd ref="2886029472" />
+    <nd ref="2886029476" />
+    <nd ref="2886029477" />
+    <nd ref="2886029478" />
+    <tag k="building" v="yes" />
+    <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015" />
+    <tag k="wall" v="no" />
+  </way>
+  <node id="2886029478" lat="43.1702142" lon="-0.4149029" version="2" timestamp="2015-04-02T07:28:20Z" changeset="29921478" uid="10610" user="RedFox" />
+  <node id="2886029472" lat="43.1701942" lon="-0.4148619" version="2" timestamp="2015-04-02T07:28:20Z" changeset="29921478" uid="10610" user="RedFox" />
+  <node id="2886029476" lat="43.1702112" lon="-0.4148499" version="2" timestamp="2015-04-02T07:28:20Z" changeset="29921478" uid="10610" user="RedFox" />
+  <node id="2886029477" lat="43.1702292" lon="-0.4148889" version="2" timestamp="2015-04-02T07:28:20Z" changeset="29921478" uid="10610" user="RedFox" />
+  <node id="2886029478" lat="43.1702142" lon="-0.4149029" version="2" timestamp="2015-04-02T07:28:20Z" changeset="29921478" uid="10610" user="RedFox" />
+</osm>
