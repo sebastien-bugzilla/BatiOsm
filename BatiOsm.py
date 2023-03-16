@@ -9,8 +9,10 @@ import time
 
 import lxml.etree
 
-BORNE_INF_MODIF = 1.0
-BORNE_SUP_MODIF = 10.0
+# in meters, limit to consider it's the same building
+MIN_DISTANCE = 1.0
+# in meters, limit to consider it can't be the same building
+MAX_DISTANCE = 10.0
 NB_ZONE_USER = 500
 
 # WGS-84 Earth equatorial radius (meters)
@@ -64,6 +66,10 @@ class Point:
         self.history = history
 
 
+def replace_quotes(s: str):
+    return s.replace('"', '&quot;')
+
+
 class Building:
     """L'entité Batiment rassemble plusieurs données :
 
@@ -91,8 +97,8 @@ class Building:
             node_count: int,
             nodes: list[Point],
             tag_count: int,
-            tableau_tag_key,
-            tableau_tag_value,
+            tag_keys,
+            tag_values,
             min_distance: float = 1000.0,
             width=0.0,
             status="UNKNOWN"
@@ -108,8 +114,8 @@ class Building:
         self.width = width
         self.status = status
         self.tag_count = tag_count
-        self.tableau_tag_key = tableau_tag_key
-        self.tableau_tag_value = tableau_tag_value
+        self.tag_keys = tag_keys
+        self.tag_values = tag_values
         self.area_issue = "NO"
         self.area = 0.0
         self.multipolygone = "no"
@@ -213,6 +219,7 @@ class Building:
         l'historique dans osm : numéros de version, date de maj, dernier
         utilisateur ayant modifié le batiment, le changeset,etc...
         """
+        log = logging.getLogger("set_history")
         self.history = history
 
     def export_bat(self):
@@ -236,7 +243,7 @@ class Building:
             export.append(f'    <nd ref="{self.nodes[i_node].node_id}" />')
             i_node = i_node + 1
         for i_tag in range(self.tag_count):
-            export.append(f'    <tag k="{self.tableau_tag_key[i_tag]}" v="{self.tableau_tag_value[i_tag]}" />')
+            export.append(f'    <tag k="{self.tag_keys[i_tag]}" v="{replace_quotes(self.tag_values[i_tag])}" />')
         export.append("  </way>")
         i_node = 0
         while i_node < self.node_count:
@@ -276,28 +283,23 @@ class Building:
         détecté comme modifié, la source est mis à jour pour prendre la valeur
         du batiment 'other'.
         """
-        log = logging.getLogger("copy_tag")
-        tag_source_save = ""
         if status == "IDENTIQUE":
             self.tag_count = other.tag_count
-            self.tableau_tag_key = other.tableau_tag_key
-            self.tableau_tag_value = other.tableau_tag_value
+            self.tag_keys = other.tag_keys
+            self.tag_values = other.tag_values
         elif status == "MODIFIE":
-            try:
-                rang_tag_source = self.tableau_tag_key.index("source")
-                tag_source_save = self.tableau_tag_value[rang_tag_source]
-            except Exception as e:
-                log.error(e)
-                pass
+            if "source" in self.tag_keys:
+                tag_source_save = self.tag_values[self.tag_keys.index("source")]
+            else:
+                tag_source_save = False
+
             self.tag_count = other.tag_count
-            self.tableau_tag_key = other.tableau_tag_key
-            self.tableau_tag_value = other.tableau_tag_value
-            try:
-                rang_tag_source = self.tableau_tag_key.index("source")
-                self.tableau_tag_value[rang_tag_source] = tag_source_save
-            except Exception as e:
-                log.error(e)
-                pass
+            self.tag_keys = other.tag_keys
+            self.tag_values = other.tag_values
+
+            # if source existed, we don't want to override it
+            if "source" in other.tag_keys and tag_source_save is not False:
+                self.tag_values[self.tag_keys.index("source")] = tag_source_save
 
     def add_inner_way(self, other: str):
         """
@@ -411,8 +413,8 @@ def main():
         new_nodes[future_nodes_count].set_history(attributes)
         future_nodes_count = future_nodes_count + 1
 
-    nb_zone_lat = int((lat_max - lat_min) * (math.pi / 180 * EARTH_RADIUS) / (2 * BORNE_SUP_MODIF)) - 1
-    nb_zone_lon = int((lon_max - lon_min) * (math.pi / 180 * EARTH_RADIUS) / (2 * BORNE_SUP_MODIF)) - 1
+    nb_zone_lat = int((lat_max - lat_min) * (math.pi / 180 * EARTH_RADIUS) / (2 * MAX_DISTANCE)) - 1
+    nb_zone_lon = int((lon_max - lon_min) * (math.pi / 180 * EARTH_RADIUS) / (2 * MAX_DISTANCE)) - 1
     nb_zone = min(nb_zone_lat, nb_zone_lon, 500, NB_ZONE_USER)
     delta_lat = (lat_max - lat_min) / nb_zone
     delta_lon = (lon_max - lon_min) / nb_zone
@@ -647,12 +649,12 @@ def main():
                                         new_bati[i_lat][i_lon][i_bat].set_close_building(
                                             old_bati[o_lat][o_lon][o_bat].bat_id
                                         )
-                                        if distance < BORNE_INF_MODIF:
+                                        if distance < MIN_DISTANCE:
                                             new_bati[i_lat][i_lon][i_bat].copy_tag(
                                                 old_bati[o_lat][o_lon][o_bat], "IDENTIQUE"
                                             )
                                         elif (
-                                                BORNE_INF_MODIF < distance < BORNE_SUP_MODIF
+                                                MIN_DISTANCE < distance < MAX_DISTANCE
                                         ):
                                             new_bati[i_lat][i_lon][i_bat].copy_tag(
                                                 old_bati[o_lat][o_lon][o_bat], "MODIFIE"
@@ -669,7 +671,7 @@ def main():
             # Classement des anciens batiments
             for i_bat in range(len(old_bati[i_lat][i_lon])):
                 if old_bati[i_lat][i_lon][i_bat].role == "outer":
-                    if old_bati[i_lat][i_lon][i_bat].min_distance > BORNE_SUP_MODIF:
+                    if old_bati[i_lat][i_lon][i_bat].min_distance > MAX_DISTANCE:
                         old_bati[i_lat][i_lon][i_bat].set_status("SUPPRIME")
                     if (
                             old_bati[i_lat][i_lon][i_bat].min_distance
@@ -679,13 +681,13 @@ def main():
             # Classement des nouveaux batiments
             for i_bat in range(len(new_bati[i_lat][i_lon])):
                 if new_bati[i_lat][i_lon][i_bat].role == "outer":
-                    if new_bati[i_lat][i_lon][i_bat].min_distance < BORNE_INF_MODIF:
+                    if new_bati[i_lat][i_lon][i_bat].min_distance < MIN_DISTANCE:
                         new_bati[i_lat][i_lon][i_bat].set_status("IDENTIQUE")
                     elif (
-                            BORNE_INF_MODIF < new_bati[i_lat][i_lon][i_bat].min_distance < BORNE_SUP_MODIF
+                            MIN_DISTANCE < new_bati[i_lat][i_lon][i_bat].min_distance < MAX_DISTANCE
                     ):
                         new_bati[i_lat][i_lon][i_bat].set_status("MODIFIE")
-                    elif new_bati[i_lat][i_lon][i_bat].min_distance > BORNE_SUP_MODIF:
+                    elif new_bati[i_lat][i_lon][i_bat].min_distance > MAX_DISTANCE:
                         new_bati[i_lat][i_lon][i_bat].set_status("NOUVEAU")
                     if (
                             new_bati[i_lat][i_lon][i_bat].min_distance
@@ -785,8 +787,8 @@ def main():
 
     file_log = open(os.path.join(base_path, f'{file_prefix}_log.txt'), "w")
     file_log.write("Rappel des input : \n")
-    file_log.write(f"    BORNE_INF_MODIF : {BORNE_INF_MODIF}\n")
-    file_log.write(f"    BORNE_SUP_MODIF : {BORNE_SUP_MODIF}\n")
+    file_log.write(f"    BORNE_INF_MODIF : {MIN_DISTANCE}\n")
+    file_log.write(f"    BORNE_SUP_MODIF : {MAX_DISTANCE}\n")
     file_log.write(f"    NB_ZONE : {nb_zone}\n")
     file_log.write(f"Le fichier {osm_file_current} contient :\n")
     file_log.write(f"    - {current_nodes_count} noeuds\n")
